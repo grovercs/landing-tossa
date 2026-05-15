@@ -13,12 +13,18 @@ export interface MenuItem {
   isButton?: boolean;
 }
 
-// Prefix routes if language is not 'es' (default)
-const basePath = lang === 'es' ? '' : `/${lang}`;
+// Map slugs depending on language
+const getLocalizedPath = (base: 'contacto' | 'reservas') => {
+  if (lang === 'es') return `/${base}`;
+  if (lang === 'ca') return `/ca/${base === 'contacto' ? 'contacte' : 'reserves'}`;
+  if (lang === 'en') return `/en/${base === 'contacto' ? 'contact' : 'booking'}`;
+  if (lang === 'fr') return `/fr/${base === 'contacto' ? 'contact' : 'reservations'}`;
+  return `/${base}`;
+};
 
 const menu: MenuItem[] = [
-  { label: t('nav.contact'), href: `${basePath}/contacto` },
-  { label: t('nav.book'), href: `${basePath}/reservas`, isButton: true },
+  { label: t('nav.contact'), href: getLocalizedPath('contacto') },
+  { label: t('nav.book'), href: getLocalizedPath('reservas'), isButton: true },
 ];
 ---
 

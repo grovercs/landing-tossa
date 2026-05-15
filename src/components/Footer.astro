@@ -1,5 +1,10 @@
 ---
 import { Icon } from "astro-icon/components";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const basePath = lang === 'es' ? '' : `/${lang}`;
 
 export interface FooterLink {
   label: string;
@@ -24,13 +29,22 @@ export interface FooterCopyright {
 
 const brandInfo: FooterBrand = {
   name: "Tossa de Mar",
-  tagline: "El Bergantí & Hostalet de Tossa. Dos opciones con encanto en el corazón de la Costa Brava."
+  tagline: t('footer.tagline')
+};
+
+// Map slugs depending on language
+const getLocalizedContact = () => {
+  if (lang === 'es') return `/contacto`;
+  if (lang === 'ca') return `/ca/contacte`;
+  if (lang === 'en') return `/en/contact`;
+  if (lang === 'fr') return `/fr/contact`;
+  return `/contacto`;
 };
 
 const exploreLinks: FooterLink[] = [
-  { label: "Contacto", href: "/contacto" },
-  { label: "El Bergantí", href: "https://elberganti-tossa.com/es/" },
-  { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/es/" }
+  { label: t('nav.contact'), href: getLocalizedContact() },
+  { label: "El Bergantí", href: "https://elberganti-tossa.com/" },
+  { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/" }
 ];
 
 const socialLinks = [
@@ -46,9 +60,9 @@ const contact: ContactItem[] = [
 ];
 
 const copyright: FooterCopyright = {
-  year: 2026,
+  year: new Date().getFullYear(),
   brand: "El Bergantí & Hostalet de Tossa",
-  text: "Todos los derechos reservados."
+  text: t('footer.rights')
 };
 ---
 
@@ -71,7 +85,7 @@ const copyright: FooterCopyright = {
 
       <!-- EXPLORE -->
       <div>
-        <h4 class="font-heading text-lg mb-4">ENLACES</h4>
+        <h4 class="font-heading text-lg mb-4">{t('footer.links')}</h4>
         <ul class="space-y-2">
           {exploreLinks.map(item => (
             <li>
@@ -85,7 +99,7 @@ const copyright: FooterCopyright = {
 
       <!-- CONTACT -->
       <div>
-        <h4 class="font-heading text-lg mb-4">CONTACTO</h4>
+        <h4 class="font-heading text-lg mb-4">{t('footer.contact')}</h4>
         <ul class="space-y-2 text-white/70">
           {contact.map(item => (
             <li class="flex items-start gap-2">

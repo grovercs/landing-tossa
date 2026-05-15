@@ -44,10 +44,18 @@ function getUrlForLang(targetLang: string) {
 
   return '/';
 }
+
+const flagIcons: Record<string, string> = {
+  es: '/images/es.svg',
+  ca: '/images/es-ct.svg',
+  en: '/images/sh.svg',
+  fr: '/images/fr.svg',
+};
 ---
 
 <div class="relative group">
-  <button class="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors uppercase">
+  <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors uppercase">
+    <img src={flagIcons[lang]} alt={lang} class="w-5 h-auto rounded-sm border border-gray-200" />
     {lang}
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down text-[10px]" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -59,8 +67,9 @@ function getUrlForLang(targetLang: string) {
         <li>
           <a
             href={getUrlForLang(locale)}
-            class={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors ${lang === locale ? 'font-bold text-primary bg-gray-50' : ''}`}
+            class={`flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors ${lang === locale ? 'font-bold text-primary bg-gray-50' : ''}`}
           >
+            <img src={flagIcons[locale]} alt={label} class="w-5 h-auto rounded-sm border border-gray-200" />
             {label}
           </a>
         </li>
