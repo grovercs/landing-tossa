@@ -2,6 +2,7 @@
 import RoomCard from "./RoomCard.astro";
 import Pagination from "./Pagination.astro";
 import { getCollection } from "astro:content";
+import { getLangFromUrl } from "../i18n/utils";
 
 export interface Props {
   title?: string;
@@ -11,19 +12,20 @@ export interface Props {
   baseUrl?: string;     
 }
 
+const lang = getLangFromUrl(Astro.url);
+
 const {
-  title = "Explore Our Rooms",
-  description =
-    "Discover a collection of thoughtfully designed rooms that combine Nordic elegance with modern comfort.",
+  title,
+  description,
   maxPosts = 6,
   currentPage = 1,
-  baseUrl = "/rooms/page/",
+  baseUrl = lang === 'es' ? "/rooms/page/" : `/${lang}/rooms/page/`,
 } = Astro.props;
 
 // ==============================
 // GET & SORT ROOMS
 // ==============================
-const allRooms = await getCollection("rooms");
+const allRooms = await getCollection("rooms", ({ id }) => id.startsWith(`${lang}/`));
 
 const sortedRooms = allRooms.sort(
   (a, b) =>

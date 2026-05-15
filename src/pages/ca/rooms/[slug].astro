@@ -9,9 +9,9 @@ import BookingInfo from "@src/components/BookingInfo.astro";
 // STATIC PATHS
 // ======================================
 export async function getStaticPaths() {
-  const rooms = await getCollection("rooms", ({ id }) => id.startsWith("es/"));
+  const rooms = await getCollection("rooms", ({ id }) => id.startsWith("ca/"));
   return rooms.map((room) => ({
-    params: { slug: room.id.replace("es/", "").replace(/\.mdx$/, "") },
+    params: { slug: room.id.replace("ca/", "").replace(/\.mdx$/, "") },
   }));
 }
 
@@ -19,8 +19,8 @@ export async function getStaticPaths() {
 // GET ROOM DATA
 // ======================================
 const { slug } = Astro.params;
-const allRoomsForEntry = await getCollection("rooms", ({ id }) => id.startsWith("es/"));
-const room = allRoomsForEntry.find(r => r.id.replace("es/", "").replace(/\.mdx$/, "") === slug);
+const allRoomsForEntry = await getCollection("rooms", ({ id }) => id.startsWith("ca/"));
+const room = allRoomsForEntry.find(r => r.id.replace("ca/", "").replace(/\.mdx$/, "") === slug);
 
 if (!room) {
   throw new Error(`Room not found: ${slug}`);
@@ -61,14 +61,14 @@ const gallery = data.gallery ?? [];
             )}
 
             <span class="text-gray-600">
-              ({data.ratingCount} Reviews)
+              ({data.ratingCount} Ressenyes)
             </span>
           </div>
         </div>
 
         <div class="relative">
           <span class="text-heading text-lg md:text-xl font-semibold text-green-600 bg-primary/10 rounded-tl-2xl rounded-br-2xl py-3 px-6">
-            From ${data.price}/night
+            Des de ${data.price}/nit
           </span>
         </div>
       </div>
@@ -114,7 +114,7 @@ const gallery = data.gallery ?? [];
           <!-- Amenities -->
           <div class="relative mb-8">
             <h2 class="font-heading text-xl md:text-2xl text-primary-dark mb-2">
-              Offered Amenities
+              Serveis Oferts
             </h2>
 
             <div class="grid grid-cols-2 md:grid-cols-3 sm:p-6 max-sm:text-sm sm:bg-skin-light sm:rounded-tl-2xl rounded-br-2xl sm:shadow-sm">
@@ -140,15 +140,15 @@ const gallery = data.gallery ?? [];
 
           <!-- Info -->
           <BookingInfo
-          title="Booking Information"
+          title="Informació de Reserva"
           items={[
-            { icon: "bi:clock", text: "Check-in time starts from 14:00 PM" },
-            { icon: "bi:clock-history", text: "Check-out time before 12:00 PM" },
-            { icon: "bi:shield-check", text: "Free cancellation up to 24 hours before arrival" },
-            { icon: "bi:cup-hot", text: "Breakfast included in all room types" },
-            { icon: "bi:wifi", text: "Free high-speed Wi-Fi in every room" },
-            { icon: "bi:cash-stack", text: "Multiple payment options available" },
-            ({ icon: "bi:people", text: "Two children above 10 years old must book their own room." }),
+            { icon: "bi:clock", text: "Check-in a partir de les 14:00 h" },
+            { icon: "bi:clock-history", text: "Check-out abans de les 12:00 h" },
+            { icon: "bi:shield-check", text: "Cancel·lació gratuïta fins a 24 hores abans de l'arribada" },
+            { icon: "bi:cup-hot", text: "Esmorzar inclòs en tots els tipus d'habitació" },
+            { icon: "bi:wifi", text: "Wi-Fi d'alta velocitat gratuït a cada habitació" },
+            { icon: "bi:cash-stack", text: "Múltiples opcions de pagament disponibles" },
+            ({ icon: "bi:people", text: "Dos nens de més de 10 anys han de reservar la seva pròpia habitació." }),
           ]}
         />
         </div>

@@ -1,0 +1,107 @@
+---
+import AboutSection from "@src/components/AboutSection.astro";
+import AwardsSection from "@src/components/AwardsSection.astro";
+import BookingSection from "@src/components/BookingSection.astro";
+import FacilitiesSection from "@src/components/FacilitiesSection.astro";
+import GallerySection from "@src/components/GallerySection.astro";
+import HeroSection from "@src/components/HeroSection.astro";
+import RestaurantSection from "@src/components/RestaurantSection.astro";
+import RoomsSection from "@src/components/RoomsSection.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="El Bergantí & Hostalet de Tossa - Costa Brava" description="Two charming accommodations in the center of Tossa de Mar. Choose between El Bergantí and Hostalet de Tossa with direct booking.">
+  <HeroSection />
+  <BookingSection />
+  <AboutSection
+    title="Accommodation in the center of Tossa de Mar"
+    image="/images/tossa-de-mar-costa-brava-1.webp"
+    paragraphs={[
+      "Enjoy the Costa Brava with us. We offer you two charming options right in the center of Tossa de Mar, ideal for exploring the Vila Vella, relaxing on the beach, and experiencing the essence of the Mediterranean.",
+      "In both El Bergantí and Hostalet de Tossa, you will find a friendly and direct service, guaranteeing the best experience without intermediaries."
+    ]}
+    list={[
+      {
+        icon: "bi:geo-alt",
+        title: "Privileged Location",
+        description: "A few minutes from the beach and right in the old town"
+      },
+      {
+        icon: "bi:shop",
+        title: "Our Restaurants",
+        description: "Quality Mediterranean cuisine in your own accommodation"
+      }
+    ]}
+  />
+  <FacilitiesSection
+    title="Why choose us"
+    subtitle="Our accommodations are designed to offer you comfort, a good location, and the warm service that characterizes the Costa Brava."
+    imageDecor="/img/lamp.png"
+    facilities={[
+      {
+        icon: "bi:wifi",
+        title: "Free Wi-Fi",
+        description: "Internet connection available"
+      },
+      {
+        icon: "bi:shop",
+        title: "Restaurant",
+        description: "Quality Mediterranean cuisine"
+      },
+      {
+        icon: "bi:brightness-high",
+        title: "Cozy Terraces",
+        description: "Quiet spaces for breakfast or dinner"
+      },
+      {
+        icon: "bi:geo",
+        title: "Central",
+        description: "Explore Tossa de Mar on foot"
+      },
+      {
+        icon: "bi:hand-thumbs-up",
+        title: "Direct Booking",
+        description: "Best price guaranteed without intermediaries"
+      },
+      {
+        icon: "bi:chat-left",
+        title: "Close Attention",
+        description: "Direct contact with reception"
+      }
+    ]}
+  />
+
+  <RoomsSection
+    title="Our Rooms"
+    description="Discover our options for a perfect stay in Tossa de Mar."
+    maxPosts={6}
+  />
+  <RestaurantSection 
+    title="Gastronomy in Tossa de Mar"
+    content={[
+      "Discover our gastronomic proposal at El Bergantí, specializing in tapas, rice dishes, and Mediterranean cuisine made with local products.",
+      "Or relax on the evocative terrace of the Hostalet, the ideal place for a quiet breakfast or to enjoy the atmosphere of the old town next to the church."
+    ]}
+    stats={[
+      { value: "100%", label: "Local Product" },
+      { value: "1789", label: "Hostalet Year" },
+      { value: "10+", label: "Specialties" }
+    ]}
+    slides={[
+      { src: "/images/elberganti-restaurante-tapas-tossa-mar.webp", title: "El Bergantí Restaurant" },
+      { src: "/images/terraza-hostal-hostalet-tossa.avif", title: "Hostalet Terrace" }
+    ]}
+  />
+  <GallerySection
+    title="Our Accommodations"
+    subtitle="Explore El Bergantí and Hostalet de Tossa."
+    images={[
+      { src: "/images/hotel-tossa-de-mar-restaurante.webp", alt: "El Bergantí Exterior" },
+      { src: "/images/habitacion-doble-berganti-tossa.webp", alt: "Bergantí Room" },
+      { src: "/images/fachada-hostalet.avif", alt: "Hostalet Exterior" },
+      { src: "/images/habitacion-doble-hostal-hostalet-tossa.avif", alt: "Hostalet Room" },
+      { src: "/images/elberganti-restaurante-tapas-tossa-mar.webp", alt: "Bergantí Restaurant" },
+      { src: "/images/terraza-hostal-hostalet-tossa.avif", alt: "Hostalet Terrace" },
+    ]}
+  />
+</MainLayout>

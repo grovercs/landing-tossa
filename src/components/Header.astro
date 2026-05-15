@@ -1,6 +1,11 @@
 ---
 import Logo from "./Logo.astro";
 import { Icon } from "astro-icon/components";
+import LanguagePicker from "./LanguagePicker.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 export interface MenuItem {
   label: string;
@@ -8,9 +13,12 @@ export interface MenuItem {
   isButton?: boolean;
 }
 
+// Prefix routes if language is not 'es' (default)
+const basePath = lang === 'es' ? '' : `/${lang}`;
+
 const menu: MenuItem[] = [
-  { label: "Contacto", href: "/contacto" },
-  { label: "RESERVAR", href: "/reservas", isButton: true },
+  { label: t('nav.contact'), href: `${basePath}/contacto` },
+  { label: t('nav.book'), href: `${basePath}/reservas`, isButton: true },
 ];
 ---
 
@@ -26,7 +34,8 @@ const menu: MenuItem[] = [
         <Logo />
 
         <!-- Desktop Menu -->
-        <div class="hidden lg:flex items-center space-x-8">
+        <div class="hidden lg:flex items-center space-x-6">
+          <LanguagePicker />
           {
             menu.map(item =>
               item.isButton ? (
@@ -66,6 +75,9 @@ const menu: MenuItem[] = [
 
       <!-- Mobile Menu -->
       <div x-show="open" style="display:none;" class="lg:hidden pb-4">
+        <div class="px-4 py-2 border-b border-gray-100">
+          <LanguagePicker />
+        </div>
         {
           menu.map(item =>
             item.isButton ? (

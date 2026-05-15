@@ -10,6 +10,14 @@ export default defineConfig({
   base: '/',
   output: 'static',
 
+  i18n: {
+    defaultLocale: 'es',
+    locales: ['es', 'ca', 'en', 'fr'],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
+
   fonts: [
     {
       name: 'Roboto',

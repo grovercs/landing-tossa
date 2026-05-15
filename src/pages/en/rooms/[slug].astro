@@ -9,9 +9,9 @@ import BookingInfo from "@src/components/BookingInfo.astro";
 // STATIC PATHS
 // ======================================
 export async function getStaticPaths() {
-  const rooms = await getCollection("rooms", ({ id }) => id.startsWith("es/"));
+  const rooms = await getCollection("rooms", ({ id }) => id.startsWith("en/"));
   return rooms.map((room) => ({
-    params: { slug: room.id.replace("es/", "").replace(/\.mdx$/, "") },
+    params: { slug: room.id.replace("en/", "").replace(/\.mdx$/, "") },
   }));
 }
 
@@ -19,8 +19,8 @@ export async function getStaticPaths() {
 // GET ROOM DATA
 // ======================================
 const { slug } = Astro.params;
-const allRoomsForEntry = await getCollection("rooms", ({ id }) => id.startsWith("es/"));
-const room = allRoomsForEntry.find(r => r.id.replace("es/", "").replace(/\.mdx$/, "") === slug);
+const allRoomsForEntry = await getCollection("rooms", ({ id }) => id.startsWith("en/"));
+const room = allRoomsForEntry.find(r => r.id.replace("en/", "").replace(/\.mdx$/, "") === slug);
 
 if (!room) {
   throw new Error(`Room not found: ${slug}`);

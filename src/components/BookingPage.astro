@@ -2,6 +2,69 @@
 import BookingInfo from "./BookingInfo.astro";
 import BookingForm from "./BookingForm.astro";
 import HelpCard from "./HelpCard.astro";
+
+export interface Props {
+  infoTitle?: string;
+  infoItems?: { icon: string; text: string }[];
+  helpTitle?: string;
+  helpDescription?: string;
+  helpItems?: { icon: string; text: string }[];
+  formFields?: any[];
+  submitText?: string;
+}
+
+const {
+  infoTitle = "Información de Reserva",
+  infoItems = [
+    { icon: "bi:clock", text: "Check-in a partir de las 14:00 h" },
+    { icon: "bi:clock-history", text: "Check-out antes de las 12:00 h" },
+    { icon: "bi:shield-check", text: "Cancelación gratuita hasta 24 horas antes de la llegada" },
+    { icon: "bi:cup-hot", text: "Restaurantes propios en los alojamientos" },
+    { icon: "bi:wifi", text: "Wi-Fi gratuito de alta velocidad" },
+  ],
+  helpTitle = "¿Necesitas Ayuda?",
+  helpDescription = "Nuestro equipo de recepción está listo para ayudarte con cualquier petición especial.",
+  helpItems = [
+    { icon: "bi:telephone", text: "El Bergantí: +34 972 34 04 22" },
+    { icon: "bi:telephone", text: "Hostalet: +34 972 34 00 00" },
+  ],
+  formFields = [
+    { label: "Nombre Completo", type: "text", name: "fullName" },
+    { label: "Correo Electrónico", type: "email", name: "email" },
+    { label: "Teléfono", type: "text", name: "phone" },
+    {
+      label: "Alojamiento",
+      type: "select",
+      name: "roomType",
+      options: [
+        "El Bergantí - Habitación Doble",
+        "Hostalet de Tossa - Habitación Doble",
+        "Hostalet de Tossa - Habitación Triple"
+      ]
+    },
+    { label: "Fecha de Entrada", type: "date", name: "checkin" },
+    { label: "Fecha de Salida", type: "date", name: "checkout" },
+    {
+      label: "Adultos",
+      type: "select",
+      name: "adults",
+      options: ["1 Adulto", "2 Adultos", "3 Adultos", "4 Adultos"]
+    },
+    {
+      label: "Niños",
+      type: "select",
+      name: "children",
+      options: ["0 Niños", "1 Niño", "2 Niños", "3 Niños"]
+    },
+    {
+      label: "Peticiones Especiales",
+      type: "textarea",
+      name: "requests",
+      span: 2
+    }
+  ],
+  submitText = "Confirmar Reserva"
+} = Astro.props;
 ---
 
 <section id="booking" class="py-16 relative bg-white overflow-x-hidden">
@@ -11,64 +74,21 @@ import HelpCard from "./HelpCard.astro";
       <!-- LEFT SIDE -->
       <div class="max-lg:order-2 space-y-8">
         <BookingInfo
-          title="Información de Reserva"
-          items={[
-            { icon: "bi:clock", text: "Check-in a partir de las 14:00 h" },
-            { icon: "bi:clock-history", text: "Check-out antes de las 12:00 h" },
-            { icon: "bi:shield-check", text: "Cancelación gratuita hasta 24 horas antes de la llegada" },
-            { icon: "bi:cup-hot", text: "Restaurantes propios en los alojamientos" },
-            { icon: "bi:wifi", text: "Wi-Fi gratuito de alta velocidad" },
-          ]}
+          title={infoTitle}
+          items={infoItems}
         />
 
         <HelpCard
-          title="¿Necesitas Ayuda?"
-          description="Nuestro equipo de recepción está listo para ayudarte con cualquier petición especial."
-          items={[
-            { icon: "bi:telephone", text: "El Bergantí: +34 972 34 04 22" },
-            { icon: "bi:telephone", text: "Hostalet: +34 972 34 00 00" },
-          ]}
+          title={helpTitle}
+          description={helpDescription}
+          items={helpItems}
         />
       </div>
 
       <!-- RIGHT SIDE -->
       <BookingForm
-        fields={[
-          { label: "Nombre Completo", type: "text", name: "fullName" },
-          { label: "Correo Electrónico", type: "email", name: "email" },
-          { label: "Teléfono", type: "text", name: "phone" },
-          {
-            label: "Alojamiento",
-            type: "select",
-            name: "roomType",
-            options: [
-              "El Bergantí - Habitación Doble",
-              "Hostalet de Tossa - Habitación Doble",
-              "Hostalet de Tossa - Habitación Triple"
-            ]
-          },
-          { label: "Fecha de Entrada", type: "date", name: "checkin" },
-          { label: "Fecha de Salida", type: "date", name: "checkout" },
-          {
-            label: "Adultos",
-            type: "select",
-            name: "adults",
-            options: ["1 Adulto", "2 Adultos", "3 Adultos", "4 Adultos"]
-          },
-          {
-            label: "Niños",
-            type: "select",
-            name: "children",
-            options: ["0 Niños", "1 Niño", "2 Niños", "3 Niños"]
-          },
-          {
-            label: "Peticiones Especiales",
-            type: "textarea",
-            name: "requests",
-            span: 2
-          }
-        ]}
-        submitText="Confirmar Reserva"
+        fields={formFields}
+        submitText={submitText}
       />
 
     </div>

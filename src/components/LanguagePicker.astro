@@ -1,0 +1,70 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const currentPath = Astro.url.pathname;
+
+// A simplistic helper to build URLs when switching languages.
+function getUrlForLang(targetLang: string) {
+  let segments = currentPath.split('/').filter(Boolean);
+  
+  // If the first segment is an existing language code, remove it.
+  if (segments.length > 0 && Object.keys(languages).includes(segments[0])) {
+    segments.shift();
+  }
+
+  // Handle specific slugs mapping
+  // We can do a rudimentary mapping here, or just map 'contacto' -> 'contacte' etc.
+  let basePage = segments[0] || '';
+  
+  if (targetLang === 'es') {
+    if (basePage === 'contacte' || basePage === 'contact') basePage = 'contacto';
+    if (basePage === 'reserves' || basePage === 'booking' || basePage === 'reservations') basePage = 'reservas';
+    return '/' + (basePage ? basePage + '/' : '');
+  }
+
+  if (targetLang === 'ca') {
+    if (basePage === 'contacto' || basePage === 'contact') basePage = 'contacte';
+    if (basePage === 'reservas' || basePage === 'booking' || basePage === 'reservations') basePage = 'reserves';
+    return '/ca/' + (basePage ? basePage + '/' : '');
+  }
+
+  if (targetLang === 'en') {
+    if (basePage === 'contacto' || basePage === 'contacte') basePage = 'contact';
+    if (basePage === 'reservas' || basePage === 'reserves' || basePage === 'reservations') basePage = 'booking';
+    return '/en/' + (basePage ? basePage + '/' : '');
+  }
+
+  if (targetLang === 'fr') {
+    if (basePage === 'contacto' || basePage === 'contacte' || basePage === 'contact') basePage = 'contact';
+    if (basePage === 'reservas' || basePage === 'reserves' || basePage === 'booking') basePage = 'reservations';
+    return '/fr/' + (basePage ? basePage + '/' : '');
+  }
+
+  return '/';
+}
+---
+
+<div class="relative group">
+  <button class="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors uppercase">
+    {lang}
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down text-[10px]" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+    </svg>
+  </button>
+  <div class="absolute right-0 top-full mt-2 w-32 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+    <ul class="py-2">
+      {Object.entries(languages).map(([locale, label]) => (
+        <li>
+          <a
+            href={getUrlForLang(locale)}
+            class={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors ${lang === locale ? 'font-bold text-primary bg-gray-50' : ''}`}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

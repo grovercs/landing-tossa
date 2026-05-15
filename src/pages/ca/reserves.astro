@@ -1,0 +1,66 @@
+---
+import BookingPage from "@src/components/BookingPage.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import NotFoundSection from "@src/components/NotFoundSection.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Reserva el teu Allotjament a Tossa de Mar - Costa Brava" description="Assegura la teva estada perfecta a El Bergantí o l'Hostalet de Tossa completant el formulari de reserva.">
+    <HeadingPage
+        title="Reservar Allotjament"
+        subtitle="Assegura la teva estada perfecta al cor de la Costa Brava completant el formulari a continuació."
+        background="/images/tossa-de-mar-costa-brava-1.webp"
+        />
+    <BookingPage 
+        infoTitle="Informació de Reserva"
+        infoItems={[
+            { icon: "bi:clock", text: "Check-in a partir de les 14:00 h" },
+            { icon: "bi:clock-history", text: "Check-out abans de les 12:00 h" },
+            { icon: "bi:shield-check", text: "Cancel·lació gratuïta fins a 24 hores abans de l'arribada" },
+            { icon: "bi:cup-hot", text: "Restaurants propis als allotjaments" },
+            { icon: "bi:wifi", text: "Wi-Fi gratuït d'alta velocitat" },
+        ]}
+        helpTitle="Necessites Ajuda?"
+        helpDescription="El nostre equip de recepció està a punt per ajudar-te amb qualsevol petició especial."
+        helpItems={[
+            { icon: "bi:telephone", text: "El Bergantí: +34 972 34 04 22" },
+            { icon: "bi:telephone", text: "Hostalet: +34 972 34 00 00" },
+        ]}
+        formFields={[
+            { label: "Nom Complet", type: "text", name: "fullName" },
+            { label: "Correu Electrònic", type: "email", name: "email" },
+            { label: "Telèfon", type: "text", name: "phone" },
+            {
+                label: "Allotjament",
+                type: "select",
+                name: "roomType",
+                options: [
+                "El Bergantí - Habitació Doble",
+                "Hostalet de Tossa - Habitació Doble",
+                "Hostalet de Tossa - Habitació Triple"
+                ]
+            },
+            { label: "Data d'Entrada", type: "date", name: "checkin" },
+            { label: "Data de Sortida", type: "date", name: "checkout" },
+            {
+                label: "Adults",
+                type: "select",
+                name: "adults",
+                options: ["1 Adult", "2 Adults", "3 Adults", "4 Adults"]
+            },
+            {
+                label: "Nens",
+                type: "select",
+                name: "children",
+                options: ["0 Nens", "1 Nen", "2 Nens", "3 Nens"]
+            },
+            {
+                label: "Peticions Especials",
+                type: "textarea",
+                name: "requests",
+                span: 2
+            }
+        ]}
+        submitText="Confirmar Reserva"
+    />
+</MainLayout>

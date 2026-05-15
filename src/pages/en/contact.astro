@@ -1,0 +1,38 @@
+---
+import ContactPage from "@src/components/ContactPage.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Contact - El Bergantí & Hostalet de Tossa" description="Get in touch with our accommodations in Tossa de Mar.">
+    <HeadingPage
+        title="Contact"
+        subtitle="Do you have any questions about your stay or need help with your booking? Our team is at your disposal."
+        background="/images/tossa-de-marcha-iglesia-de-st-vincent.png"
+        />
+    <ContactPage
+    heading="Information"
+    items={[
+        {
+        icon: "bi:geo-alt",
+        title: "Location",
+        text: "Tossa de Mar\nCosta Brava, Girona"
+        },
+        {
+        icon: "bi:telephone",
+        title: "Phones",
+        text: "El Bergantí: +34 972 34 04 22\nHostalet: +34 972 34 00 00"
+        },
+        {
+        icon: "bi:envelope",
+        title: "Email",
+        text: "reservas@elberganti-tossa.com"
+        },
+        {
+        icon: "bi:clock",
+        title: "Opening Hours",
+        text: "Monday – Sunday: 08:00 – 22:00"
+        }
+    ]}
+    />
+</MainLayout>
