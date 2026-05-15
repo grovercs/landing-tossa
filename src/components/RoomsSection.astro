@@ -2,7 +2,6 @@
 import RoomCard from "./RoomCard.astro";
 import Pagination from "./Pagination.astro";
 import { getCollection } from "astro:content";
-import { getLangFromUrl } from "../i18n/utils";
 
 export interface Props {
   title?: string;
@@ -12,7 +11,7 @@ export interface Props {
   baseUrl?: string;     
 }
 
-const lang = getLangFromUrl(Astro.url);
+const lang = (Astro.currentLocale || 'es') as string;
 
 const {
   title,

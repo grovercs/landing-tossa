@@ -10,12 +10,12 @@ export interface Props {
 const {
   currentPage,
   totalPages,
-  baseUrl = "/blogs/page/",
+  baseUrl = "/rooms/page/",
 } = Astro.props;
 
 // Build URL helper
 const buildHref = (page: number) => {
-  if (page === 1) return "/blogs/";
+  if (page === 1) return baseUrl.replace('page/', '');
   return `${baseUrl}${page}/`;
 };
 
