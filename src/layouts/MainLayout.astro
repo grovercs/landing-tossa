@@ -29,8 +29,15 @@ const {
     <meta name="author" content="Author Name" />
     <meta name="robots" content="index, follow" />
 
-    <link rel="canonical" href={Astro.url?.href || "https://nordicia.madethemes.com"} />
-    <link rel="icon" type="image/x-icon" href="/img/favicon.png" />
+    <link rel="canonical" href={Astro.url?.href || "https://landing-tossa.netlify.app"} />
+    <link rel="icon" type="image/png" href="/images/alojamientos-tossa-de-mar-logo.png" />
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url?.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://landing-tossa.netlify.app/images/tossa-de-mar-costa-brava-1.webp" />
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />
   </head>
