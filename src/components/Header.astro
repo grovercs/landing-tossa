@@ -1,0 +1,92 @@
+---
+import Logo from "./Logo.astro";
+import { Icon } from "astro-icon/components";
+
+export interface MenuItem {
+  label: string;
+  href: string;
+  isButton?: boolean;
+}
+
+const menu: MenuItem[] = [
+  { label: "Contacto", href: "/contact" },
+  { label: "RESERVAR", href: "/booking", isButton: true },
+];
+---
+
+<header>
+  <nav
+    class="bg-white shadow-sm fixed w-full top-0 z-50"
+    x-data="{ open: false }"
+  >
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between items-center h-20">
+
+        <!-- Logo -->
+        <Logo />
+
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex items-center space-x-8">
+          {
+            menu.map(item =>
+              item.isButton ? (
+                <a
+                  href={item.href}
+                  class="inline-flex items-center gap-2 justify-center bg-primary text-white px-6 py-3 hover:bg-primary-dark transition"
+                >
+                  <Icon name="bi:journal-check" class="text-lg" />
+                  {item.label}
+                </a>
+              ) : (
+                <a
+                  href={item.href}
+                  class="text-gray-700 hover:text-primary transition"
+                >
+                  {item.label}
+                </a>
+              )
+            )
+          }
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          @click="open = !open"
+          aria-label="mobile menu"
+          class="lg:hidden text-gray-700"
+        >
+          <span x-show="!open">
+            <Icon name="bi:list" class="text-3xl" />
+          </span>
+          <span x-show="open" style="display:none;">
+            <Icon name="bi:x-lg" class="text-3xl" />
+          </span>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div x-show="open" style="display:none;" class="lg:hidden pb-4">
+        {
+          menu.map(item =>
+            item.isButton ? (
+              <a
+                href={item.href}
+                class="w-full flex items-center gap-2 justify-center bg-primary text-white px-6 py-3 mt-4"
+              >
+                <Icon name="bi:journal-check" class="text-lg" />
+                {item.label}
+              </a>
+            ) : (
+              <a
+                href={item.href}
+                class="block py-2 text-gray-700"
+              >
+                {item.label}
+              </a>
+            )
+          )
+        }
+      </div>
+    </div>
+  </nav>
+</header>

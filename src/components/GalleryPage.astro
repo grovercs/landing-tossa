@@ -1,0 +1,115 @@
+---
+export interface GalleryImage {
+  src: string;
+  alt: string;
+}
+
+export interface Props {
+  id?: string;
+  introImages: GalleryImage[];     // first 6 images used for special layout
+  extraImages?: GalleryImage[];    // images after intro layout
+  maxExtra?: number;               // default: 12
+  pattern?: boolean;               // enable patterned background
+}
+
+const {
+  id = "gallery",
+  introImages = [],
+  extraImages = [],
+  maxExtra = 12,
+  pattern = true
+} = Astro.props;
+
+// Limit extra images
+const extraList = extraImages.slice(0, maxExtra);
+
+// Extract first 6 intro images safely
+const img = introImages;
+
+// helper:
+const get = (index: number) =>
+  img[index] || { src: "/img/placeholder.jpg", alt: "gallery placeholder" };
+---
+
+<section id={id} class="py-16 bg-skin-light relative overflow-x-hidden">
+
+  {pattern && (
+    <div class="absolute inset-0 opacity-5 geometric-pattern"></div>
+  )}
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <!-- TOP COMPLEX GRID LAYOUT (6 images max) -->
+    <div class="grid md:grid-cols-2 gap-2 mb-2">
+      <div class="grid grid-cols-2 gap-2">
+        <!-- Left stack 1 -->
+        <div class="relative grid grid-cols-1 gap-2">
+          <div class="w-full aspect-4/3 bg-gray-100 relative overflow-hidden group">
+            <a href={get(0).src} class="glightbox">
+              <img src={get(0).src} alt={get(0).alt} loading="lazy" class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+
+          <div class="w-full aspect-4/3 bg-gray-100 relative overflow-hidden group">
+            <a href={get(1).src} class="glightbox">
+              <img src={get(1).src} alt={get(1).alt} loading="lazy" class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Tall right image -->
+        <div class="relative col-row-2">
+          <div class="w-full aspect-[2/3.1] md:aspect-[2/3.05] bg-gray-100 relative overflow-hidden group">
+            <a href={get(2).src} class="glightbox">
+              <img src={get(2).src} alt={get(2).alt} loading="lazy"
+                class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-2">
+        <!-- Wide image -->
+        <div class="relative">
+          <div class="w-full aspect-[4/1.475] bg-gray-100 relative overflow-hidden group">
+            <a href={get(3).src} class="glightbox">
+              <img src={get(3).src} alt={get(3).alt} loading="lazy"
+                class="absolute inset-0 w-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+        </div>
+
+        <div class="relative grid grid-cols-2 gap-2">
+          <div class="w-full aspect-4/3 bg-gray-100 relative overflow-hidden group">
+            <a href={get(4).src} class="glightbox">
+              <img src={get(4).src} alt={get(4).alt} loading="lazy"
+                class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+
+          <div class="w-full aspect-4/3 bg-gray-100 relative overflow-hidden group">
+            <a href={get(5).src} class="glightbox">
+              <img src={get(5).src} alt={get(5).alt} loading="lazy"
+                class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXTRA IMAGES (MAX 12) -->
+    {extraList.length > 0 && (
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+        {extraList.map((image) => (
+          <div class="aspect-video bg-gray-100 overflow-hidden group">
+            <a href={image.src} class="glightbox">
+              <img
+                src={image.src}
+                alt={image.alt}
+                class="w-full group-hover:scale-110 transition-all duration-500"
+              />
+            </a>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>

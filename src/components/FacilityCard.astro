@@ -1,0 +1,31 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface FacilityItem {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  item: FacilityItem;
+}
+
+const { item } = Astro.props;
+---
+
+<div class="bg-white p-6 shadow-md hover:shadow-xl transition group rounded-tl-2xl rounded-br-2xl">
+  <!-- ICON WRAPPER -->
+  <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary transition">
+    <Icon 
+      name={item.icon}
+      class="text-2xl text-primary group-hover:text-white transition"
+    />
+  </div>
+  <!-- TITLE -->
+  <h3 class="font-heading text-xl text-primary-dark mb-2">
+    {item.title}
+  </h3>
+  <!-- DESCRIPTION -->
+  <p class="text-gray-600">{item.description}</p>
+</div>

@@ -1,0 +1,35 @@
+---
+import HeadingPageSm from '@src/components/HeadingPageSm.astro';
+import MainLayout from '@src/layouts/MainLayout.astro';
+
+import { getCollection, render } from "astro:content";
+
+const entries = await getCollection("pages");
+const entry = entries.find(e => e.id.includes("docs"));
+let Content;
+if (entry) {
+  ({ Content } = await render(entry));
+}
+const updatedText = entry?.data?.updated
+  ? `Update: ${entry.data.updated}`
+  : "";
+---
+
+{entry ? (
+  <MainLayout title={entry.data.title}>
+    <HeadingPageSm
+        title="Documentation"
+        subtitle={updatedText}
+        bgImage="/img/hero1.jpg"
+    />
+    <div class="py-20 bg-white overflow-x-hidden">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="post-content">
+                {Content && <Content />}
+            </div>
+        </div>
+    </div>
+  </MainLayout>
+) : (
+  <div>Page not found.</div>
+)}

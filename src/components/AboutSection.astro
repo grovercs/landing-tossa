@@ -1,0 +1,77 @@
+---
+import { Icon } from "astro-icon/components";
+
+//
+// ─── TYPE DEFINITIONS ───────────────────────────────────────────
+//
+export interface AboutListItem {
+  icon: string;         // example: "bi:check-circle"
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  id?: string;
+  title: string;
+  paragraphs: string[];
+  image: string;
+  imageAlt?: string;
+  list?: AboutListItem[];
+}
+
+const {
+  id = "about",
+  title,
+  paragraphs,
+  image,
+  imageAlt = "About Image",
+  list = [],
+} = Astro.props;
+---
+
+<section id={id} class="py-20 bg-white overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-20 items-center">
+      <!-- IMAGE -->
+      <div class="relative">
+        <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-wood-dark"></div>
+        <img 
+          src={image}
+          alt={imageAlt}
+          class="relative w-full h-auto rounded-tl-3xl object-cover"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- CONTENT -->
+      <div>
+        <!-- Title -->
+        <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-6">
+          {title}
+        </h2>
+
+        <!-- Paragraphs -->
+        <div class="post-content mb-6 space-y-4">
+          {paragraphs.map(p => (
+            <p>{p}</p>
+          ))}
+        </div>
+
+        <!-- List Items -->
+        <div class="space-y-4">
+          {list.map(item => (
+            <div class="flex items-start gap-3">
+              <Icon name={item.icon} class="text-3xl text-primary mt-1" />
+              <div>
+                <h3 class="text-heading font-semibold text-primary-dark mb-0.5">
+                  {item.title}
+                </h3>
+                <p class="text-gray-600">{item.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

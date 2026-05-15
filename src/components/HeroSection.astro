@@ -1,0 +1,182 @@
+---
+import { Icon } from "astro-icon/components";
+import Button from "../components/Button.astro";
+
+//
+// ─── TYPE DEFINITIONS ───────────────────────────────────────────
+//
+export interface HeroSlide {
+  src: string;
+  alt: string;
+}
+
+export interface HeroCTA {
+  label: string;
+  href: string;
+  icon: string | null;
+  variant: "primary" | "outline";
+}
+
+export interface HeroRating {
+  totalVisitors: string;
+  score: string;
+  reviewsCount: string;
+}
+
+export interface PartnerLogo {
+  src: string;
+  alt: string;
+}
+
+// slides
+const slides: HeroSlide[] = [
+  { src: "/images/tossa-de-mar-costa-brava-1.webp", alt: "Vistas de Tossa de Mar" },
+  { src: "/images/hotel-tossa-de-mar-restaurante.webp", alt: "El Bergantí Exterior" },
+  { src: "/images/fachada-hostalet.avif", alt: "Hostalet Exterior" }
+];
+
+// heading + subheading
+const heroTitle = "El Bergantí & Hostalet de Tossa";
+const heroSubtitle =
+  "Descubre la auténtica Costa Brava desde el corazón de la Vila Vella. Dos alojamientos con encanto para una estancia inolvidable.";
+
+// CTA buttons
+const ctas: HeroCTA[] = [
+  {
+    label: "Reservar Ahora",
+    href: "#booking",
+    icon: "bi:calendar-check",
+    variant: "primary"
+  },
+  {
+    label: "Ver Alojamientos",
+    href: "#rooms",
+    icon: "bi:door-open",
+    variant: "outline"
+  }
+];
+
+// Rating
+const rating: HeroRating = {
+  totalVisitors: "Miles de huéspedes",
+  score: "Trato Familiar",
+  reviewsCount: "Reserva Directa"
+};
+
+// Partner logos
+const partners: PartnerLogo[] = [];
+---
+
+<!-- HERO SECTION -->
+<section
+  class="relative pt-14 pb-20 lg:py-24 flex items-center overflow-x-hidden"
+  x-data=`{
+    active: 0,
+    interval: null,
+
+    init() {
+      this.start();
+    },
+
+    start() {
+      this.interval = setInterval(() => {
+        this.next();
+      }, 8000);
+    },
+
+    next() {
+      this.active = (this.active + 1) % ${slides.length};
+    },
+
+    goTo(i) {
+      this.active = i;
+      clearInterval(this.interval);
+      this.start();
+    }
+  }`
+>
+
+  <!-- DEFAULT BACKGROUND -->
+  <img
+    src={slides[0].src}
+    alt={slides[0].alt}
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+
+  <!-- SLIDE IMAGES -->
+  {slides.map((slide, index) => (
+    <img
+      src={slide.src}
+      alt={slide.alt}
+      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+      x-show={`active === ${index}`}
+      x-transition:enter="transition ease-out duration-1000"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-1000"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      style={index === 0 ? "" : "display:none;"}
+    />
+  ))}
+
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-primary/90"></div>
+    <div class="max-w-2xl bg-white/85 p-6 md:p-12 relative rounded-tl-3xl">
+      <!-- TITLE -->
+      <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl text-primary-dark mb-2">
+        {heroTitle}
+      </h1>
+      <p class="text-gray-700 mb-4 text-lg">{heroSubtitle}</p>
+      <!-- CTA BUTTONS -->
+      <div class="flex max-sm:flex-col items-center gap-4 mb-6">
+        {ctas.map((cta) => (
+          <Button
+            href={cta.href}
+            variant={cta.variant}
+            size="md"
+            icon={cta.icon}
+            class={cta.variant === "outline" ? "glightbox" : ""}
+          >
+            {cta.label}
+          </Button>
+        ))}
+
+      </div>
+
+      <!-- RATING -->
+      <div class="mb-3">
+        <div class="font-bold text-gray-900">{rating.totalVisitors}</div>
+        <div class="flex items-center gap-1 text-yellow-500">
+          {[...Array(5)].map(() => (
+            <Icon name="bi:star-fill" class="w-4 h-4" />
+          ))}
+          <span class="text-gray-600 ml-2">
+            {rating.score} ({rating.reviewsCount})
+          </span>
+        </div>
+      </div>
+
+      <!-- PARTNER LOGOS -->
+      <div class="flex flex-wrap items-center gap-2">
+        {partners.map((p) => (
+          <img src={p.src} class="h-6" alt={p.alt} loading="lazy" />
+        ))}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOTS NAVIGATION -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+    {slides.map((slide, index) => (
+      <button
+        type="button"
+        aria-label={`Go to slide ${index + 1}`}
+        class="w-4 h-4 rounded-full border border-white cursor-pointer transition-all duration-300"
+        x-bind:class={`active === ${index} ? 'bg-primary border-primary scale-110' : 'bg-white/30 hover:bg-white/50'`}
+        x-on:click={`goTo(${index})`}
+      ></button>
+    ))}
+  </div>
+</section>

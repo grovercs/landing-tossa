@@ -1,0 +1,52 @@
+---
+import MenuCard, { type MenuItem } from "./MenuCard.astro";
+
+export interface MenuCategory {
+  title: string;
+  items: MenuItem[];
+}
+
+export interface Props {
+  id?: string;
+  title: string;
+  subtitle: string;
+  imageDecor?: string;
+  categories: MenuCategory[];
+}
+
+const {
+  id = "menu",
+  title,
+  subtitle,
+  imageDecor = null,
+  categories = []
+} = Astro.props;
+---
+
+<section id={id} class="py-20 bg-skin-light overflow-x-hidden">
+  <div class="max-w-7xl relative mx-auto px-4">
+    <!-- Decorative floating image -->
+    {imageDecor && (
+      <div class="absolute -top-24 md:-top-20 right-0">
+        <img src={imageDecor} class="w-16 sm:w-20" alt="decor" loading="lazy" />
+      </div>
+    )}
+
+    <!-- Heading -->
+    <div class="max-w-2xl mb-12">
+      <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-4">
+        {title}
+      </h2>
+      <p class="text-gray-700 text-lg leading-relaxed">
+        {subtitle}
+      </p>
+    </div>
+
+    <!-- Menu Cards -->
+    <div class="grid lg:grid-cols-3 gap-10">
+      {categories.map((cat) => (
+        <MenuCard title={cat.title} items={cat.items} />
+      ))}
+    </div>
+  </div>
+</section>

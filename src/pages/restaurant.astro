@@ -1,0 +1,116 @@
+---
+import GalleryMenu from "@src/components/GalleryMenu.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import IntroSection from "@src/components/IntroSection.astro";
+import RestaurantMenuSection from "@src/components/RestaurantMenuSection.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Nordicia - Luxury Hotel Experience" description="Experience the epitome of luxury and comfort at Nordicia, where exceptional service meets elegant design.">
+    <HeadingPage
+        title="Signature Restaurant"
+        subtitle="A refined dining destination where Nordic simplicity meets modern culinary excellence."
+        background="/img/hotel1.jpg"
+        />
+    <IntroSection
+        id="intro"
+        title="An Elegant Nordic Dining Experience"
+        paragraphs={[
+            "Our restaurant offers a warm and intimate atmosphere inspired by Scandinavian design. Every dish is prepared using fresh, locally sourced ingredients and crafted with precision.",
+            "Whether you are enjoying breakfast, lunch, or dinner, our signature menu is designed to delight your senses with elegant flavors and beautiful presentation."
+        ]}
+        features={[
+            { icon: "bi:cup-hot", text: "Breakfast, Lunch & Dinner" },
+            { icon: "bi:star", text: "Fine Dining Concept" },
+            { icon: "bi:alarm", text: "Open Daily: 07.00 – 23.00" },
+            { icon: "bi:cup-straw", text: "Premium Beverages" }
+        ]}
+        image="/img/restaurant.jpg"
+        imageAlt="Restaurant"
+        decorColor="bg-primary"
+        />
+    <RestaurantMenuSection
+        title="Our Restaurant Menu"
+        subtitle="Enjoy our carefully curated selections for breakfast, lunch, and dinner."
+        imageDecor="/img/lamp.png"
+        categories={[
+            {
+            title: "Breakfast Menu",
+            items: [
+                {
+                name: "Scandinavian Breakfast Set",
+                price: "FREE",
+                description: "Fresh bread, smoked salmon, organic eggs, cheese, and Nordic coffee."
+                },
+                {
+                name: "Nordic Omelette",
+                price: "$12",
+                description: "Fluffy omelette with herbs, cheese, and garden vegetables."
+                },
+                {
+                name: "Fresh Berry Yogurt Bowl",
+                price: "$10",
+                description: "Creamy yogurt served with mixed Nordic berries and honey."
+                }
+            ]
+            },
+
+            {
+            title: "Lunch Menu",
+            items: [
+                {
+                name: "Nordic Grilled Salmon",
+                price: "$28",
+                description: "Grilled Atlantic salmon served with seasonal vegetables and lemon butter sauce."
+                },
+                {
+                name: "Nordic Chicken Steak",
+                price: "$22",
+                description: "Juicy chicken steak with creamy mashed potatoes and special Nordic sauce."
+                },
+                {
+                name: "Nordic Cream Pasta",
+                price: "$20",
+                description: "Homemade pasta with creamy sauce, mushrooms, and herbs."
+                }
+            ]
+            },
+
+            {
+            title: "Dinner Menu",
+            items: [
+                {
+                name: "Nordic Beef Tenderloin",
+                price: "$36",
+                description: "Premium beef tenderloin served with roasted potatoes and red wine sauce."
+                },
+                {
+                name: "Nordic Seafood Platter",
+                price: "$42",
+                description: "Selection of grilled salmon, prawns, squid, and fresh seasonal seafood."
+                },
+                {
+                name: "Nordic Berry Dessert",
+                price: "$12",
+                description: "Fresh Nordic berries served with vanilla cream and honey."
+                }
+            ]
+            }
+        ]}
+        />
+    <GalleryMenu
+        title="A Memorable Culinary Experience"
+        paragraphs={[
+            "Step into a refined dining atmosphere where every detail is designed to create an unforgettable culinary journey. From warm surroundings to impeccable service, your experience is crafted to leave a lasting impression.",
+            "Whether you join us for breakfast, lunch, or dinner, each dish is thoughtfully prepared to impress your senses with exceptional flavors, elegant presentation, and premium quality."
+        ]}
+        images={[
+            { src: "/img/food1.jpg", alt: "Food 1" },
+            { src: "/img/food2.jpg", alt: "Food 2" },
+            { src: "/img/food3.jpg", alt: "Food 3" },
+            { src: "/img/food4.jpg", alt: "Food 4" },
+            { src: "/img/food5.jpg", alt: "Food 5" },
+            { src: "/img/food6.jpg", alt: "Food 6" }
+        ]}
+        />
+</MainLayout>

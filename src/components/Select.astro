@@ -1,0 +1,55 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  label: string;
+  icon?: string;
+  options: string[];
+  name?: string;
+  hideLabel?: boolean;   // <— NEW PROP
+  class?: string;
+}
+
+const {
+  label,
+  icon = null,
+  options,
+  name = "",
+  hideLabel = false,
+  class: extraClass = "",
+} = Astro.props;
+
+const baseClass = `
+  h-12 px-3 bg-white text-gray-800
+  focus:outline-none focus:ring-2 focus:ring-primary
+  appearance-none cursor-pointer
+  ${extraClass}
+`;
+---
+
+<div class="flex flex-col relative">
+
+  <!-- LABEL LOGIC -->
+  {hideLabel ? (
+    <!-- screen-reader only version -->
+    <label class="sr-only">{label}</label>
+  ) : (
+    <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+      {icon && <Icon name={icon} class="w-4 h-4" />}
+      {label}
+    </label>
+  )}
+
+  <!-- SELECT -->
+  <select name={name} class={baseClass}>
+    {options.map((opt) => (
+      <option>{opt}</option>
+    ))}
+  </select>
+
+  <!-- dropdown arrow -->
+  <Icon 
+    name="bi:chevron-down"
+    class="absolute right-3 top-[42px] w-4 h-4 text-gray-600 pointer-events-none"
+  />
+</div>

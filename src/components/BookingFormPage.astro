@@ -1,0 +1,128 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  roomTitle: string;
+  price: number;
+}
+
+const { roomTitle, price } = Astro.props;
+---
+<div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg mb-8">
+  <form class="grid grid-cols-2 gap-5">
+    
+    <!-- Room Info -->
+    <div class="col-span-2">
+      <span class="text-sm text-white mb-1 block">Room Type</span>
+      <span class="text-heading font-semibold text-white">
+        {roomTitle}
+      </span>
+      <span class="block text-sm text-white/80 mt-1">
+        From ${price} / night
+      </span>
+    </div>
+
+    <!-- Full Name -->
+    <div class="col-span-2">
+      <label class="text-sm text-white mb-1 block">Full Name</label>
+      <input
+        type="text"
+        name="name"
+        required
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <!-- Email -->
+    <div class="col-span-2">
+      <label class="text-sm text-white mb-1 block">Email Address</label>
+      <input
+        type="email"
+        name="email"
+        required
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <!-- Phone -->
+    <div class="col-span-2">
+      <label class="text-sm text-white mb-1 block">Phone Number</label>
+      <input
+        type="tel"
+        name="phone"
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <!-- Check-in -->
+    <div>
+      <label class="text-sm text-white mb-1 block">Check-in Date</label>
+      <input
+        type="date"
+        name="checkin"
+        required
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <!-- Check-out -->
+    <div>
+      <label class="text-sm text-white mb-1 block">Check-out Date</label>
+      <input
+        type="date"
+        name="checkout"
+        required
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <!-- Adults -->
+    <div>
+      <label class="text-sm text-white mb-1 block">Adults</label>
+      <select
+        name="adults"
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option value="1">1 Adult</option>
+        <option value="2">2 Adults</option>
+        <option value="3">3 Adults</option>
+        <option value="4">4 Adults</option>
+      </select>
+    </div>
+
+    <!-- Children -->
+    <div>
+      <label class="text-sm text-white mb-1 block">Children</label>
+      <select
+        name="children"
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option value="0">0 Child</option>
+        <option value="1">1 Child</option>
+        <option value="2">2 Children</option>
+        <option value="3">3 Children</option>
+      </select>
+    </div>
+
+    <!-- Notes -->
+    <div class="col-span-2">
+      <label class="text-sm text-white mb-1 block">Special Requests</label>
+      <textarea
+        rows="4"
+        name="notes"
+        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+      ></textarea>
+    </div>
+
+    <!-- Submit -->
+    <div class="col-span-2">
+      <button
+        type="submit"
+        class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
+      >
+        <Icon name="bi:journal-check" class="text-lg" />
+        Confirm Reservation
+      </button>
+    </div>
+  </form>
+</div>

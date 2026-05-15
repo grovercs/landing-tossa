@@ -1,0 +1,47 @@
+---
+import ContactForm from "./ContactForm.astro";
+import { Icon } from "astro-icon/components";
+
+export interface ContactItem {
+  icon: string;     // "bi:geo-alt"
+  title: string;    // "Hotel Address"
+  text: string;     // text or multiline
+}
+
+export interface Props {
+  id?: string;
+  heading: string;
+  items: ContactItem[];
+}
+
+const { id = "contact", heading, items } = Astro.props;
+---
+
+<div id={id} class="py-16 bg-white overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-8 items-start">
+
+      <!-- LEFT: Contact Info -->
+      <div class="flex flex-col">
+        <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-8">
+          {heading}
+        </h2>
+
+        {items.map((item) => (
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+              <Icon name={item.icon} class="text-2xl text-primary" />
+            </div>
+            <div>
+              <h4 class="font-semibold text-primary-dark mb-1">{item.title}</h4>
+              <p class="text-gray-600 whitespace-pre-line">{item.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- RIGHT: Contact Form -->
+      <ContactForm />
+    </div>
+  </div>
+</div>

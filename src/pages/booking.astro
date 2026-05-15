@@ -1,0 +1,15 @@
+---
+import BookingPage from "@src/components/BookingPage.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import NotFoundSection from "@src/components/NotFoundSection.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Nordicia - Luxury Hotel Experience" description="Experience the epitome of luxury and comfort at Nordicia, where exceptional service meets elegant design.">
+    <HeadingPage
+        title="Room Reservation"
+        subtitle="Secure your perfect stay at Nordicia Hotel by completing the reservation form below."
+        background="/img/hero1.jpg"
+        />
+    <BookingPage />
+</MainLayout>

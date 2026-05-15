@@ -1,0 +1,54 @@
+---
+import { Icon } from "astro-icon/components";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  room: CollectionEntry<"rooms">;
+}
+
+const { room } = Astro.props;
+const { data } = room;
+const slug = room.id.replace(/\.mdx$/, "");
+const url = `/rooms/${slug}/`;
+---
+
+<div class="bg-white rounded-tl-2xl rounded-br-2xl overflow-hidden shadow-lg">
+  <div class="relative aspect-video bg-gray-100 overflow-hidden">
+    <a href={url}>
+      <img src={data.featuredImage} alt={data.title} class="w-full object-cover" loading="lazy" />
+    </a>
+
+    {data.label && (
+      <div class="absolute right-0 top-4 bg-accent text-wood-dark py-1 px-3 font-semibold">
+        {data.label}
+      </div>
+    )}
+  </div>
+
+  <div class="p-6">
+    <h3 class="text-xl font-semibold text-primary-dark mb-2">
+      <a href={url}>{data.title}</a>
+    </h3>
+
+    <div class="flex flex-wrap gap-3 text-sm text-gray-600 mb-5">
+      {data.amenities.slice(0, 4).map((a) => (
+        <span class="flex items-center gap-1">
+          <Icon name={a.icon} /> {a.label}
+        </span>
+      ))}
+    </div>
+
+    <div class="flex items-center justify-between">
+      <span class="font-semibold text-wood">
+        From ${data.price} / night
+      </span>
+
+      <a
+        href={url}
+        class="px-5 py-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition"
+      >
+        View Details
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface IntroFeature {
+  icon: string;    // e.g. "bi:cup-hot"
+  text: string;    // e.g. "Breakfast, Lunch & Dinner"
+}
+
+export interface Props {
+  item: IntroFeature;
+}
+
+const { item } = Astro.props;
+---
+
+<div class="flex items-center gap-3 text-gray-700">
+  <Icon name={item.icon} class="text-2xl text-primary" />
+  <span>{item.text}</span>
+</div>

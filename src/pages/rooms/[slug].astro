@@ -1,0 +1,158 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BookingFormPage from "@src/components/BookingFormPage.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection, render } from "astro:content";
+import BookingInfo from "@src/components/BookingInfo.astro";
+
+// ======================================
+// STATIC PATHS
+// ======================================
+export async function getStaticPaths() {
+  const rooms = await getCollection("rooms");
+  return rooms.map((room) => ({
+    params: { slug: room.id.replace(/\.mdx$/, "") },
+  }));
+}
+
+// ======================================
+// GET ROOM DATA
+// ======================================
+const { slug } = Astro.params;
+const allRoomsForEntry = await getCollection("rooms");
+const room = allRoomsForEntry.find(r => r.id.replace(/\.mdx$/, "") === slug);
+
+if (!room) {
+  throw new Error(`Room not found: ${slug}`);
+}
+
+const { Content } = await render(room);
+const { data } = room;
+
+// Rating helpers
+const fullStars = Math.floor(data.rating);
+const hasHalfStar = data.rating % 1 !== 0;
+
+// Images
+const featured = data.featuredImage;
+const gallery = data.gallery ?? [];
+---
+<MainLayout title={data.title}>
+  <div id="rooms" class="py-8 sm:py-12 bg-white overflow-x-hidden">
+    <div class="max-w-7xl mx-auto px-4">
+
+      <!-- Heading -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
+        <div class="flex flex-col">
+          <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl text-primary-dark mb-2">
+            {data.title}
+          </h1>
+
+          <!-- Rating -->
+          <div class="flex items-center gap-2">
+            <span class="text-gray-600">{data.rating}</span>
+
+            {Array.from({ length: fullStars }).map(() => (
+              <Icon name="bi:star-fill" class="text-lg text-yellow-500" />
+            ))}
+
+            {hasHalfStar && (
+              <Icon name="bi:star-half" class="text-lg text-yellow-500" />
+            )}
+
+            <span class="text-gray-600">
+              ({data.ratingCount} Reviews)
+            </span>
+          </div>
+        </div>
+
+        <div class="relative">
+          <span class="text-heading text-lg md:text-xl font-semibold text-green-600 bg-primary/10 rounded-tl-2xl rounded-br-2xl py-3 px-6">
+            From ${data.price}/night
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- MAIN -->
+        <div class="relative md:col-span-2">
+
+          <!-- Gallery -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 mb-8">
+            <!-- Featured -->
+            <div class="relative aspect-4/3 bg-gray-100 md:aspect-square overflow-hidden group rounded-tl-3xl">
+              <a href={featured} class="glightbox">
+                <img
+                  src={featured}
+                  alt={data.title}
+                  class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500"
+                />
+              </a>
+            </div>
+
+            <!-- Additional -->
+            <div class="grid grid-cols-4 md:grid-cols-2 gap-1 sm:gap-2">
+              {gallery.map((img, i) => (
+                <div
+                  class={`relative overflow-hidden max-md:aspect-square bg-gray-100 group ${
+                    i === gallery.length - 1 ? "rounded-br-3xl" : ""
+                  }`}
+                >
+                  <a href={img} class="glightbox">
+                    <img
+                      src={img}
+                      alt={`gallery-${i}`}
+                      class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500"
+                    />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Amenities -->
+          <div class="relative mb-8">
+            <h2 class="font-heading text-xl md:text-2xl text-primary-dark mb-2">
+              Offered Amenities
+            </h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 sm:p-6 max-sm:text-sm sm:bg-skin-light sm:rounded-tl-2xl rounded-br-2xl sm:shadow-sm">
+              {data.amenities.map((item) => (
+                <span class="flex items-center gap-1 py-2 border-b border-dashed border-accent">
+                  <Icon name={item.icon} /> {item.label}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="post-content mb-6">
+            <Content />
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="relative">
+
+          <!-- Booking Form -->
+          <BookingFormPage roomTitle={data.title} price={data.price} />
+
+          <!-- Info -->
+          <BookingInfo
+          title="Booking Information"
+          items={[
+            { icon: "bi:clock", text: "Check-in time starts from 14:00 PM" },
+            { icon: "bi:clock-history", text: "Check-out time before 12:00 PM" },
+            { icon: "bi:shield-check", text: "Free cancellation up to 24 hours before arrival" },
+            { icon: "bi:cup-hot", text: "Breakfast included in all room types" },
+            { icon: "bi:wifi", text: "Free high-speed Wi-Fi in every room" },
+            { icon: "bi:cash-stack", text: "Multiple payment options available" },
+            ({ icon: "bi:people", text: "Two children above 10 years old must book their own room." }),
+          ]}
+        />
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,31 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import RoomsPage from "@src/components/RoomsPage.astro";
+import { getCollection } from "astro:content";
+import HeadingPage from "@src/components/HeadingPage.astro";
+
+const allRooms = await getCollection("rooms");
+
+// sort by date
+const rooms = allRooms.sort(
+  (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+
+const perPage = 6;
+const currentPage = 1;
+const totalPages = Math.ceil(rooms.length / perPage);
+const visibleRooms = rooms.slice(0, perPage);
+---
+
+<MainLayout title="Rooms – Nordicia Hotel">
+    <HeadingPage
+        title="Explore Our Rooms"
+        subtitle="Discover a collection of thoughtfully designed rooms that combine Nordic elegance with modern comfort."
+        background="/img/hero1.jpg"
+        />
+    <RoomsPage
+        rooms={visibleRooms}
+        currentPage={currentPage}
+        totalPages={totalPages}
+    />
+</MainLayout>

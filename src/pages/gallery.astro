@@ -1,0 +1,32 @@
+---
+import GalleryPage from "@src/components/GalleryPage.astro";
+import GallerySection from "@src/components/GallerySection.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Nordicia - Luxury Hotel Experience" description="Experience the epitome of luxury and comfort at Nordicia, where exceptional service meets elegant design.">
+    <HeadingPage
+        title="Our Hotel Gallery"
+        subtitle="Explore a curated collection of moments, spaces, and details that define the Scandinavian luxury experience at our hotel."
+        background="/img/hotel1.jpg"
+        />
+    <GalleryPage
+        introImages={[
+            { src: "/img/hotel1.jpg", alt: "Hotel 1" },
+            { src: "/img/hotel3.jpg", alt: "Hotel 3" },
+            { src: "/img/hotel2.jpg", alt: "Hotel 2" },
+            { src: "/img/pool.jpg", alt: "Pool" },
+            { src: "/img/detail2.jpg", alt: "Detail" },
+            { src: "/img/hero1.jpg", alt: "Hero 1" }
+        ]}
+        extraImages={[
+            { src: "/img/hero1.jpg", alt: "Hero 1" },
+            { src: "/img/hero2.jpg", alt: "Hero 2" },
+            { src: "/img/room1.jpg", alt: "Room 1" },
+            { src: "/img/room2.jpg", alt: "Room 2" },
+            { src: "/img/room3.jpg", alt: "Room 3" },
+            { src: "/img/detail1.jpg", alt: "Detail 1" },
+        ]}
+    />
+</MainLayout>

@@ -1,0 +1,96 @@
+---
+import { Icon } from "astro-icon/components";
+import Input from "../components/Input.astro";
+import Select from "../components/Select.astro";
+import Button from "../components/Button.astro";
+
+// OPTIONS DATA
+const adults = [
+  "1 Adulto","2 Adultos","3 Adultos","4 Adultos","5 Adultos",
+  "6 Adultos","7 Adultos","8 Adultos","9 Adultos","10 Adultos","10+"
+];
+
+const children = [
+  "0 Niños","1 Niño","2 Niños","3 Niños","4 Niños",
+  "5 Niños","6 Niños","7 Niños","8 Niños","9 Niños","10 Niños","10+"
+];
+
+const roomTypes = [
+  "El Bergantí - Habitación Doble",
+  "El Bergantí - Habitación Triple",
+  "Hostalet de Tossa - Habitación Doble",
+  "Hostalet de Tossa - Habitación Triple"
+];
+---
+
+<section class="bg-primary-dark py-8 overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="bg-primary p-6 rounded-lg shadow-xl">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+
+        <!-- Check-in -->
+        <Input 
+          label="Fecha Entrada" 
+          type="date"
+          class="w-full"
+          icon="bi:calendar-check"
+        />
+
+        <!-- Check-out -->
+        <Input 
+          label="Fecha Salida" 
+          type="date"
+          class="w-full"
+          icon="bi:calendar-x"
+        />
+
+        <!-- Guests -->
+        <div class="flex flex-col">
+          <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+            <Icon name="bi:people" class="w-4 h-4" /> Huéspedes
+          </label>
+
+          <div class="grid grid-cols-2 h-12 gap-2">
+            <!-- Adults -->
+            <Select 
+              label="Adultos"
+              icon="bi:person"
+              options={adults}
+              hideLabel={true}
+              class="flex-1"
+            />
+
+            <!-- Children -->
+            <Select 
+              label="Niños"
+              icon="bi:person-add"
+              options={children}
+              hideLabel={true}
+              class="flex-1"
+            />
+          </div>
+        </div>
+
+        <!-- Rooms -->
+        <Select 
+          label="Alojamiento"
+          icon="bi:door-open"
+          options={roomTypes}
+        />
+
+        <!-- Book Button -->
+        <div>
+          <Button 
+            variant="success"
+            size="md"
+            icon="bi:journal-check"
+            iconPosition="left"
+            class="w-full h-12 bg-green-700/90 hover:bg-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Buscar
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

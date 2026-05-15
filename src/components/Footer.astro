@@ -1,0 +1,115 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface FooterLink {
+  label: string;
+  href: string;
+}
+
+export interface ContactItem {
+  icon: string;
+  text: string | string[];
+}
+
+export interface FooterBrand {
+  name: string;
+  tagline: string;
+}
+
+export interface FooterCopyright {
+  year: number;
+  brand: string;
+  text: string;
+}
+
+const brandInfo: FooterBrand = {
+  name: "Tossa de Mar",
+  tagline: "El Bergantí & Hostalet de Tossa. Dos opciones con encanto en el corazón de la Costa Brava."
+};
+
+const exploreLinks: FooterLink[] = [
+  { label: "Contacto", href: "/contact" },
+  { label: "El Bergantí", href: "https://elberganti-tossa.com/es/" },
+  { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/es/" }
+];
+
+const socialLinks = [
+  { icon: "bi:facebook", href: "#" },
+  { icon: "bi:instagram", href: "#" },
+  { icon: "bi:twitter-x", href: "#" },
+  { icon: "bi:tiktok", href: "#" },
+];
+
+const contact: ContactItem[] = [
+  { icon: "bi:geo-alt", text: ["Tossa de Mar", "Costa Brava, Girona"] },
+  { icon: "bi:house", text: ["El Bergantí: +34 972 34 04 22", "Hostalet: +34 972 34 00 00"] }
+];
+
+const copyright: FooterCopyright = {
+  year: 2026,
+  brand: "El Bergantí & Hostalet de Tossa",
+  text: "Todos los derechos reservados."
+};
+---
+
+<footer id="footer" class="bg-deep-primary text-white pt-16 pb-12 overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+
+      <!-- BRAND -->
+      <div>
+        <h3 class="font-heading text-2xl mb-4">{brandInfo.name.toUpperCase()}</h3>
+        <p class="text-white/70 mb-4">{brandInfo.tagline}</p>
+        <div class="flex gap-4">
+          {socialLinks.map(s => (
+            <a href={s.href} class="text-white/70 hover:text-accent transition">
+              <Icon name={s.icon} class="text-xl" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- EXPLORE -->
+      <div>
+        <h4 class="font-heading text-lg mb-4">ENLACES</h4>
+        <ul class="space-y-2">
+          {exploreLinks.map(item => (
+            <li>
+              <a href={item.href} class="text-white/70 hover:text-accent transition">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- CONTACT -->
+      <div>
+        <h4 class="font-heading text-lg mb-4">CONTACTO</h4>
+        <ul class="space-y-2 text-white/70">
+          {contact.map(item => (
+            <li class="flex items-start gap-2">
+              <Icon name={item.icon} class="text-white mt-1" />
+              {Array.isArray(item.text) ? (
+                <span>{item.text[0]}<br />{item.text[1]}</span>
+              ) : (
+                <span>{item.text}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="border-t border-white/20 pt-8 text-center text-white/70">
+      <p>
+        &copy; {copyright.year}
+        {` ${copyright.brand}. `}
+        {copyright.text}
+      </p>
+    </div>
+  </div>
+</footer>

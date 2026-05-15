@@ -1,0 +1,125 @@
+---
+import BrandsMarquee from './BrandsMarquee.astro';
+
+export interface GalleryImage {
+  src: string;
+  alt: string;
+}
+
+export interface Props {
+  id?: string;
+  title: string;
+  subtitle: string;
+  images: GalleryImage[];   // max 6 images
+}
+
+const {
+  id = "gallery",
+  title,
+  subtitle,
+  images = []
+} = Astro.props;
+
+// Ensure maximum 6 images
+const gallery = images.slice(0, 6);
+---
+
+<section id={id} class="pt-20 pb-12 bg-skin-light relative overflow-x-hidden">
+  <div class="absolute inset-0 opacity-5 geometric-pattern"></div>
+
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+
+    <!-- HEADING -->
+    <div class="text-center mb-12">
+      <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-6">
+        {title}
+      </h2>
+      <p class="text-gray-700 text-lg max-w-2xl mx-auto">
+        {subtitle}
+      </p>
+    </div>
+
+    <!-- GALLERY GRID -->
+    <div class="grid md:grid-cols-2 gap-2 mb-12">
+      <!-- LEFT GRID -->
+      <div class="grid grid-cols-2 gap-2">
+        <!-- LEFT COLUMN (two images stacked) -->
+        <div class="relative grid grid-cols-1 gap-2">
+          {gallery[0] && (
+            <div class="w-full aspect-4/3 bg-gray-100 relative overflow-hidden group">
+              <a href={gallery[0].src} class="glightbox" data-gallery="gallery1">
+                <img src={gallery[0].src} alt={gallery[0].alt} loading="lazy" 
+                  class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+              </a>
+            </div>
+          )}
+
+          {gallery[1] && (
+            <div class="w-full aspect-4/3 bg-gray-100 relative overflow-hidden group">
+              <a href={gallery[1].src} class="glightbox" data-gallery="gallery1">
+                <img src={gallery[1].src} alt={gallery[1].alt} loading="lazy" 
+                  class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+              </a>
+            </div>
+          )}
+        </div>
+
+        <!-- LEFT TALL IMAGE -->
+        <div class="relative">
+          {gallery[2] && (
+            <div class="w-full aspect-2/3 md:aspect-[2/3.05] bg-gray-100 relative overflow-hidden group">
+              <a href={gallery[2].src} class="glightbox" data-gallery="gallery1">
+                <img src={gallery[2].src} alt={gallery[2].alt} loading="lazy" 
+                  class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- RIGHT GRID -->
+      <div class="grid grid-cols-1 gap-2">
+        <!-- TOP WIDE -->
+        {gallery[3] && (
+          <div class="w-full aspect-[4/1.475] relative overflow-hidden group">
+            <a href={gallery[3].src} class="glightbox" data-gallery="gallery1">
+              <img src={gallery[3].src} alt={gallery[3].alt} loading="lazy" 
+                class="absolute inset-0 w-full object-cover group-hover:scale-110 transition-all duration-500" />
+            </a>
+          </div>
+        )}
+
+        <!-- BOTTOM 2 IMAGES -->
+        <div class="grid grid-cols-2 gap-2">
+          {gallery[4] && (
+            <div class="w-full aspect-4/3 relative overflow-hidden group">
+              <a href={gallery[4].src} class="glightbox" data-gallery="gallery1">
+                <img src={gallery[4].src} alt={gallery[4].alt} loading="lazy" 
+                  class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+              </a>
+            </div>
+          )}
+
+          {gallery[5] && (
+            <div class="w-full aspect-4/3 relative overflow-hidden group">
+              <a href={gallery[5].src} class="glightbox" data-gallery="gallery1">
+                <img src={gallery[5].src} alt={gallery[5].alt} loading="lazy" 
+                  class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500" />
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <BrandsMarquee
+        brands={[
+            { src: "/img/brand1.png", alt: "Brand 1" },
+            { src: "/img/brand2.png", alt: "Brand 2" },
+            { src: "/img/brand3.png", alt: "Brand 3" },
+            { src: "/img/brand4.png", alt: "Brand 4" },
+            { src: "/img/brand5.png", alt: "Brand 5" },
+        ]}
+    />
+  </div>
+</section>

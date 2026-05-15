@@ -1,0 +1,36 @@
+---
+export interface MenuItem {
+  name: string;
+  price: string; // "FREE" atau "$28"
+  description: string;
+}
+
+export interface Props {
+  title: string;      // e.g. "Breakfast Menu"
+  items: MenuItem[];  // daftar makanan
+}
+
+const { title, items } = Astro.props;
+---
+
+<div class="bg-white p-8 rounded-tl-3xl shadow-lg">
+  <!-- Card Title -->
+  <h3 class="font-heading text-2xl text-primary-dark pb-3 border-b-2 border-dotted border-wood">
+    {title}
+  </h3>
+
+  <div class="flex-col">
+    {items.map((item) => (
+      <div class="py-3 border-b-2 border-dotted border-wood">
+        <div class="flex items-center justify-between">
+          <h4 class="font-semibold text-primary-dark">{item.name}</h4>
+          <span class="font-semibold text-wood">{item.price}</span>
+        </div>
+
+        <p class="text-gray-600 mt-1">
+          {item.description}
+        </p>
+      </div>
+    ))}
+  </div>
+</div>

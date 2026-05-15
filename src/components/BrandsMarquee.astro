@@ -1,0 +1,135 @@
+---
+export interface BrandItem {
+  src: string;
+  alt: string;
+}
+
+export interface BrandsMarqueeProps {
+  title?: string;
+  brands: BrandItem[];
+}
+
+// Props
+const {
+  title = "Trusted by",
+  brands
+} = Astro.props;
+
+---
+
+<div class="relative max-w-6xl w-full mx-auto overflow-hidden">
+  <h3 class="font-heading text-lg md:text-xl text-center mb-1">{title}</h3>
+
+  <div class="marquee relative w-full overflow-hidden" id="marquee">
+    <!-- FIRST TRACK -->
+    <div id="track-first" class="track first flex items-center gap-4">
+      {brands.map((b: BrandItem) => (
+        <img src={b.src} alt={b.alt} class="h-10 object-contain grayscale" loading="lazy" />
+      ))}
+    </div>
+
+    <!-- SECOND TRACK -->
+    <div id="track-second" class="track second flex items-center gap-4">
+      {brands.map((b: BrandItem) => (
+        <img src={b.src} alt={b.alt} class="h-10 object-contain grayscale" loading="lazy" />
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+    function waitForImages(container: HTMLElement): Promise<void> {
+        const imgs = Array.from(container.querySelectorAll('img'));
+        if (!imgs.length) return Promise.resolve();
+        
+        return Promise.all(imgs.map(img => new Promise<void>(resolve => {
+            if (img.complete && (img.naturalWidth || img.naturalHeight)) {
+                return resolve();
+            }
+            
+            function done() {
+                img.removeEventListener('load', done);
+                img.removeEventListener('error', done);
+                resolve();
+            }
+            
+            img.addEventListener('load', done);
+            img.addEventListener('error', done);
+        }))).then(() => {});
+    }
+
+    function getTotalChildrenWidth(element: HTMLElement): number {
+        return Math.ceil(Array.from(element.children).reduce((total, child) => {
+            const rect = child.getBoundingClientRect();
+            const computedStyle = window.getComputedStyle(child);
+            const marginLeft = parseFloat(computedStyle.marginLeft) || 0;
+            const marginRight = parseFloat(computedStyle.marginRight) || 0;
+            return total + rect.width + marginLeft + marginRight;
+        }, 0));
+    }
+
+    async function initMarqueeAnimation() {
+    const marquee = document.getElementById('marquee') as HTMLElement | null;
+    const first = document.getElementById('track-first') as HTMLElement | null;
+    const second = document.getElementById('track-second') as HTMLElement | null;
+
+    if (!marquee || !first || !second) return;
+
+    await waitForImages(first);
+
+    // scrollWidth
+    let fullWidth = first.scrollWidth;
+    const containerWidth = marquee.offsetWidth;
+
+    // duplicate
+    if (fullWidth < containerWidth) {
+        first.innerHTML += first.innerHTML;
+        second.innerHTML += second.innerHTML;
+        fullWidth = first.scrollWidth; // update
+    }
+
+    // posisi awal
+    let position1 = 0;
+    let position2 = fullWidth;
+
+    const speed = 1;
+    let animationId: number;
+
+    function update() {
+        if (first) {
+            first.style.transform = `translateY(-50%) translateX(${position1}px)`;
+        }
+        if (second) {
+            second.style.transform = `translateY(-50%) translateX(${position2}px)`;
+        }
+    }
+
+    function animate() {
+        position1 -= speed;
+        position2 -= speed;
+
+        update();
+        if (position1 <= -fullWidth) position1 = position2 + fullWidth;
+        if (position2 <= -fullWidth) position2 = position1 + fullWidth;
+
+        animationId = requestAnimationFrame(animate);
+    }
+
+    update();
+    animationId = requestAnimationFrame(animate);
+
+    marquee.addEventListener("mouseenter", () => cancelAnimationFrame(animationId));
+    marquee.addEventListener("mouseleave", () => animationId = requestAnimationFrame(animate));
+}
+
+    // ============================
+    // INITIALIZATION
+    // ============================
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            await initMarqueeAnimation();
+        } catch (error) {
+            console.error('Marquee initialization failed:', error);
+        }
+    });
+  </script>

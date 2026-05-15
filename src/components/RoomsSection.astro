@@ -1,0 +1,80 @@
+---
+import RoomCard from "./RoomCard.astro";
+import Pagination from "./Pagination.astro";
+import { getCollection } from "astro:content";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  maxPosts?: number;     
+  currentPage?: number;   // default 1
+  baseUrl?: string;     
+}
+
+const {
+  title = "Explore Our Rooms",
+  description =
+    "Discover a collection of thoughtfully designed rooms that combine Nordic elegance with modern comfort.",
+  maxPosts = 6,
+  currentPage = 1,
+  baseUrl = "/rooms/page/",
+} = Astro.props;
+
+// ==============================
+// GET & SORT ROOMS
+// ==============================
+const allRooms = await getCollection("rooms");
+
+const sortedRooms = allRooms.sort(
+  (a, b) =>
+    new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+
+// ==============================
+// PAGINATION LOGIC
+// ==============================
+const totalPages = Math.ceil(sortedRooms.length / maxPosts);
+
+const start = (currentPage - 1) * maxPosts;
+const end = start + maxPosts;
+const visibleRooms = sortedRooms.slice(start, end);
+---
+<section id="rooms" class="py-20 bg-skin-light overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+
+    <!-- Heading -->
+    {(title || description) && (
+      <div class="max-w-2xl mb-8">
+        {title && (
+          <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-4">
+            {title}
+          </h2>
+        )}
+
+        {description && (
+          <p class="text-gray-700 text-lg leading-relaxed">
+            {description}
+          </p>
+        )}
+      </div>
+    )}
+
+    <!-- Room Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {visibleRooms.map((room) => (
+        <RoomCard room={room} />
+      ))}
+    </div>
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <div class="mt-16 flex justify-center">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          baseUrl={baseUrl}
+        />
+      </div>
+    )}
+  </div>
+</section>

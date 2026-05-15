@@ -1,0 +1,104 @@
+---
+import AboutSection from "@src/components/AboutSection.astro";
+import FacilitiesSection from "@src/components/FacilitiesSection.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Nordicia - Luxury Hotel Experience" description="Experience the epitome of luxury and comfort at Nordicia, where exceptional service meets elegant design.">
+    <HeadingPage
+        title="World-Class Hotel Facilities"
+        subtitle="Discover a complete collection of premium facilities designed to elevate your comfort, relaxation, and overall stay experience."
+        background="/img/hotel2.jpg"
+        />
+    <AboutSection
+        id="facilities-preview"
+        title="Comfort, Convenience & Luxury in Every Detail"
+        paragraphs={[
+            "Our facilities are thoughtfully designed to complement your stay with unmatched comfort and modern convenience. Every space is crafted to deliver both functionality and elegance.",
+            "From wellness and dining to recreation and business services, each facility reflects our commitment to exceptional quality and guest satisfaction."
+        ]}
+        list={[
+            {
+            icon: "bi:check-circle",
+            title: "Complete Guest Facilities",
+            description: "Enjoy a full range of facilities designed to meet every guest’s needs"
+            },
+            {
+            icon: "bi:check-circle",
+            title: "Premium Comfort Standards",
+            description: "High-quality services and amenities for a truly relaxing experience"
+            }
+        ]}
+        image="/img/meeting.jpg"
+        imageAlt="Hotel Relaxation"
+        />
+    <FacilitiesSection
+        id="facilities"
+        title="World-Class Facilities"
+        subtitle="Indulge in our carefully curated amenities designed to enhance your stay. From rejuvenating spa treatments to exquisite dining experiences, every facility reflects our commitment to excellence."
+        imageDecor="/img/lamp.png"
+        facilities={[
+            {
+            icon: "bi:wifi",
+            title: "Free Wi-Fi",
+            description: "High-speed internet throughout the hotel"
+            },
+            {
+            icon: "bi:easel",
+            title: "Meeting Room",
+            description: "Meeting Room with a maximum capacity of 35 people"
+            },
+            {
+            icon: "bi:water",
+            title: "Swimming Pool",
+            description: "Heated pool with panoramic vistas"
+            },
+            {
+            icon: "bi:shop",
+            title: "Restaurant",
+            description: "Fine dining with Nordic-inspired cuisine"
+            },
+            {
+            icon: "bi:stars",
+            title: "Beauty Spa",
+            description: "Rejuvenating treatments for body and mind"
+            },
+            {
+            icon: "bi:p-square",
+            title: "Free Parking",
+            description: "Secure parking for all guests"
+            },
+            {
+            icon: "bi:cup-hot",
+            title: "Cafe",
+            description: "Cozy cafe serving coffee, snacks, and light meals"
+            },
+            {
+            icon: "bi:tree",
+            title: "Garden",
+            description: "Peaceful green garden for relaxation and fresh air"
+            },
+            {
+            icon: "bi:buildings",
+            title: "City & Sea View",
+            description: "Stunning panoramic views of the city and the sea"
+            },
+            {
+            icon: "bi:heart-pulse",
+            title: "Fitness Center",
+            description: "Modern gym with complete training equipment"
+            },
+            {
+            icon: "bi:headset",
+            title: "24-Hour Front Desk",
+            description: "Professional service available anytime"
+            },
+            {
+            icon: "bi:basket",
+            title: "Laundry Service",
+            description: "Daily laundry and dry-cleaning service"
+            }
+        ]}
+        />
+</MainLayout>

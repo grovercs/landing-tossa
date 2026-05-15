@@ -1,0 +1,169 @@
+---
+import { Icon } from "astro-icon/components";
+
+//
+// ─── TYPE DEFINITIONS ───────────────────────────────────────────
+//
+export interface RestaurantStat {
+  value: string;
+  label: string;
+}
+
+export interface RestaurantSlide {
+  src: string;
+  title: string;
+}
+
+export interface Props {
+  decorImage?: string;
+  title?: string;
+  content?: string[];
+  stats?: RestaurantStat[];
+  slides?: RestaurantSlide[];
+  autoPlayInterval?: number;
+}
+
+//
+// ─── RESTAURANT DATA ────────────────────────────────────────────
+//
+
+const {
+  decorImage = "/img/lamp.png",
+  title = "Gastronomía en Tossa de Mar",
+  content = [
+    "Descubre nuestra propuesta gastronómica en El Bergantí, especializado en tapas, arroces y cocina mediterránea elaborada con producto local.",
+    "O relájate en la evocadora terraza del Hostalet, el lugar ideal para un desayuno tranquilo o disfrutar del ambiente del casco antiguo junto a la iglesia."
+  ],
+  stats = [
+    { value: "100%", label: "Producto Local" },
+    { value: "1789", label: "Año Hostalet" },
+    { value: "10+", label: "Especialidades" }
+  ],
+  slides = [
+    { src: "/images/elberganti-restaurante-tapas-tossa-mar.webp", title: "Restaurante El Bergantí" },
+    { src: "/images/terraza-hostal-hostalet-tossa.avif", title: "Terraza Hostalet" }
+  ],
+  autoPlayInterval = 4000
+} = Astro.props;
+---
+
+<!-- Restaurant Section -->
+<section class="py-20 bg-white relative overflow-x-hidden">
+  <div class="max-w-7xl mx-auto relative px-4">
+    <div class="absolute -top-24 max-lg:right-0 lg:left-0">
+      <img src={decorImage} class="w-16" alt="decorative lamp" loading="lazy" />
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Text Content -->
+      <div>
+        <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-6">
+          {title}
+        </h2>
+
+        <div class="post-content mb-8">
+          {content.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+
+        <!-- Restaurant Stats -->
+        <div class="flex flex-wrap gap-4">
+          {stats.map((stat) => (
+            <div class="text-center">
+              <div class="text-4xl font-heading text-wood mb-2">{stat.value}</div>
+              <div class="text-gray-600">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Slider Container -->
+      <div
+        x-data={`{ 
+          currentSlide: 0, 
+          images: ${JSON.stringify(slides)},
+          nextSlide() {
+            this.currentSlide = (this.currentSlide + 1) % this.images.length;
+          },
+          prevSlide() {
+            this.currentSlide = (this.currentSlide - 1 + this.images.length) % this.images.length;
+          },
+          autoPlay: null,
+          startAutoPlay() {
+            this.autoPlay = setInterval(() => {
+              this.nextSlide();
+            }, ${autoPlayInterval});
+          },
+          stopAutoPlay() {
+            clearInterval(this.autoPlay);
+          },
+          init() {
+            this.startAutoPlay();
+          }
+        }`}
+        class="relative group"
+        @mouseenter="stopAutoPlay()"
+        @mouseleave="startAutoPlay()"
+      >
+        <!-- Image Slider -->
+        <div class="w-full max-w-full overflow-hidden">
+          <div
+            class="flex transition-transform duration-500 ease-in-out"
+            :style="`transform: translateX(-${currentSlide * 100}%)`"
+          >
+            <template x-for="(image, index) in images" :key="index">
+              <div class="w-full shrink-0 px-2">
+                <div class="relative">
+                  <!-- Image -->
+                  <img
+                    :src="`${image.src}?w=800&h=600&fit=crop`"
+                    :alt="image.title"
+                    class="relative w-full h-auto rounded-tl-3xl object-cover z-10"
+                  />
+
+                  <!-- Image Title Overlay -->
+                  <div
+                    class="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-6 z-20"
+                  >
+                    <h3
+                      class="text-heading text-white text-2xl font-medium"
+                      x-text="image.title"
+                    ></h3>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <button
+          x-on:click="prevSlide()"
+          class="opacity-100 md:opacity-0 md:group-hover:opacity-100 duration-500 absolute left-0 top-1/2 -translate-y-1/2 md:-translate-x-6 bg-primary text-white size-10 flex items-center justify-center hover:bg-opacity-80 transition-all shadow-lg z-30"
+        >
+          <Icon name="bi:chevron-left" class="w-5 h-5" />
+        </button>
+
+        <button
+          x-on:click="nextSlide()"
+          class="opacity-100 md:opacity-0 md:group-hover:opacity-100 duration-500 absolute right-0 top-1/2 -translate-y-1/2 md:translate-x-6 bg-primary text-white size-10 flex items-center justify-center hover:bg-opacity-80 transition-all shadow-lg z-30"
+        >
+          <Icon name="bi:chevron-right" class="w-5 h-5" />
+        </button>
+
+        <!-- Dots Indicator -->
+        <div class="flex justify-center mt-6 gap-2">
+          <template x-for="(image, index) in images" :key="index">
+            <button
+              x-on:click="currentSlide = index"
+              :class="currentSlide === index ? 'bg-primary w-8' : 'bg-gray-300 w-2'"
+              class="h-2 rounded-full transition-all duration-300 hover:bg-primary/60"
+            >
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

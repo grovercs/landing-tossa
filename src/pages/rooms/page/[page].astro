@@ -1,0 +1,62 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import RoomsPage from "@src/components/RoomsPage.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import { getCollection } from "astro:content";
+
+// ======================================
+//  STATIC PATHS (required for [page])
+// ======================================
+export async function getStaticPaths() {
+  const rooms = await getCollection("rooms");
+  const perPage = 6;
+  const totalPages = Math.ceil(rooms.length / perPage);
+
+  return Array.from({ length: totalPages }, (_, i) => ({
+    params: { page: String(i + 1) },
+  }));
+}
+
+// ======================================
+//  PAGE LOGIC
+// ======================================
+const { page } = Astro.params;
+const currentPage = Number(page);
+
+// Get all rooms
+const allRooms = await getCollection("rooms");
+
+// Sort by date (newest first)
+const rooms = allRooms.sort(
+  (a, b) =>
+    new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+
+// Pagination config
+const perPage = 6;
+const totalPages = Math.ceil(rooms.length / perPage);
+
+// Safety guard
+if (currentPage < 1 || currentPage > totalPages) {
+  throw new Error("Page not found");
+}
+
+// Slice visible rooms
+const start = (currentPage - 1) * perPage;
+const end = start + perPage;
+const visibleRooms = rooms.slice(start, end);
+---
+<MainLayout title={`Page ${currentPage} | Nordicia Hotel`}>
+  <HeadingPage
+    title="Explore Our Rooms"
+    subtitle="Discover a collection of thoughtfully designed rooms that combine Nordic elegance with modern comfort."
+    background="/img/hero1.jpg"
+  />
+
+  <RoomsPage
+    rooms={visibleRooms}
+    currentPage={currentPage}
+    totalPages={totalPages}
+    baseUrl="/rooms/page/"
+  />
+</MainLayout>

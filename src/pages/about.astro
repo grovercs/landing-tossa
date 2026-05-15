@@ -1,0 +1,140 @@
+---
+import AboutSection from "@src/components/AboutSection.astro";
+import AwardsSection from "@src/components/AwardsSection.astro";
+import FacilitiesSection from "@src/components/FacilitiesSection.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+import VisionSection from "@src/components/VisionSection.astro";
+import StorySection from "@src/components/StorySection.astro";
+---
+
+<MainLayout title="Nordicia - Luxury Hotel Experience" description="Experience the epitome of luxury and comfort at Nordicia, where exceptional service meets elegant design.">
+    <HeadingPage
+        title="Nordicia Modern Minimalist Hotel"
+        subtitle="Experience tranquility and elegance in our meticulously designed spaces."
+        background="/img/hero1.jpg"
+        />
+    <AboutSection
+        title="About Nordicia Hotel"
+        image="/img/facad.jpg"
+        paragraphs={[
+        "Nestled in a serene location, our hotel embodies the essence of Nordic design philosophy. Clean lines, natural materials, and abundant light create spaces that soothe the soul.",
+        "Each element has been thoughtfully curated to provide an atmosphere of calm sophistication, where modern luxury meets timeless elegance."
+        ]}
+        list={[
+        {
+            icon: "bi:check-circle",
+            title: "Prime City Location",
+            description: "Located in the heart of the city with easy access to top attractions"
+        },
+        {
+            icon: "bi:check-circle",
+            title: "Luxury Scandinavian Comfort",
+            description: "Experience minimalist Nordic design with comfort and elegance"
+        }
+        ]}
+    />
+    <FacilitiesSection
+        id="whychoose"
+        title="Why Choose Nordicia"
+        subtitle="Discover what makes us the preferred choice for discerning travelers seeking authentic Scandinavian hospitality and modern luxury."
+        imageDecor="/img/lamp.png"
+        facilities={[
+            {
+            icon: "bi:heart",
+            title: "Authentic Nordic Experience",
+            description: "Experience true Scandinavian ambiance with minimalist design and calming natural elements."
+            },
+            {
+            icon: "bi:stars",
+            title: "Exceptional Service",
+            description: "Personalized hospitality with warm, professional Nordic-style service."
+            },
+            {
+            icon: "bi:geo-alt",
+            title: "Prime Location",
+            description: "Strategically located near city highlights while maintaining a peaceful atmosphere."
+            },
+            {
+            icon: "bi:flower1",
+            title: "Sustainable Living",
+            description: "Eco-friendly operations using sustainable energy and local natural materials."
+            },
+            {
+            icon: "bi:award",
+            title: "Award-Winning Design",
+            description: "Internationally celebrated Nordic architecture blending beauty and function."
+            },
+            {
+            icon: "bi:cup-hot",
+            title: "Culinary Excellence",
+            description: "Nordic-inspired cuisine prepared with premium local ingredients."
+            }
+        ]}
+    />
+    <AwardsSection
+        title="Awards & Recognitions"
+        subtitle="We are honored to be recognized by leading hospitality organizations for our exceptional guest experience, refined design, and world-class service."
+        backgroundImageClass="bg-tree"
+        awards={[
+        { src: "/img/award1.jpg", alt: "Hospitality Award" },
+        { src: "/img/award2.jpg", alt: "Luxury Hotel Award" },
+        { src: "/img/award3.jpg", alt: "Travel Excellence Award" },
+        { src: "/img/award4.jpg", alt: "Design Hotel Award" },
+        ]}
+    />
+    <VisionSection
+        title="Our Vision & Mission"
+        subtitle="Guided by Scandinavian values of simplicity, sustainability, and human connection, we strive to create meaningful experiences for every guest."
+        items={[
+            {
+            icon: "bi:eye",
+            title: "Our Vision",
+            description:
+                "To become the leading destination for travelers seeking authentic Nordic hospitality, where minimalist design meets maximum comfort.",
+            points: [
+                "Setting new standards in sustainable luxury",
+                "Creating calm and inspiring spaces",
+                "Building lasting guest connections",
+                "Preserving Nordic design heritage"
+            ]
+            },
+            {
+            icon: "bi:compass",
+            title: "Our Mission",
+            description:
+                "To provide exceptional hospitality rooted in Nordic principles of simplicity, functionality, and respect for nature.",
+            points: [
+                "Deliver warm personalized service",
+                "Maintain high cleanliness standards",
+                "Champion environmental sustainability",
+                "Build a culture of excellence"
+            ]
+            }
+        ]}
+        />
+    <StorySection
+        title="From Dream to Reality"
+        paragraphs={[
+            "Nordicia was born from a vision to create a haven where Scandinavian design philosophy meets world-class hospitality.",
+            "What started as a dream has blossomed into an award-winning hotel that celebrates simplicity, warmth, and craftsmanship.",
+            "Today, we continue to evolve while staying true to our Nordic roots."
+        ]}
+        timeline={[
+            {
+            year: "2020 — The Beginning",
+            description: "Nordicia opens its doors with 50 carefully designed rooms."
+            },
+            {
+            year: "2023 — Sustainable Excellence",
+            description: "Achieved carbon neutrality and international sustainability awards."
+            },
+            {
+            year: "2025 — Looking Forward",
+            description: "Expanding new guest experiences while preserving our core values."
+            }
+        ]}
+        image="/img/hotel2.jpg"
+        imageAlt="Hotel Relaxation"
+    />
+</MainLayout>

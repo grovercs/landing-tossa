@@ -1,0 +1,50 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+import Pagination from "@src/components/Pagination.astro";
+import HeadingPageSm from "@src/components/HeadingPageSm.astro";
+
+import { getCollection } from "astro:content";
+
+// get mdx files
+const allPosts = await getCollection("blog");
+
+// Sort posts by date (newest first)
+const posts = allPosts.sort((a, b) => {
+  const dateA = typeof a.data.date === "string" ? new Date(a.data.date) : a.data.date;
+  const dateB = typeof b.data.date === "string" ? new Date(b.data.date) : b.data.date;
+  return dateB.valueOf() - dateA.valueOf();
+});
+
+// Pagination settings
+const maxPerPage = 3;
+const currentPage = 1;
+
+// Calculate total pages
+const totalPages = Math.ceil(posts.length / maxPerPage);
+
+// Get visible posts for current page
+const visiblePosts = posts.slice(0, maxPerPage);
+---
+
+<MainLayout title="Blog – Nordicia Hotel">
+  <HeadingPageSm
+    title="Insights & Updates"
+    subtitle="Stay informed with the latest news, travel tips, and stories from Nordicia Hotel."
+    bgImage="/img/detail2.jpg"
+  />
+
+  <section id="blogs" class="py-16 bg-skin-light overflow-x-hidden">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {visiblePosts.map((post) => <BlogCard post={post} />)}
+      </div>
+
+      {totalPages > 1 && (
+        <div class="flex justify-center mt-16">
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
+        </div>
+      )}
+    </div>
+  </section>
+</MainLayout>

@@ -1,0 +1,45 @@
+---
+export interface Props {
+  title: string;
+  subtitle?: string;
+  bgImage: string;
+  centered?: boolean; // default: true
+}
+
+const {
+  title,
+  subtitle = "",
+  bgImage,
+  centered = true
+} = Astro.props;
+---
+
+<div class="relative py-12 flex items-center bg-gray-200 overflow-x-hidden">
+  <!-- Background -->
+  <img
+    src={bgImage}
+    alt={title}
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <!-- Decorative box -->
+    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-primary/90"></div>
+
+    <div
+      class={`max-w-2xl bg-white/85 p-6 md:p-12 relative rounded-tl-3xl ${
+        centered ? "text-center" : ""
+      }`}
+    >
+      <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl text-primary-dark mb-2">
+        {title}
+      </h1>
+
+      {subtitle && (
+        <p class="text-gray-700 text-lg">
+          {subtitle}
+        </p>
+      )}
+    </div>
+  </div>
+</div>

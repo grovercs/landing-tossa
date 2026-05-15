@@ -1,0 +1,143 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection, render } from "astro:content";
+
+// ======================================
+//  STATIC PATHS dynamic route
+// ======================================
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.mdx$/, "") },
+  }));
+}
+
+// ======================================
+//  GET POST DATA
+// ======================================
+const { slug } = Astro.params;
+
+const allPostsForEntry = await getCollection("blog");
+const post = allPostsForEntry.find(p => p.id.replace(/\.mdx$/, "") === slug);
+if (!post) throw new Error(`Blog post not found: ${slug}`);
+
+const { Content } = await render(post);
+
+// All posts
+const allPosts = await getCollection("blog");
+
+// Related posts
+const related = allPosts
+  .filter((p) => p.id.replace(/\.mdx$/, "") !== slug && p.data.category === post.data.category)
+  .sort((a, b) => {
+    const dateA = new Date(a.data.date);
+    const dateB = new Date(b.data.date);
+    return dateB.valueOf() - dateA.valueOf();
+  })
+  .slice(0, 3);
+
+// Safety fallback
+const tags = Array.isArray(post.data.tags) ? post.data.tags : [];
+const cover = post.data.image ?? "/img/default.jpg";
+
+// Date formatting
+const postDate =
+  typeof post.data.date === "string"
+    ? new Date(post.data.date)
+    : post.data.date;
+
+const formattedDate = new Intl.DateTimeFormat("id-ID", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+}).format(postDate);
+
+const relatedSection = {
+  title: "Related Articles",
+  description:
+    "Discover helpful travel guides, hotel tips, and inspiring stories to make the most of your stay.",
+  lamp: "/img/lamp.png",
+} as const;
+---
+
+<MainLayout title={post.data.title}>
+  <!-- HERO SECTION -->
+  <div class="relative py-8 flex items-center overflow-x-hidden">
+    <!-- default bg -->
+    <img
+      src={cover}
+      alt={post.data.title}
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+      <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-primary/90"></div>
+
+      <div class="max-w-4xl bg-white/85 p-6 md:p-12 relative text-left md:text-center rounded-tl-3xl">
+        <h1 class="font-heading text-4xl md:text-5xl text-primary-dark mb-4">
+          {post.data.title}
+        </h1>
+
+        <div class="flex flex-wrap items-center md:justify-center gap-x-6 gap-y-2 text-lg text-gray-600">
+          <span class="flex items-center gap-2">
+            <Icon name="bi:calendar-event" /> {formattedDate}
+          </span>
+
+          <span class="flex items-center gap-2">
+            <Icon name="bi:person" /> {post.data.author}
+          </span>
+
+          {tags.length > 0 && (
+            <span class="flex items-center gap-2">
+              <Icon name="bi:tag" /> {tags[0]}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="py-12 bg-white overflow-x-hidden">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="post-content">
+        <Content />
+      </div>
+    </div>
+  </div>
+
+  {/* ✅ RELATED ARTICLES: only render if related > 0 */}
+{related.length > 0 && (
+  <section id="related" class="py-20 bg-skin-light overflow-x-hidden">
+    <div class="max-w-7xl mx-auto relative px-4">
+      {/* decorative lamp (optional) */}
+      {relatedSection.lamp && (
+        <div class="absolute -top-24 md:-top-20 right-0">
+          <img src={relatedSection.lamp} class="w-16 sm:w-20" alt="lamp" loading="lazy" />
+        </div>
+      )}
+
+      <div class="flex flex-col relative gap-8">
+        {/* Heading */}
+        <div class="max-w-2xl">
+          <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-4">
+            {relatedSection.title}
+          </h2>
+          <p class="text-gray-700 text-lg leading-relaxed">
+            {relatedSection.description}
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {related.map((p) => (
+            <BlogCard post={p} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+</MainLayout>

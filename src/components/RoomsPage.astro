@@ -1,0 +1,39 @@
+---
+import RoomCard from "./RoomCard.astro";
+import Pagination from "./Pagination.astro";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  rooms: CollectionEntry<"rooms">[];
+  currentPage: number;
+  totalPages: number;
+  baseUrl?: string; // ⬅️ optional
+}
+
+const {
+  rooms,
+  currentPage,
+  totalPages,
+  baseUrl = "/rooms/page/", // ⬅️ default fallback
+} = Astro.props;
+---
+
+<section id="rooms" class="py-20 bg-skin-light overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {rooms.map((room) => (
+        <RoomCard room={room} />
+      ))}
+    </div>
+
+    {totalPages > 1 && (
+      <div class="mt-16 flex justify-center">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          baseUrl={baseUrl}
+        />
+      </div>
+    )}
+  </div>
+</section>

@@ -1,0 +1,87 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  variant?: "primary" | "outline" | "success";
+  size?: "sm" | "md" | "lg";
+  href?: string;
+  icon?: string | null;
+  iconPosition?: "left" | "right";
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  class?: string;
+}
+
+const {
+  variant = "primary",
+  size = "md",
+  href,
+  icon = null,
+  iconPosition = "right",
+  disabled = false,
+  type = "button",
+  class: extraClass = "",
+} = Astro.props;
+
+// Size classes
+const sizeClasses = {
+  sm: "px-6 py-3 text-sm",
+  md: "px-8 py-4 text-base",
+  lg: "px-10 py-5 text-lg",
+}[size];
+
+// Variants
+const variantClasses = {
+  primary: `
+    bg-primary text-white 
+    hover:bg-primary-dark
+  `,
+  outline: `
+    border-2 border-primary text-primary
+    hover:bg-primary hover:text-white
+  `,
+  success: ` 
+    bg-green-700 text-white 
+    hover:bg-green-800
+  `,
+}[variant];
+
+// Base styles
+const baseClass = `
+  inline-flex items-center justify-center gap-2
+  transition font-medium rounded-none
+  max-sm:w-full
+`;
+
+const finalClass = `${baseClass} ${variantClasses} ${sizeClasses} ${extraClass}`;
+---
+
+{href ? (
+  <a href={href} class={finalClass} aria-disabled={disabled}>
+    
+    {icon && iconPosition === "left" && (
+      <Icon name={icon} class="w-5 h-5" />
+    )}
+
+    <slot />
+
+    {icon && iconPosition === "right" && (
+      <Icon name={icon} class="w-5 h-5" />
+    )}
+
+  </a>
+) : (
+  <button type={type} disabled={disabled} class={finalClass}>
+    
+    {icon && iconPosition === "left" && (
+      <Icon name={icon} class="w-5 h-5" />
+    )}
+
+    <slot />
+
+    {icon && iconPosition === "right" && (
+      <Icon name={icon} class="w-5 h-5" />
+    )}
+
+  </button>
+)}

@@ -1,0 +1,59 @@
+---
+export interface GalleryImage {
+  src: string;
+  alt: string;
+}
+
+export interface Props {
+  id?: string;
+  title: string;
+  paragraphs: string[];
+  images: GalleryImage[]; // max 6 images
+}
+
+const {
+  id = "galleryPreview",
+  title,
+  paragraphs = [],
+  images = [],
+} = Astro.props;
+
+// pastikan max 6 gambar
+const galleryImages = images.slice(0, 6);
+---
+
+<section id={id} class="py-20 bg-white overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <!-- CONTENT -->
+      <div>
+        <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-5">
+          {title}
+        </h2>
+
+        <div class="post-content">
+          {paragraphs.map((p) => (
+            <p>{p}</p>
+          ))}
+        </div>
+      </div>
+
+      <!-- GALLERY GRID -->
+      <div class="relative">
+        <div class="grid grid-cols-2 gap-2">
+          {galleryImages.map((img) => (
+            <div class="aspect-video overflow-hidden group">
+              <a href={img.src} class="glightbox">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  class="w-full group-hover:scale-110 transition-all duration-500"
+                />
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

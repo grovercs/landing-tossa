@@ -1,0 +1,52 @@
+---
+export interface AwardItem {
+  src: string;
+  alt: string;
+}
+
+export interface Props {
+  id?: string;
+  title: string;
+  subtitle: string;
+  awards: AwardItem[];
+  backgroundImageClass?: string; // e.g. "bg-tree"
+}
+
+const {
+  id = "awards",
+  title,
+  subtitle,
+  awards,
+  backgroundImageClass = "bg-tree",
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class={`py-20 bg-primary ${backgroundImageClass} relative text-white overflow-x-hidden`}
+>
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="text-center max-w-3xl mx-auto">
+      <!-- TITLE -->
+      <h2 class="font-heading text-4xl md:text-5xl mb-6">
+        {title}
+      </h2>
+
+      <!-- SUBTITLE -->
+      <p class="text-lg mb-8 text-white/90">
+        {subtitle}
+      </p>
+
+      <!-- AWARD LOGOS GRID -->
+      <div class="max-w-lg mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        {awards.map((award) => (
+          <img
+            src={award.src}
+            alt={award.alt}
+            class="w-full rounded-tl-lg rounded-br-lg shadow-lg"
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

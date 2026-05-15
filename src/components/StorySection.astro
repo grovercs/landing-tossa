@@ -1,0 +1,61 @@
+---
+import StoryTimelineCard, { type StoryTimelineItem } from "./StoryTimelineCard.astro";
+
+export interface Props {
+  id?: string;
+  title: string;
+  paragraphs: string[];          // story paragraphs
+  timeline: StoryTimelineItem[]; // timeline data
+  image: string;                 // main image
+  imageAlt?: string;
+  decorColor?: string;           // background shape color class (e.g., bg-wood-dark)
+}
+
+const {
+  id = "story",
+  title,
+  paragraphs = [],
+  timeline = [],
+  image,
+  imageAlt = "story image",
+  decorColor = "bg-wood-dark"
+} = Astro.props;
+---
+
+<section id={id} class="py-20 bg-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- TEXT COLUMN -->
+      <div>
+
+        <div class="post-content mb-8">
+          <h2>{title}</h2>
+
+          {paragraphs.map((p) => (
+            <p>{p}</p>
+          ))}
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="border-l-2 border-primary pl-8 space-y-10 max-w-4xl ms-3">
+          {timeline.map((item) => (
+            <StoryTimelineCard item={item} />
+          ))}
+        </div>
+      </div>
+
+      <!-- IMAGE COLUMN -->
+      <div>
+        <div class="relative">
+          <div class={`absolute -bottom-8 -right-8 w-48 h-48 ${decorColor}`}></div>
+
+          <img
+            src={image}
+            alt={imageAlt}
+            class="relative w-full h-auto rounded-tl-3xl object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
