@@ -14,32 +14,32 @@ function getUrlForLang(targetLang: string) {
     segments.shift();
   }
 
-  // Handle specific slugs mapping
-  // We can do a rudimentary mapping here, or just map 'contacto' -> 'contacte' etc.
   let basePage = segments[0] || '';
+  let rest = segments.slice(1).join('/');
+  let trailing = rest ? '/' + rest + '/' : (basePage ? '/' : '');
   
   if (targetLang === 'es') {
     if (basePage === 'contacte' || basePage === 'contact') basePage = 'contacto';
     if (basePage === 'reserves' || basePage === 'booking' || basePage === 'reservations') basePage = 'reservas';
-    return '/' + (basePage ? basePage + '/' : '');
+    return '/' + (basePage ? basePage + trailing : '');
   }
 
   if (targetLang === 'ca') {
     if (basePage === 'contacto' || basePage === 'contact') basePage = 'contacte';
     if (basePage === 'reservas' || basePage === 'booking' || basePage === 'reservations') basePage = 'reserves';
-    return '/ca/' + (basePage ? basePage + '/' : '');
+    return '/ca/' + (basePage ? basePage + trailing : '');
   }
 
   if (targetLang === 'en') {
     if (basePage === 'contacto' || basePage === 'contacte') basePage = 'contact';
     if (basePage === 'reservas' || basePage === 'reserves' || basePage === 'reservations') basePage = 'booking';
-    return '/en/' + (basePage ? basePage + '/' : '');
+    return '/en/' + (basePage ? basePage + trailing : '');
   }
 
   if (targetLang === 'fr') {
     if (basePage === 'contacto' || basePage === 'contacte' || basePage === 'contact') basePage = 'contact';
     if (basePage === 'reservas' || basePage === 'reserves' || basePage === 'booking') basePage = 'reservations';
-    return '/fr/' + (basePage ? basePage + '/' : '');
+    return '/fr/' + (basePage ? basePage + trailing : '');
   }
 
   return '/';
