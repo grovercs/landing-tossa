@@ -68,7 +68,7 @@ const gallery = data.gallery ?? [];
 
         <div class="relative">
           <span class="text-heading text-lg md:text-xl font-semibold text-green-600 bg-primary/10 rounded-tl-2xl rounded-br-2xl py-3 px-6">
-            À partir de ${data.price}/nuit
+            À partir de {data.price}€/nuit
           </span>
         </div>
       </div>
@@ -142,13 +142,13 @@ const gallery = data.gallery ?? [];
           <BookingInfo
           title="Informations de Réservation"
           items={[
-            { icon: "bi:clock", text: "Enregistrement à partir de 14h00" },
+            { icon: "bi:clock", text: "L'enregistrement commence à 14h00" },
             { icon: "bi:clock-history", text: "Départ avant 12h00" },
             { icon: "bi:shield-check", text: "Annulation gratuite jusqu'à 24 heures avant l'arrivée" },
-            { icon: "bi:cup-hot", text: "Petit-déjeuner inclus dans tous les types de chambre" },
+            { icon: "bi:cup-hot", text: "Petit-déjeuner inclus dans tous les types de chambres" },
             { icon: "bi:wifi", text: "Wi-Fi haut débit gratuit dans chaque chambre" },
             { icon: "bi:cash-stack", text: "Plusieurs options de paiement disponibles" },
-            ({ icon: "bi:people", text: "Deux enfants de plus de 10 ans doivent réserver leur propre chambre." }),
+            { icon: "bi:people", text: "Deux enfants de plus de 10 ans doivent réserver leur propre chambre." },
           ]}
         />
         </div>
