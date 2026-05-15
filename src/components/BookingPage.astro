@@ -11,22 +11,22 @@ import HelpCard from "./HelpCard.astro";
       <!-- LEFT SIDE -->
       <div class="max-lg:order-2 space-y-8">
         <BookingInfo
-          title="Booking Information"
+          title="Información de Reserva"
           items={[
-            { icon: "bi:clock", text: "Check-in time starts from 14:00 PM" },
-            { icon: "bi:clock-history", text: "Check-out time before 12:00 PM" },
-            { icon: "bi:shield-check", text: "Free cancellation up to 24 hours before arrival" },
-            { icon: "bi:cup-hot", text: "Breakfast included in all room types" },
-            { icon: "bi:wifi", text: "Free high-speed Wi-Fi in every room" },
+            { icon: "bi:clock", text: "Check-in a partir de las 14:00 h" },
+            { icon: "bi:clock-history", text: "Check-out antes de las 12:00 h" },
+            { icon: "bi:shield-check", text: "Cancelación gratuita hasta 24 horas antes de la llegada" },
+            { icon: "bi:cup-hot", text: "Restaurantes propios en los alojamientos" },
+            { icon: "bi:wifi", text: "Wi-Fi gratuito de alta velocidad" },
           ]}
         />
 
         <HelpCard
-          title="Need Assistance?"
-          description="Our reservation team is ready to assist you with any special requests or questions."
+          title="¿Necesitas Ayuda?"
+          description="Nuestro equipo de recepción está listo para ayudarte con cualquier petición especial."
           items={[
-            { icon: "bi:telephone", text: "+47 123 456 789" },
-            { icon: "bi:envelope", text: "booking@nordicretreat.com" },
+            { icon: "bi:telephone", text: "El Bergantí: +34 972 34 04 22" },
+            { icon: "bi:telephone", text: "Hostalet: +34 972 34 00 00" },
           ]}
         />
       </div>
@@ -34,44 +34,41 @@ import HelpCard from "./HelpCard.astro";
       <!-- RIGHT SIDE -->
       <BookingForm
         fields={[
-          { label: "Full Name", type: "text", name: "fullName" },
-          { label: "Email Address", type: "email", name: "email" },
-          { label: "Phone Number", type: "text", name: "phone" },
+          { label: "Nombre Completo", type: "text", name: "fullName" },
+          { label: "Correo Electrónico", type: "email", name: "email" },
+          { label: "Teléfono", type: "text", name: "phone" },
           {
-            label: "Room Type",
+            label: "Alojamiento",
             type: "select",
             name: "roomType",
             options: [
-              "Nordic Serenity Room",
-              "Nordic Comfort Suite",
-              "Nordic Deluxe Escape",
-              "Nordic Family Haven",
-              "Nordic Executive Retreat",
-              "Nordic Skyline Suite"
+              "El Bergantí - Habitación Doble",
+              "Hostalet de Tossa - Habitación Doble",
+              "Hostalet de Tossa - Habitación Triple"
             ]
           },
-          { label: "Check-in Date", type: "date", name: "checkin" },
-          { label: "Check-out Date", type: "date", name: "checkout" },
+          { label: "Fecha de Entrada", type: "date", name: "checkin" },
+          { label: "Fecha de Salida", type: "date", name: "checkout" },
           {
-            label: "Adults",
+            label: "Adultos",
             type: "select",
             name: "adults",
-            options: ["1 Adult", "2 Adults", "3 Adults", "4 Adults"]
+            options: ["1 Adulto", "2 Adultos", "3 Adultos", "4 Adultos"]
           },
           {
-            label: "Children",
+            label: "Niños",
             type: "select",
             name: "children",
-            options: ["0 Child", "1 Child", "2 Children", "3 Children"]
+            options: ["0 Niños", "1 Niño", "2 Niños", "3 Niños"]
           },
           {
-            label: "Special Requests",
+            label: "Peticiones Especiales",
             type: "textarea",
             name: "requests",
             span: 2
           }
         ]}
-        submitText="Confirm Reservation"
+        submitText="Confirmar Reserva"
       />
 
     </div>
