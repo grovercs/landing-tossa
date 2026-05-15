@@ -4,7 +4,7 @@ import { Icon } from "astro-icon/components";
 import LanguagePicker from "./LanguagePicker.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
 const t = useTranslations(lang);
 
 export interface MenuItem {
