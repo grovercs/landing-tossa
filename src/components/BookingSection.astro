@@ -3,16 +3,30 @@ import { Icon } from "astro-icon/components";
 import Input from "../components/Input.astro";
 import Select from "../components/Select.astro";
 import Button from "../components/Button.astro";
+import { useTranslations } from "../i18n/utils";
+
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+const t = useTranslations(lang);
+
+// Dictionaries for Adults/Children
+const dicts = {
+  es: { adult1: "1 Adulto", adult: "Adultos", child0: "0 Niños", child1: "1 Niño", child: "Niños" },
+  ca: { adult1: "1 Adult", adult: "Adults", child0: "0 Nens", child1: "1 Nen", child: "Nens" },
+  en: { adult1: "1 Adult", adult: "Adults", child0: "0 Children", child1: "1 Child", child: "Children" },
+  fr: { adult1: "1 Adulte", adult: "Adultes", child0: "0 Enfants", child1: "1 Enfant", child: "Enfants" },
+};
+
+const d = dicts[lang] || dicts.es;
 
 // OPTIONS DATA
 const adults = [
-  "1 Adulto","2 Adultos","3 Adultos","4 Adultos","5 Adultos",
-  "6 Adultos","7 Adultos","8 Adultos","9 Adultos","10 Adultos","10+"
+  d.adult1, `2 ${d.adult}`, `3 ${d.adult}`, `4 ${d.adult}`, `5 ${d.adult}`,
+  `6 ${d.adult}`, `7 ${d.adult}`, `8 ${d.adult}`, `9 ${d.adult}`, `10 ${d.adult}`, "10+"
 ];
 
 const children = [
-  "0 Niños","1 Niño","2 Niños","3 Niños","4 Niños",
-  "5 Niños","6 Niños","7 Niños","8 Niños","9 Niños","10 Niños","10+"
+  d.child0, d.child1, `2 ${d.child}`, `3 ${d.child}`, `4 ${d.child}`,
+  `5 ${d.child}`, `6 ${d.child}`, `7 ${d.child}`, `8 ${d.child}`, `9 ${d.child}`, `10 ${d.child}`, "10+"
 ];
 
 const roomTypes = [
@@ -30,7 +44,7 @@ const roomTypes = [
 
         <!-- Check-in -->
         <Input 
-          label="Fecha Entrada" 
+          label={t('booking.checkin')} 
           type="date"
           class="w-full"
           icon="bi:calendar-check"
@@ -38,7 +52,7 @@ const roomTypes = [
 
         <!-- Check-out -->
         <Input 
-          label="Fecha Salida" 
+          label={t('booking.checkout')} 
           type="date"
           class="w-full"
           icon="bi:calendar-x"
@@ -47,13 +61,13 @@ const roomTypes = [
         <!-- Guests -->
         <div class="flex flex-col">
           <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
-            <Icon name="bi:people" class="w-4 h-4" /> Huéspedes
+            <Icon name="bi:people" class="w-4 h-4" /> {t('booking.guests')}
           </label>
 
           <div class="grid grid-cols-2 h-12 gap-2">
             <!-- Adults -->
             <Select 
-              label="Adultos"
+              label={t('booking.adults')}
               icon="bi:person"
               options={adults}
               hideLabel={true}
@@ -62,7 +76,7 @@ const roomTypes = [
 
             <!-- Children -->
             <Select 
-              label="Niños"
+              label={t('booking.children')}
               icon="bi:person-add"
               options={children}
               hideLabel={true}
@@ -73,7 +87,7 @@ const roomTypes = [
 
         <!-- Rooms -->
         <Select 
-          label="Alojamiento"
+          label={t('booking.room')}
           icon="bi:door-open"
           options={roomTypes}
         />
@@ -87,7 +101,7 @@ const roomTypes = [
             iconPosition="left"
             class="w-full h-12 bg-green-700/90 hover:bg-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
-            Buscar
+            {t('booking.search')}
           </Button>
         </div>
       </div>

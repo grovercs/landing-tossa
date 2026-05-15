@@ -1,6 +1,10 @@
 ---
 import { Icon } from "astro-icon/components";
 import Button from "../components/Button.astro";
+import { useTranslations } from "../i18n/utils";
+
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+const t = useTranslations(lang);
 
 //
 // ─── TYPE DEFINITIONS ───────────────────────────────────────────
@@ -36,20 +40,19 @@ const slides: HeroSlide[] = [
 ];
 
 // heading + subheading
-const heroTitle = "El Bergantí & Hostalet de Tossa";
-const heroSubtitle =
-  "Descubre la auténtica Costa Brava desde el corazón de la Vila Vella. Dos alojamientos con encanto para una estancia inolvidable.";
+const heroTitle = t('hero.title');
+const heroSubtitle = t('hero.subtitle');
 
 // CTA buttons
 const ctas: HeroCTA[] = [
   {
-    label: "Reservar Ahora",
+    label: t('hero.bookNow'),
     href: "#booking",
     icon: "bi:calendar-check",
     variant: "primary"
   },
   {
-    label: "Ver Alojamientos",
+    label: t('hero.viewRooms'),
     href: "#rooms",
     icon: "bi:door-open",
     variant: "outline"
@@ -58,9 +61,9 @@ const ctas: HeroCTA[] = [
 
 // Rating
 const rating: HeroRating = {
-  totalVisitors: "Miles de huéspedes",
-  score: "Trato Familiar",
-  reviewsCount: "Reserva Directa"
+  totalVisitors: t('hero.visitors'),
+  score: t('hero.score'),
+  reviewsCount: t('hero.reviews')
 };
 
 // Partner logos
