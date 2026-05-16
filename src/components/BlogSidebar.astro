@@ -42,7 +42,14 @@ const translations = {
 };
 
 const t = translations[lang] || translations.es;
-const bookingLink = lang === 'es' ? '/reservas' : `/${lang}/reservas`; // Adjust if booking route differs
+const bookingLinks = {
+  es: '/reservas',
+  ca: '/ca/reserves',
+  en: '/en/booking',
+  fr: '/fr/reservations'
+};
+
+const bookingLink = bookingLinks[lang] || '/reservas';
 
 const fbShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
 const twShare = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}`;
