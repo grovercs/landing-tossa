@@ -1,24 +1,36 @@
 ---
 import Header from '@src/components/Header.astro';
 import Footer from '@src/components/Footer.astro';
+import SchemaMarkup from '@src/components/SchemaMarkup.astro';
 import { Font } from "astro:assets";
 
 import 'glightbox/dist/css/glightbox.min.css';
 import '@src/styles/style.css';
 import BackToTop from '@src/components/BackToTop.astro';
 
-interface Props {
+export interface Props {
   title: string;
   description?: string;
+  image?: string;
+  type?: string;
+  schema?: object;
 }
 
 const {
   title = "El Bergantí & Hostalet de Tossa",
   description = "Disfruta de la auténtica Costa Brava. Dos alojamientos con encanto en el centro de Tossa de Mar con restaurante y reserva directa.",
+  image = "/images/tossa-de-mar-costa-brava-1.webp",
+  type = "website",
+  schema
 } = Astro.props;
+
+const lang = Astro.currentLocale || 'es';
+const siteUrl = Astro.url?.href || "https://landing-tossa.netlify.app";
+// Ensure absolute URL for OpenGraph images
+const ogImage = image.startsWith('http') ? image : `https://landing-tossa.netlify.app${image}`;
 ---
 <!DOCTYPE html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,18 +38,22 @@ const {
 
     <!-- Primary Meta -->
     <meta name="description" content={description} />
-    <meta name="author" content="Author Name" />
+    <meta name="author" content="El Bergantí & Hostalet" />
     <meta name="robots" content="index, follow" />
 
-    <link rel="canonical" href={Astro.url?.href || "https://landing-tossa.netlify.app"} />
-    <link rel="icon" type="image/png" href="/images/alojamientos-tossa-de-mar-logo.png" />
+    <link rel="canonical" href={siteUrl} />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <link rel="apple-touch-icon" href="/img/favicon.png" />
 
     <!-- Open Graph / Social Sharing -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url?.href} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={siteUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://landing-tossa.netlify.app/images/tossa-de-mar-costa-brava-1.webp" />
+    <meta property="og:image" content={ogImage} />
+    
+    {schema && <SchemaMarkup schema={schema} />}
+
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />
   </head>

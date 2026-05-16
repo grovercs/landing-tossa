@@ -1,42 +1,54 @@
 ---
 import { Icon } from "astro-icon/components";
 import type { CollectionEntry } from "astro:content";
+import { useTranslations } from "@src/i18n/utils";
 
 export interface Props {
   post: CollectionEntry<"blog">;
+  lang?: "es" | "ca" | "en" | "fr";
 }
 
-const { post } = Astro.props;
+const { post, lang = "es" } = Astro.props;
+const t = useTranslations(lang);
 const { data, body } = post;
-const slug = post.id.replace(/\.mdx$/, "");
+const baseSlug = post.id.split('/').pop()?.replace(/\.mdx$/, "");
 
 // Convert string date → Date object
 const postDate =
   typeof data.date === "string" ? new Date(data.date) : data.date;
 
-// Format date (Indonesia)
-const formattedDate = new Intl.DateTimeFormat("id-ID", {
+// Format date 
+const formattedDate = new Intl.DateTimeFormat(lang, {
   year: "numeric",
   month: "long",
   day: "numeric",
 }).format(postDate);
 
-const url = `/blogs/${slug}/`;
+const url = lang === 'es' ? `/blogs/${baseSlug}/` : `/${lang}/blogs/${baseSlug}/`;
+
+const translations = {
+  es: { minRead: "Min de lectura", readMore: "Leer Más" },
+  ca: { minRead: "Min de lectura", readMore: "Llegir Més" },
+  en: { minRead: "Min Read", readMore: "Read More" },
+  fr: { minRead: "Min de lecture", readMore: "Lire Plus" },
+};
+
+const d = translations[lang] || translations.es;
 ---
 
-<div class="bg-white rounded-tl-2xl rounded-br-2xl overflow-hidden shadow-lg">
+<div class="bg-white rounded-tl-2xl rounded-br-2xl overflow-hidden shadow-lg flex flex-col h-full">
   <div class="relative aspect-video bg-gray-100 overflow-hidden">
     <a href={url}>
-      <img src={data.image} alt={data.title} class="w-full object-cover" loading="lazy" />
+      <img src={data.image} alt={data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
     </a>
   </div>
 
-  <div class="p-6">
+  <div class="p-6 flex flex-col flex-grow">
     <h3 class="text-xl font-semibold text-primary-dark hover:text-deep-primary mb-2">
       <a href={url}>{data.title}</a>
     </h3>
 
-    <p class="text-gray-500 mb-4">
+    <p class="text-gray-500 mb-4 flex-grow">
       {data.description ?? (body ? body.slice(0, 120) + "..." : "")}
     </p>
 
@@ -48,22 +60,16 @@ const url = `/blogs/${slug}/`;
       <span class="flex items-center gap-1">
         <Icon name="bi:person" /> {data.author}
       </span>
-
-      {data.tags && data.tags.length > 0 && (
-        <span class="flex items-center gap-1">
-          <Icon name="bi:tag" /> {data.tags[0]}
-        </span>
-      )}
     </div>
 
-    <div class="flex items-center justify-between">
-      <span class="text-heading font-semibold text-wood">{data.readingTime} Min Read</span>
+    <div class="flex items-center justify-between mt-auto">
+      <span class="text-heading font-semibold text-wood">{data.readingTime} {d.minRead}</span>
 
       <a
         href={url}
-        class="px-5 py-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition"
+        class="px-5 py-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition rounded-sm"
       >
-        Read More
+        {d.readMore}
       </a>
     </div>
   </div>

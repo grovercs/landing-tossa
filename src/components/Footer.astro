@@ -32,7 +32,6 @@ const brandInfo: FooterBrand = {
   tagline: t('footer.tagline')
 };
 
-// Map slugs depending on language
 const getLocalizedContact = () => {
   if (lang === 'es') return `/contacto`;
   if (lang === 'ca') return `/ca/contacte`;
@@ -41,7 +40,16 @@ const getLocalizedContact = () => {
   return `/contacto`;
 };
 
+const getLocalizedBlog = () => {
+  if (lang === 'es') return `/blogs`;
+  if (lang === 'ca') return `/ca/blogs`;
+  if (lang === 'en') return `/en/blogs`;
+  if (lang === 'fr') return `/fr/blogs`;
+  return `/blogs`;
+};
+
 const exploreLinks: FooterLink[] = [
+  { label: t('nav.blog'), href: getLocalizedBlog() },
   { label: t('nav.contact'), href: getLocalizedContact() },
   { label: "El Bergantí", href: "https://elberganti-tossa.com/" },
   { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/" }

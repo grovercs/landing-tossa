@@ -1,0 +1,93 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+import Pagination from "@src/components/Pagination.astro";
+import HeadingPageSm from "@src/components/HeadingPageSm.astro";
+import { getCollection } from "astro:content";
+
+// ======================================
+// STATIC PATHS
+// ======================================
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ id }) => id.startsWith("fr/"));
+
+  const maxPerPage = 9;
+  const totalPages = Math.ceil(posts.length / maxPerPage);
+
+  // page 1 is handled by index.astro
+  const pages = Array.from(
+    { length: totalPages },
+    (_, i) => i + 1
+  ).filter((p) => p > 1);
+
+  return pages.map((page) => ({
+    params: { page: String(page) },
+  }));
+}
+
+// ======================================
+// PAGE LOGIC
+// ======================================
+const { page } = Astro.params;
+const currentPage = Number(page);
+const lang = "fr";
+
+// Safety check
+if (!Number.isInteger(currentPage) || currentPage < 2) {
+  return new Response(null, { status: 404 });
+}
+
+// Get all posts
+const allPosts = await getCollection("blog", ({ id }) => id.startsWith("fr/"));
+
+// Sort posts
+const posts = allPosts.sort((a, b) => {
+  const dateA = typeof a.data.date === "string" ? new Date(a.data.date) : a.data.date;
+  const dateB = typeof b.data.date === "string" ? new Date(b.data.date) : b.data.date;
+  return dateB.valueOf() - dateA.valueOf();
+});
+
+// Pagination config
+const maxPerPage = 9;
+const totalPages = Math.ceil(posts.length / maxPerPage);
+
+// Out of range
+if (currentPage > totalPages) {
+  return new Response(null, { status: 404 });
+}
+
+// Visible posts
+const start = (currentPage - 1) * maxPerPage;
+const visiblePosts = posts.slice(start, start + maxPerPage);
+
+const title = `Blog - Page ${currentPage} | El Bergantí & Hostalet de Tossa`;
+---
+
+<MainLayout 
+  title={title}
+  description={`Plus d'articles et de guides sur Tossa de Mar. Page ${currentPage}.`}
+>
+  <HeadingPageSm
+    title="Blog & Guide Local"
+    subtitle={`Explorer Tossa de Mar - Page ${currentPage}`}
+    bgImage="/images/tossa-de-mar-costa-brava-1.webp"
+  />
+
+  <section id="blogs" class="py-16 bg-skin-light overflow-x-hidden min-h-[50vh]">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {visiblePosts.map((post) => (
+          <BlogCard post={post} lang={lang} />
+        ))}
+      </div>
+
+      <div class="flex justify-center mt-16">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          baseUrl="/fr/blogs"
+        />
+      </div>
+    </div>
+  </section>
+</MainLayout>

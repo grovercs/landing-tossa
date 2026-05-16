@@ -39,72 +39,76 @@ const roomTypes = [
 
 <section class="bg-primary-dark py-8 overflow-x-hidden">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="bg-primary p-6 rounded-lg shadow-xl">
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+      <div class="bg-primary p-6 rounded-lg shadow-xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
-        <!-- Check-in -->
-        <Input 
-          label={t('booking.checkin')} 
-          type="date"
-          class="w-full"
-          icon="bi:calendar-check"
-        />
-
-        <!-- Check-out -->
-        <Input 
-          label={t('booking.checkout')} 
-          type="date"
-          class="w-full"
-          icon="bi:calendar-x"
-        />
-
-        <!-- Guests -->
-        <div class="flex flex-col">
-          <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
-            <Icon name="bi:people" class="w-4 h-4" /> {t('booking.guests')}
-          </label>
-
-          <div class="grid grid-cols-2 h-12 gap-2">
-            <!-- Adults -->
-            <Select 
-              label={t('booking.adults')}
-              icon="bi:person"
-              options={adults}
-              hideLabel={true}
-              class="flex-1"
-            />
-
-            <!-- Children -->
-            <Select 
-              label={t('booking.children')}
-              icon="bi:person-add"
-              options={children}
-              hideLabel={true}
-              class="flex-1"
+          <!-- Check-in -->
+          <div class="lg:col-span-2">
+            <Input 
+              label={t('booking.checkin')} 
+              type="date"
+              class="w-full"
+              icon="bi:calendar-check"
             />
           </div>
-        </div>
 
-        <!-- Rooms -->
-        <Select 
-          label={t('booking.room')}
-          icon="bi:door-open"
-          options={roomTypes}
-        />
+          <!-- Check-out -->
+          <div class="lg:col-span-2">
+            <Input 
+              label={t('booking.checkout')} 
+              type="date"
+              class="w-full"
+              icon="bi:calendar-x"
+            />
+          </div>
 
-        <!-- Book Button -->
-        <div>
-          <Button 
-            variant="success"
-            size="md"
-            icon="bi:journal-check"
-            iconPosition="left"
-            class="w-full h-12 bg-green-700/90 hover:bg-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-          >
-            {t('booking.search')}
-          </Button>
+          <!-- Guests -->
+          <div class="flex flex-col lg:col-span-3">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:people" class="w-4 h-4" /> {t('booking.guests')}
+            </label>
+
+            <div class="grid grid-cols-2 h-12 gap-2">
+              <Select 
+                label={t('booking.adults')}
+                icon="bi:person"
+                options={adults}
+                hideLabel={true}
+                class="flex-1"
+              />
+
+              <Select 
+                label={t('booking.children')}
+                icon="bi:person-add"
+                options={children}
+                hideLabel={true}
+                class="flex-1"
+              />
+            </div>
+          </div>
+
+          <!-- Rooms -->
+          <div class="lg:col-span-2">
+            <Select 
+              label={t('booking.room')}
+              icon="bi:door-open"
+              options={roomTypes}
+            />
+          </div>
+
+          <!-- Book Button -->
+          <div class="lg:col-span-3">
+            <Button 
+              variant="success"
+              size="md"
+              icon="bi:journal-check"
+              iconPosition="left"
+              class="w-full h-12 bg-green-700/90 hover:bg-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-2"
+            >
+              <span class="text-sm sm:text-base whitespace-nowrap">{t('booking.search')}</span>
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
   </div>
 </section>

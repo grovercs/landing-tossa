@@ -18,6 +18,7 @@ const blog = defineCollection({
     date: z.string(),
     category: z.string(),
     tags: z.array(z.string()),
+    keywords: z.array(z.string()).optional(),
     readingTime: z.number(),
     author: z.string(),
     description: z.string(),

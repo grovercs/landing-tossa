@@ -4,6 +4,8 @@ import mdx from '@astrojs/mdx';
 import icon from "astro-icon";
 import tailwindcss from '@tailwindcss/vite';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://landing-tossa.netlify.app',
@@ -33,10 +35,7 @@ export default defineConfig({
     },
   ],
 
-  integrations: [
-    icon(),
-    mdx(),
-  ],
+  integrations: [icon(), mdx(), sitemap()],
 
   vite: {
     resolve: {
