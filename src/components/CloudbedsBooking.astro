@@ -1,0 +1,303 @@
+---
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "../i18n/utils";
+import BookingInfo from "./BookingInfo.astro";
+import HelpCard from "./HelpCard.astro";
+
+export interface Props {
+  /** When true, renders the full two-column page layout. When false, renders a compact search bar. */
+  fullLayout?: boolean;
+  infoTitle?: string;
+  infoItems?: { icon: string; text: string }[];
+  helpTitle?: string;
+  helpDescription?: string;
+  helpItems?: { icon: string; text: string }[];
+}
+
+const {
+  fullLayout = false,
+  infoTitle = "Información de Reserva",
+  infoItems = [
+    { icon: "bi:clock", text: "Check-in a partir de las 14:00 h" },
+    { icon: "bi:clock-history", text: "Check-out antes de las 12:00 h" },
+    { icon: "bi:shield-check", text: "Cancelación gratuita hasta 24 horas antes de la llegada" },
+    { icon: "bi:cup-hot", text: "Restaurantes propios en los alojamientos" },
+    { icon: "bi:wifi", text: "Wi-Fi gratuito de alta velocidad" },
+  ],
+  helpTitle = "¿Necesitas Ayuda?",
+  helpDescription = "Nuestro equipo de recepción está listo para ayudarte con cualquier petición especial.",
+  helpItems = [
+    { icon: "bi:telephone", text: "El Bergantí: +34 972 34 04 22" },
+    { icon: "bi:telephone", text: "Hostalet: +34 972 34 00 00" },
+  ],
+} = Astro.props;
+
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+const t = useTranslations(lang);
+
+// Translated dictionaries for adults/children labels
+const dicts = {
+  es: {
+    adult1: "1 Adulto", adult: "Adultos", child0: "0 Niños", child1: "1 Niño", child: "Niños",
+    propertyLabel: "Alojamiento",
+    propertyAny: "Cualquiera",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "Hostalet de Tossa",
+    checkinLabel: "Fecha Entrada",
+    checkoutLabel: "Fecha Salida",
+    guestsLabel: "Huéspedes",
+    adultsLabel: "Adultos",
+    childrenLabel: "Niños",
+    checkBtn: "Comprobar Disponibilidad",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+  },
+  ca: {
+    adult1: "1 Adult", adult: "Adults", child0: "0 Nens", child1: "1 Nen", child: "Nens",
+    propertyLabel: "Allotjament",
+    propertyAny: "Qualsevol",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "Hostalet de Tossa",
+    checkinLabel: "Data Entrada",
+    checkoutLabel: "Data Sortida",
+    guestsLabel: "Hostes",
+    adultsLabel: "Adults",
+    childrenLabel: "Nens",
+    checkBtn: "Comprovar Disponibilitat",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+  },
+  en: {
+    adult1: "1 Adult", adult: "Adults", child0: "0 Children", child1: "1 Child", child: "Children",
+    propertyLabel: "Accommodation",
+    propertyAny: "Any",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "Hostalet de Tossa",
+    checkinLabel: "Check-in",
+    checkoutLabel: "Check-out",
+    guestsLabel: "Guests",
+    adultsLabel: "Adults",
+    childrenLabel: "Children",
+    checkBtn: "Check Availability",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+  },
+  fr: {
+    adult1: "1 Adulte", adult: "Adultes", child0: "0 Enfants", child1: "1 Enfant", child: "Enfants",
+    propertyLabel: "Hébergement",
+    propertyAny: "Tous",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "Hostalet de Tossa",
+    checkinLabel: "Date d'arrivée",
+    checkoutLabel: "Date de départ",
+    guestsLabel: "Voyageurs",
+    adultsLabel: "Adultes",
+    childrenLabel: "Enfants",
+    checkBtn: "Vérifier la Disponibilité",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+  },
+};
+
+const d = dicts[lang] || dicts.es;
+
+// Options
+const adultsOptions = [d.adult1, `2 ${d.adult}`, `3 ${d.adult}`, `4 ${d.adult}`, `5 ${d.adult}`, `6 ${d.adult}`];
+const childrenOptions = [d.child0, d.child1, `2 ${d.child}`, `3 ${d.child}`];
+const properties = [d.propertyAny, d.propertyBerganti, d.propertyHostalet];
+---
+
+{fullLayout ? (
+  <!-- FULL PAGE LAYOUT -->
+  <section id="booking" class="py-16 relative bg-white overflow-x-hidden">
+    <div class="max-w-7xl relative mx-auto px-4">
+      <div class="grid lg:grid-cols-2 gap-8 items-start">
+
+        <!-- LEFT SIDE -->
+        <div class="max-lg:order-2 space-y-8">
+          <BookingInfo title={infoTitle} items={infoItems} />
+          <HelpCard title={helpTitle} description={helpDescription} items={helpItems} />
+        </div>
+
+        <!-- RIGHT SIDE: Cloudbeds Search Form -->
+        <div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg">
+          <form
+            class="grid grid-cols-2 gap-5"
+            action={d.cloudbedsUrl}
+            method="GET"
+            target="_blank"
+          >
+            <!-- Property Selector -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.propertyLabel}</label>
+              <select
+                name="property"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {properties.map(p => <option value={p}>{p}</option>)}
+              </select>
+            </div>
+
+            <!-- Check-in -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.checkinLabel}</label>
+              <input
+                type="date"
+                name="checkin"
+                required
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Check-out -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.checkoutLabel}</label>
+              <input
+                type="date"
+                name="checkout"
+                required
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Adults -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.adultsLabel}</label>
+              <select
+                name="adults"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {adultsOptions.map((opt, i) => (
+                  <option value={i + 1}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Children -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.childrenLabel}</label>
+              <select
+                name="children"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {childrenOptions.map((opt, i) => (
+                  <option value={i}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-span-2">
+              <button
+                type="submit"
+                class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
+              >
+                <Icon name="bi:journal-check" class="text-lg" />
+                {d.checkBtn}
+              </button>
+            </div>
+          </form>
+
+          <p class="text-white/60 text-sm mt-4 text-center">
+            {lang === 'es' && "Serás redirigido a nuestro motor de reservas seguro gestionado por Cloudbeds."}
+            {lang === 'ca' && "Seràs redirigit al nostre motor de reserves segur gestionat per Cloudbeds."}
+            {lang === 'en' && "You will be redirected to our secure booking engine powered by Cloudbeds."}
+            {lang === 'fr' && "Vous serez redirigé vers notre moteur de réservation sécurisé géré par Cloudbeds."}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+) : (
+  <!-- COMPACT HOME SEARCH BAR -->
+  <section class="bg-primary-dark py-8 overflow-x-hidden" id="booking">
+    <div class="max-w-7xl mx-auto px-4">
+      <form
+        class="bg-primary p-6 rounded-lg shadow-xl"
+        action={d.cloudbedsUrl}
+        method="GET"
+        target="_blank"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+
+          <!-- Property -->
+          <div class="lg:col-span-3">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:building" class="w-4 h-4" /> {d.propertyLabel}
+            </label>
+            <select
+              name="property"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            >
+              {properties.map(p => <option value={p}>{p}</option>)}
+            </select>
+          </div>
+
+          <!-- Check-in -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:calendar-check" class="w-4 h-4" /> {d.checkinLabel}
+            </label>
+            <input
+              type="date"
+              name="checkin"
+              required
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
+          <!-- Check-out -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:calendar-x" class="w-4 h-4" /> {d.checkoutLabel}
+            </label>
+            <input
+              type="date"
+              name="checkout"
+              required
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
+          <!-- Adults -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:people" class="w-4 h-4" /> {d.adultsLabel}
+            </label>
+            <select
+              name="adults"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            >
+              {adultsOptions.map((opt, i) => (
+                <option value={i + 1}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Children -->
+          <div class="lg:col-span-1">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:person-add" class="w-4 h-4" /> {d.childrenLabel}
+            </label>
+            <select
+              name="children"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            >
+              {childrenOptions.map((opt, i) => (
+                <option value={i}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Submit -->
+          <div class="lg:col-span-2">
+            <button
+              type="submit"
+              class="w-full h-12 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-2 transition"
+            >
+              <Icon name="bi:journal-check" class="text-lg" />
+              <span class="text-sm sm:text-base whitespace-nowrap">{d.checkBtn}</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+)}

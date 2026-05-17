@@ -54,6 +54,26 @@ const ogImage = image.startsWith('http') ? image : `https://landing-tossa.netlif
     
     {schema && <SchemaMarkup schema={schema} />}
 
+    <!-- Organization schema (default for all pages) -->
+    <SchemaMarkup schema={{
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "El Bergantí & Hostalet de Tossa",
+      "url": "https://landing-tossa.netlify.app",
+      "logo": "https://landing-tossa.netlify.app/img/favicon.png",
+      "sameAs": [
+        "https://elberganti-tossa.com/",
+        "https://www.hostalhostalet.com/"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Tossa de Mar",
+        "addressRegion": "Girona",
+        "addressCountry": "ES"
+      },
+      "telephone": "+34 972 34 04 22"
+    }} />
+
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />
   </head>

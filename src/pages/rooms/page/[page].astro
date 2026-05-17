@@ -8,7 +8,7 @@ import { getCollection } from "astro:content";
 //  STATIC PATHS (required for [page])
 // ======================================
 export async function getStaticPaths() {
-  const rooms = await getCollection("rooms");
+  const rooms = await getCollection("rooms", ({ id }) => id.startsWith("es/"));
   const perPage = 6;
   const totalPages = Math.ceil(rooms.length / perPage);
 
@@ -23,8 +23,8 @@ export async function getStaticPaths() {
 const { page } = Astro.params;
 const currentPage = Number(page);
 
-// Get all rooms
-const allRooms = await getCollection("rooms");
+// Get Spanish rooms only
+const allRooms = await getCollection("rooms", ({ id }) => id.startsWith("es/"));
 
 // Sort by date (newest first)
 const rooms = allRooms.sort(

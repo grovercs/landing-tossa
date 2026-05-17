@@ -29,7 +29,7 @@ const rooms = defineCollection({
   loader: glob({ pattern: "**/*.mdx", base: "./src/content/rooms" }),
   schema: z.object({
     title: z.string(),
-    price: z.number(),
+    price: z.number().optional(),
     date: z.string(),
     rating: z.number(),
     ratingCount: z.number(),

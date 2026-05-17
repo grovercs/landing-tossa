@@ -28,9 +28,11 @@ const d = dicts[lang] || dicts.es;
       <span class="text-heading font-semibold text-white">
         {roomTitle}
       </span>
+      {(price && price > 0) && (
       <span class="block text-sm text-white/80 mt-1">
         {t('rooms.from')} {price}€ {t('rooms.night')}
       </span>
+      )}
     </div>
 
     <!-- Full Name -->
