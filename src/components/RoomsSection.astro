@@ -26,10 +26,13 @@ const {
 // ==============================
 const allRooms = await getCollection("rooms", ({ id }) => id.startsWith(`${lang}/`));
 
-const sortedRooms = allRooms.sort(
-  (a, b) =>
-    new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
-);
+// Sort: Hostalet first, then El Bergantí (Hostalet is the main property)
+const sortedRooms = allRooms.sort((a, b) => {
+  const slugA = a.id.split('/').pop()?.replace(/\.mdx$/, '') || '';
+  const slugB = b.id.split('/').pop()?.replace(/\.mdx$/, '') || '';
+  const order: Record<string, number> = { 'hostalet': 0, 'el-berganti': 1 };
+  return (order[slugA] ?? 99) - (order[slugB] ?? 99);
+});
 
 // ==============================
 // PAGINATION LOGIC
