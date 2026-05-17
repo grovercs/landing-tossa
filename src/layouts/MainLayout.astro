@@ -80,7 +80,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />
 
-    {gaId && <GoogleAnalytics id={gaId} />}
+    <GoogleAnalytics id={gaId || 'G-6RS4GY4ZTK'} />
   </head>
 
   <body class="font-sans text-gray-800 pt-20">
