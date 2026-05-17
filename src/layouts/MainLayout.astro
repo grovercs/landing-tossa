@@ -7,6 +7,7 @@ import { Font } from "astro:assets";
 import 'glightbox/dist/css/glightbox.min.css';
 import '@src/styles/style.css';
 import BackToTop from '@src/components/BackToTop.astro';
+import GoogleAnalytics from '@src/components/GoogleAnalytics.astro';
 
 export interface Props {
   title: string;
@@ -28,6 +29,8 @@ const lang = Astro.currentLocale || 'es';
 const siteUrl = Astro.url?.href || "https://alojamientotossademar.com";
 // Ensure absolute URL for OpenGraph images
 const ogImage = image.startsWith('http') ? image : `https://alojamientotossademar.com${image}`;
+
+const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -76,6 +79,8 @@ const ogImage = image.startsWith('http') ? image : `https://alojamientotossadema
 
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />
+
+    {gaId && <GoogleAnalytics id={gaId} />}
   </head>
 
   <body class="font-sans text-gray-800 pt-20">
