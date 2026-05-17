@@ -65,8 +65,8 @@ Inject via `MainLayout` or a shared SEO component:
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "El Bergantí & Hostalet de Tossa",
-  "url": "https://landing-tossa.netlify.app",
-  "logo": "https://landing-tossa.netlify.app/img/favicon.png",
+  "url": "https://alojamientotossademar.com",
+  "logo": "https://alojamientotossademar.com/img/favicon.png",
   "sameAs": ["https://elberganti-tossa.com/", "https://www.hostalhostalet.com/"],
   "address": {
     "@type": "PostalAddress",
@@ -135,7 +135,7 @@ export default defineConfig({
 Each page should include:
 
 ```html
-<link rel="canonical" href="https://landing-tossa.netlify.app/es/rooms/el-berganti/" />
+<link rel="canonical" href="https://alojamientotossademar.com/es/rooms/el-berganti/" />
 <link rel="alternate" hreflang="es" href="https://.../es/rooms/el-berganti/" />
 <link rel="alternate" hreflang="ca" href="https://.../ca/rooms/el-berganti/" />
 <link rel="alternate" hreflang="en" href="https://.../en/rooms/el-berganti/" />
@@ -166,7 +166,7 @@ Disallow: /
 User-agent: PerplexityBot
 Disallow: /
 
-Sitemap: https://landing-tossa.netlify.app/sitemap-index.xml
+Sitemap: https://alojamientotossademar.com/sitemap-index.xml
 ```
 
 ### llms.txt (optional, emerging standard)

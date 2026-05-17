@@ -8,7 +8,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://landing-tossa.netlify.app',
+  site: 'https://alojamientotossademar.com',
   base: '/',
   output: 'static',
 

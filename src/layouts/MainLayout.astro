@@ -25,9 +25,9 @@ const {
 } = Astro.props;
 
 const lang = Astro.currentLocale || 'es';
-const siteUrl = Astro.url?.href || "https://landing-tossa.netlify.app";
+const siteUrl = Astro.url?.href || "https://alojamientotossademar.com";
 // Ensure absolute URL for OpenGraph images
-const ogImage = image.startsWith('http') ? image : `https://landing-tossa.netlify.app${image}`;
+const ogImage = image.startsWith('http') ? image : `https://alojamientotossademar.com${image}`;
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -59,8 +59,8 @@ const ogImage = image.startsWith('http') ? image : `https://landing-tossa.netlif
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "El Hostalet de Tossa & El Bergantí",
-      "url": "https://landing-tossa.netlify.app",
-      "logo": "https://landing-tossa.netlify.app/img/favicon.png",
+      "url": "https://alojamientotossademar.com",
+      "logo": "https://alojamientotossademar.com/img/favicon.png",
       "sameAs": [
         "https://elberganti-tossa.com/",
         "https://www.hostalhostalet.com/"

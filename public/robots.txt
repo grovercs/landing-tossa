@@ -13,4 +13,4 @@ Disallow: /
 User-agent: ChatGPT-User
 Disallow: /
 
-Sitemap: https://landing-tossa.netlify.app/sitemap-index.xml
+Sitemap: https://alojamientotossademar.com/sitemap-index.xml
