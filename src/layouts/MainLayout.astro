@@ -17,7 +17,7 @@ export interface Props {
 }
 
 const {
-  title = "El Bergantí & Hostalet de Tossa",
+  title = "Hostalet de Tossa & El Bergantí",
   description = "Disfruta de la auténtica Costa Brava. Dos alojamientos con encanto en el centro de Tossa de Mar con restaurante y reserva directa.",
   image = "/images/tossa-de-mar-costa-brava-1.webp",
   type = "website",
@@ -38,7 +38,7 @@ const ogImage = image.startsWith('http') ? image : `https://landing-tossa.netlif
 
     <!-- Primary Meta -->
     <meta name="description" content={description} />
-    <meta name="author" content="El Bergantí & Hostalet" />
+    <meta name="author" content="Hostalet de Tossa & El Bergantí" />
     <meta name="robots" content="index, follow" />
 
     <link rel="canonical" href={siteUrl} />
@@ -53,6 +53,26 @@ const ogImage = image.startsWith('http') ? image : `https://landing-tossa.netlif
     <meta property="og:image" content={ogImage} />
     
     {schema && <SchemaMarkup schema={schema} />}
+
+    <!-- Organization schema (default for all pages) -->
+    <SchemaMarkup schema={{
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Hostalet de Tossa & El Bergantí",
+      "url": "https://landing-tossa.netlify.app",
+      "logo": "https://landing-tossa.netlify.app/img/favicon.png",
+      "sameAs": [
+        "https://elberganti-tossa.com/",
+        "https://www.hostalhostalet.com/"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Tossa de Mar",
+        "addressRegion": "Girona",
+        "addressCountry": "ES"
+      },
+      "telephone": "+34 972 34 04 22"
+    }} />
 
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />

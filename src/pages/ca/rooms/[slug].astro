@@ -37,7 +37,33 @@ const hasHalfStar = data.rating % 1 !== 0;
 const featured = data.featuredImage;
 const gallery = data.gallery ?? [];
 ---
-<MainLayout title={data.title}>
+<MainLayout
+  title={data.title}
+  description={`${data.title} - Allotjament a Tossa de Mar. ${data.label}. Reserva directa.`}
+  image={data.featuredImage}
+  schema={{
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "name": data.title,
+    "image": `https://landing-tossa.netlify.app${data.featuredImage}`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Tossa de Mar",
+      "addressRegion": "Girona",
+      "addressCountry": "ES"
+    },
+    "aggregateRating": data.rating && data.ratingCount ? {
+      "@type": "AggregateRating",
+      "ratingValue": String(data.rating),
+      "reviewCount": data.ratingCount
+    } : undefined,
+    "amenityFeature": data.amenities?.map((a) => ({
+      "@type": "LocationFeatureSpecification",
+      "name": a.label,
+      "value": true
+    }))
+  }}
+>
   <div id="rooms" class="py-8 sm:py-12 bg-white overflow-x-hidden">
     <div class="max-w-7xl mx-auto px-4">
 
@@ -66,11 +92,13 @@ const gallery = data.gallery ?? [];
           </div>
         </div>
 
+        {(data.price && data.price > 0) && (
         <div class="relative">
           <span class="text-heading text-lg md:text-xl font-semibold text-green-600 bg-primary/10 rounded-tl-2xl rounded-br-2xl py-3 px-6">
             Des de {data.price}€/nit
           </span>
         </div>
+        )}
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -87,6 +115,8 @@ const gallery = data.gallery ?? [];
                   src={featured}
                   alt={data.title}
                   class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             </div>
@@ -104,6 +134,8 @@ const gallery = data.gallery ?? [];
                       src={img}
                       alt={`gallery-${i}`}
                       class="absolute inset-0 h-full object-cover group-hover:scale-110 transition-all duration-500"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </a>
                 </div>

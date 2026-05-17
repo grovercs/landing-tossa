@@ -1,5 +1,5 @@
 ---
-import BookingPage from "@src/components/BookingPage.astro";
+import CloudbedsBooking from "@src/components/CloudbedsBooking.astro";
 import HeadingPage from "@src/components/HeadingPage.astro";
 import NotFoundSection from "@src/components/NotFoundSection.astro";
 import MainLayout from "@src/layouts/MainLayout.astro";
@@ -11,7 +11,8 @@ import MainLayout from "@src/layouts/MainLayout.astro";
         subtitle="Secure your perfect stay in the heart of the Costa Brava by completing the form below."
         background="/images/tossa-de-mar-costa-brava-1.webp"
         />
-    <BookingPage 
+    <CloudbedsBooking
+        fullLayout={true}
         infoTitle="Booking Information"
         infoItems={[
             { icon: "bi:clock", text: "Check-in time starts from 14:00 PM" },
@@ -26,41 +27,5 @@ import MainLayout from "@src/layouts/MainLayout.astro";
             { icon: "bi:telephone", text: "El Bergantí: +34 972 34 04 22" },
             { icon: "bi:telephone", text: "Hostalet: +34 972 34 00 00" },
         ]}
-        formFields={[
-            { label: "Full Name", type: "text", name: "fullName" },
-            { label: "Email Address", type: "email", name: "email" },
-            { label: "Phone Number", type: "text", name: "phone" },
-            {
-                label: "Accommodation",
-                type: "select",
-                name: "roomType",
-                options: [
-                "El Bergantí - Double Room",
-                "Hostalet de Tossa - Double Room",
-                "Hostalet de Tossa - Triple Room"
-                ]
-            },
-            { label: "Check-in Date", type: "date", name: "checkin" },
-            { label: "Check-out Date", type: "date", name: "checkout" },
-            {
-                label: "Adults",
-                type: "select",
-                name: "adults",
-                options: ["1 Adult", "2 Adults", "3 Adults", "4 Adults"]
-            },
-            {
-                label: "Children",
-                type: "select",
-                name: "children",
-                options: ["0 Children", "1 Child", "2 Children", "3 Children"]
-            },
-            {
-                label: "Special Requests",
-                type: "textarea",
-                name: "requests",
-                span: 2
-            }
-        ]}
-        submitText="Confirm Booking"
     />
 </MainLayout>

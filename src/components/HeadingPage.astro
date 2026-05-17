@@ -19,10 +19,13 @@ const alignmentClass =
 
 <section class="relative pt-24 pb-20 lg:py-32 min-h-[40vh] md:min-h-[400px] bg-gray-200 flex items-center overflow-x-hidden">
   <!-- Background Image -->
-  <img 
+  <img
     src={background}
     alt="Page Header Background"
     class="absolute inset-0 w-full h-full object-cover"
+    fetchpriority="high"
+    loading="eager"
+    decoding="async"
   />
 
   <div class="max-w-7xl mx-auto px-4 relative z-10">

@@ -21,7 +21,7 @@ const url = lang === 'es' ? `/rooms/${baseSlug}/` : `/${lang}/rooms/${baseSlug}/
 <div class="bg-white rounded-tl-2xl rounded-br-2xl overflow-hidden shadow-lg">
   <div class="relative aspect-video bg-gray-100 overflow-hidden">
     <a href={url}>
-      <img src={data.featuredImage} alt={data.title} class="w-full object-cover" loading="lazy" />
+      <img src={data.featuredImage} alt={data.title} class="w-full object-cover" loading="lazy" decoding="async" />
     </a>
 
     {data.label && (
@@ -46,7 +46,9 @@ const url = lang === 'es' ? `/rooms/${baseSlug}/` : `/${lang}/rooms/${baseSlug}/
 
     <div class="flex items-center justify-between">
       <span class="font-semibold text-wood">
-        {t('rooms.from')} {data.price}€ {t('rooms.night')}
+        {(data.price && data.price > 0)
+          ? `${t('rooms.from')} ${data.price}€ ${t('rooms.night')}`
+          : `${t('rooms.from')} ${t('booking.search')}`}
       </span>
 
       <a

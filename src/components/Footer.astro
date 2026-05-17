@@ -51,8 +51,8 @@ const getLocalizedBlog = () => {
 const exploreLinks: FooterLink[] = [
   { label: t('nav.blog'), href: getLocalizedBlog() },
   { label: t('nav.contact'), href: getLocalizedContact() },
-  { label: "El Bergantí", href: "https://elberganti-tossa.com/" },
-  { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/" }
+  { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/" },
+  { label: "El Bergantí", href: "https://elberganti-tossa.com/" }
 ];
 
 const socialLinks = [
@@ -64,12 +64,12 @@ const socialLinks = [
 
 const contact: ContactItem[] = [
   { icon: "bi:geo-alt", text: ["Tossa de Mar", "Costa Brava, Girona"] },
-  { icon: "bi:house", text: ["El Bergantí: +34 972 34 04 22", "Hostalet: +34 972 34 00 00"] }
+  { icon: "bi:house", text: ["Hostalet: +34 972 34 00 00", "El Bergantí: +34 972 34 04 22"] }
 ];
 
 const copyright: FooterCopyright = {
   year: new Date().getFullYear(),
-  brand: "El Bergantí & Hostalet de Tossa",
+  brand: "Hostalet de Tossa & El Bergantí",
   text: t('footer.rights')
 };
 ---
@@ -82,6 +82,8 @@ const copyright: FooterCopyright = {
       <div>
         <h3 class="font-heading text-2xl mb-4">{brandInfo.name.toUpperCase()}</h3>
         <p class="text-white/70 mb-4">{brandInfo.tagline}</p>
+        {/* Social links hidden until real URLs are provided */}
+        {/*
         <div class="flex gap-4">
           {socialLinks.map(s => (
             <a href={s.href} class="text-white/70 hover:text-accent transition">
@@ -89,6 +91,7 @@ const copyright: FooterCopyright = {
             </a>
           ))}
         </div>
+        */}
       </div>
 
       <!-- EXPLORE -->

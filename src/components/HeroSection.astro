@@ -104,6 +104,9 @@ const partners: PartnerLogo[] = [];
     src={slides[0].src}
     alt={slides[0].alt}
     class="absolute inset-0 w-full h-full object-cover"
+    fetchpriority="high"
+    loading="eager"
+    decoding="async"
   />
 
   <!-- SLIDE IMAGES -->
@@ -112,6 +115,9 @@ const partners: PartnerLogo[] = [];
       src={slide.src}
       alt={slide.alt}
       class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+      fetchpriority={index === 0 ? "high" : "low"}
+      loading={index === 0 ? "eager" : "lazy"}
+      decoding="async"
       x-show={`active === ${index}`}
       x-transition:enter="transition ease-out duration-1000"
       x-transition:enter-start="opacity-0"

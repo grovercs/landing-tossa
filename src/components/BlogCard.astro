@@ -39,7 +39,7 @@ const d = translations[lang] || translations.es;
 <div class="bg-white rounded-tl-2xl rounded-br-2xl overflow-hidden shadow-lg flex flex-col h-full">
   <div class="relative aspect-video bg-gray-100 overflow-hidden">
     <a href={url}>
-      <img src={data.image} alt={data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+      <img src={data.image} alt={data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async" />
     </a>
   </div>
 
