@@ -48,10 +48,12 @@ const getLocalizedBlog = () => {
   return `/blogs`;
 };
 
+const hostaletLabel = lang === 'ca' || lang === 'fr' ? "L'Hostalet de Tossa" : lang === 'es' ? "El Hostalet de Tossa" : "Hostalet de Tossa";
+
 const exploreLinks: FooterLink[] = [
   { label: t('nav.blog'), href: getLocalizedBlog() },
   { label: t('nav.contact'), href: getLocalizedContact() },
-  { label: "Hostalet de Tossa", href: "https://www.hostalhostalet.com/" },
+  { label: hostaletLabel, href: "https://www.hostalhostalet.com/" },
   { label: "El Bergantí", href: "https://elberganti-tossa.com/" }
 ];
 
@@ -64,12 +66,12 @@ const socialLinks = [
 
 const contact: ContactItem[] = [
   { icon: "bi:geo-alt", text: ["Tossa de Mar", "Costa Brava, Girona"] },
-  { icon: "bi:house", text: ["Hostalet: +34 972 34 00 00", "El Bergantí: +34 972 34 04 22"] }
+  { icon: "bi:house", text: [`${lang === 'ca' || lang === 'fr' ? "L'Hostalet" : lang === 'es' ? "El Hostalet" : "Hostalet"}: +34 972 34 00 00`, "El Bergantí: +34 972 34 04 22"] }
 ];
 
 const copyright: FooterCopyright = {
   year: new Date().getFullYear(),
-  brand: "Hostalet de Tossa & El Bergantí",
+  brand: hostaletLabel + " & El Bergantí",
   text: t('footer.rights')
 };
 ---
@@ -137,11 +139,11 @@ const copyright: FooterCopyright = {
           target="_blank"
           rel="noopener noreferrer"
           class="opacity-80 hover:opacity-100 transition"
-          aria-label="L'Hostalet de Tossa"
+          aria-label={hostaletLabel}
         >
           <img
             src="/images/logo-lhostalet.avif"
-            alt="L'Hostalet de Tossa"
+            alt={hostaletLabel}
             class="h-10 w-auto"
             loading="lazy"
             decoding="async"
