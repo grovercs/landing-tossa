@@ -7,6 +7,7 @@ import { Font } from "astro:assets";
 import 'glightbox/dist/css/glightbox.min.css';
 import '@src/styles/style.css';
 import BackToTop from '@src/components/BackToTop.astro';
+import ExitPopup from '@src/components/ExitPopup.astro';
 
 export interface Props {
   title: string;
@@ -118,5 +119,7 @@ const ogImage = image.startsWith('http') ? image : `https://alojamientotossadema
     </script>
 
     <script src="@src/scripts/animation.ts"></script>
+
+    <ExitPopup />
   </body>
 </html>
