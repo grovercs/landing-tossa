@@ -80,14 +80,7 @@ const ogImage = image.startsWith('http') ? image : `https://alojamientotossadema
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6RS4GY4ZTK"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'G-6RS4GY4ZTK');
-    </script>
+    <script is:inline src="/gtag.js"></script>
   </head>
 
   <body class="font-sans text-gray-800 pt-20">
