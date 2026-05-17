@@ -30,7 +30,6 @@ const siteUrl = Astro.url?.href || "https://alojamientotossademar.com";
 // Ensure absolute URL for OpenGraph images
 const ogImage = image.startsWith('http') ? image : `https://alojamientotossademar.com${image}`;
 
-const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -80,7 +79,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <Font cssVariable="--font-roboto" preload />
     <Font cssVariable="--font-gilda-display" preload />
 
-    <GoogleAnalytics id={gaId || 'G-6RS4GY4ZTK'} />
+    <GoogleAnalytics />
   </head>
 
   <body class="font-sans text-gray-800 pt-20">
