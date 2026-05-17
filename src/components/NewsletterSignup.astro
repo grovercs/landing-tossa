@@ -1,0 +1,96 @@
+---
+export interface Props {
+  lang?: "es" | "ca" | "en" | "fr";
+  variant?: "inline" | "box";
+}
+
+const { lang = "es", variant = "box" } = Astro.props;
+
+const copy = {
+  es: {
+    headline: "Guía secreta de Tossa de Mar",
+    sub: "Recibe gratis los 5 rincones que solo los locales conocen + ofertas exclusivas de última hora.",
+    placeholder: "Tu correo electrónico",
+    cta: "Descargar guía gratis",
+    privacy: "Sin spam. Puedes darte de baja en cualquier momento.",
+    success: "¡Gracias! Revisa tu bandeja de entrada.",
+  },
+  ca: {
+    headline: "Guia secreta de Tossa de Mar",
+    sub: "Rep de franc els 5 racons que només coneixen els locals + ofertes exclusives de darrera hora.",
+    placeholder: "El teu correu electrònic",
+    cta: "Descarregar guia gratuïta",
+    privacy: "Sense spam. Et pots donar de baixa en qualsevol moment.",
+    success: "Gràcies! Revisa la teva bústia d'entrada.",
+  },
+  en: {
+    headline: "Secret Tossa de Mar Guide",
+    sub: "Get free the 5 hidden spots only locals know + exclusive last-minute offers.",
+    placeholder: "Your email address",
+    cta: "Get free guide",
+    privacy: "No spam. Unsubscribe anytime.",
+    success: "Thanks! Check your inbox.",
+  },
+  fr: {
+    headline: "Guide secret de Tossa de Mar",
+    sub: "Recevez gratuitement les 5 recoins connus seulement des locaux + offres exclusives de dernière minute.",
+    placeholder: "Votre adresse e-mail",
+    cta: "Télécharger le guide gratuit",
+    privacy: "Pas de spam. Vous pouvez vous désinscrire à tout moment.",
+    success: "Merci ! Vérifiez votre boîte de réception.",
+  },
+};
+
+const t = copy[lang];
+
+const wrapperClasses =
+  variant === "box"
+    ? "bg-primary/5 border border-primary/10 rounded-tl-3xl rounded-br-3xl p-6 sm:p-8"
+    : "border-t border-primary/10 pt-8";
+---
+
+<div class={wrapperClasses}>
+  <h3 class="font-heading text-xl sm:text-2xl text-primary-dark mb-2">
+    {t.headline}
+  </h3>
+  <p class="text-gray-600 mb-4 text-sm sm:text-base">
+    {t.sub}
+  </p>
+
+  <form
+    name={`newsletter-${lang}`}
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    class="flex flex-col sm:flex-row gap-3"
+  >
+    <p class="hidden">
+      <label>
+        Don't fill this out if you're human:
+        <input name="bot-field" />
+      </label>
+    </p>
+
+    <input type="hidden" name="form-name" value={`newsletter-${lang}`} />
+    <input type="hidden" name="language" value={lang} />
+
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder={t.placeholder}
+      class="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors"
+    />
+
+    <button
+      type="submit"
+      class="bg-primary hover:bg-primary-dark text-white font-medium px-6 py-3 rounded-lg text-sm transition-colors whitespace-nowrap"
+    >
+      {t.cta}
+    </button>
+  </form>
+
+  <p class="text-xs text-gray-400 mt-3">
+    {t.privacy}
+  </p>
+</div>

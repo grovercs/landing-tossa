@@ -1,6 +1,7 @@
 ---
 import MainLayout from "@src/layouts/MainLayout.astro";
 import BookingFormPage from "@src/components/BookingFormPage.astro";
+import DirectBookingBanner from "@src/components/DirectBookingBanner.astro";
 import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
 import BookingInfo from "@src/components/BookingInfo.astro";
@@ -162,6 +163,9 @@ const gallery = data.gallery ?? [];
           <div class="post-content mb-6">
             <Content />
           </div>
+
+          <!-- Anti-OTA Banner -->
+          <DirectBookingBanner />
         </div>
 
         <!-- SIDEBAR -->

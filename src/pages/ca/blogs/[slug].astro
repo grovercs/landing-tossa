@@ -1,12 +1,14 @@
 ---
 import MainLayout from "@src/layouts/MainLayout.astro";
 import BlogCard from "@src/components/BlogCard.astro";
+import DirectBookingBanner from "@src/components/DirectBookingBanner.astro";
 import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
 import { useTranslations } from "@src/i18n/utils";
 import BlogSidebar from "@src/components/BlogSidebar.astro";
 import GuestReviews from "@src/components/GuestReviews.astro";
 import GiscusComments from "@src/components/GiscusComments.astro";
+import NewsletterSignup from "@src/components/NewsletterSignup.astro";
 
 // ======================================
 //  STATIC PATHS dynamic route
@@ -136,7 +138,12 @@ const schema = {
           <Content />
         </div>
 
+        <DirectBookingBanner />
+
         <GuestReviews lang={lang} />
+
+        <NewsletterSignup lang="ca" />
+
         <!-- GiscusComments disabled: upstream 403 error (giscus/giscus#1269) -->
         <!-- <GiscusComments lang={lang} /> -->
       </div>
