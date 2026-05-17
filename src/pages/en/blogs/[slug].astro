@@ -6,6 +6,7 @@ import { getCollection, render } from "astro:content";
 import { useTranslations } from "@src/i18n/utils";
 import BlogSidebar from "@src/components/BlogSidebar.astro";
 import GuestReviews from "@src/components/GuestReviews.astro";
+import GiscusComments from "@src/components/GiscusComments.astro";
 
 // ======================================
 //  STATIC PATHS dynamic route
@@ -131,6 +132,7 @@ const schema = {
         </div>
 
         <GuestReviews lang={lang} />
+        <GiscusComments lang={lang} />
       </div>
 
       <!-- Right Column: Sidebar -->

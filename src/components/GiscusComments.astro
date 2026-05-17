@@ -1,0 +1,32 @@
+---
+export interface Props {
+  lang?: "es" | "ca" | "en" | "fr";
+}
+
+const { lang = "es" } = Astro.props;
+
+const giscusLang = {
+  es: "es",
+  ca: "es",
+  en: "en",
+  fr: "fr",
+}[lang] || "es";
+---
+
+<div class="giscus mt-10"></div>
+<script
+  src="https://giscus.app/client.js"
+  data-repo="grovercs/landing-tossa"
+  data-repo-id="R_kgDOSepIwA"
+  data-category="General"
+  data-category-id="DIC_kwDOSepIwM4C9Pme"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="preferred_color_scheme"
+  data-lang={giscusLang}
+  crossorigin="anonymous"
+  async>
+</script>
