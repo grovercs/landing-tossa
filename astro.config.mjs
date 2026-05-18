@@ -35,7 +35,12 @@ export default defineConfig({
     },
   ],
 
-  integrations: [icon(), mdx(), sitemap()],
+  integrations: [icon(), mdx(), sitemap({
+    lastmod: new Date(),
+    changefreq: 'weekly',
+    priority: 0.7,
+    filter: (page) => !page.includes('/debug/'),
+  })],
 
   vite: {
     resolve: {
