@@ -11,6 +11,7 @@ export default defineConfig({
   site: 'https://alojamientostossademar.com',
   base: '/',
   output: 'static',
+  trailingSlash: 'always',
 
   i18n: {
     defaultLocale: 'es',

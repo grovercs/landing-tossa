@@ -1,3 +1,30 @@
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Handle trailing slashes properly
+[[redirects]]
+  from = "/reserva-enviada"
+  to = "/reserva-enviada/"
+  status = 301
+
+[[redirects]]
+  from = "/ca/reserva-enviada"
+  to = "/ca/reserva-enviada/"
+  status = 301
+
+[[redirects]]
+  from = "/en/booking-sent"
+  to = "/en/booking-sent/"
+  status = 301
+
+[[redirects]]
+  from = "/fr/reservation-envoyee"
+  to = "/fr/reservation-envoyee/"
+  status = 301
+
+# SPA fallback for Astro static routes
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
