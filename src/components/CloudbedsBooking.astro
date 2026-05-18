@@ -156,8 +156,8 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
           <form
             name="booking"
             method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
+            netlify
+            netlify-honeypot="bot-field"
             action={d.successUrl}
             x-data=`{
               property: '${d.propertyAny}',
@@ -330,8 +330,8 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
       <form
         name="booking-compact"
         method="POST"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
+        netlify
+        netlify-honeypot="bot-field"
         action={d.successUrl}
         x-data=`{
           property: '${d.propertyAny}',
@@ -436,8 +436,46 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             </select>
           </div>
 
+          <!-- Name -->
+          <div class="lg:col-span-3">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:person" class="w-4 h-4" /> {d.nameField}
+            </label>
+            <input
+              type="text"
+              name="name"
+              required
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="lg:col-span-3">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:envelope" class="w-4 h-4" /> {d.emailField}
+            </label>
+            <input
+              type="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div class="lg:col-span-3">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:telephone" class="w-4 h-4" /> {d.phoneField}
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
           <!-- Submit -->
-          <div class="lg:col-span-2">
+          <div class="lg:col-span-3">
             <button
               type="submit"
               class="w-full h-12 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-2 transition"
