@@ -133,6 +133,22 @@ const dicts = {
 
 const d = dicts[lang] || dicts.es;
 
+const bookingPageUrls = {
+  es: '/reservas/',
+  ca: '/ca/reserves/',
+  en: '/en/booking/',
+  fr: '/fr/reservations/',
+};
+const bookingPageUrl = bookingPageUrls[lang] || bookingPageUrls.es;
+
+const roomPageUrls = {
+  es: '/rooms/hostalet/',
+  ca: '/ca/rooms/hostalet/',
+  en: '/en/rooms/hostalet/',
+  fr: '/fr/rooms/hostalet/',
+};
+const hostaletRoomUrl = roomPageUrls[lang] || roomPageUrls.es;
+
 // Options
 const adultsOptions = [d.adult1, `2 ${d.adult}`, `3 ${d.adult}`, `4 ${d.adult}`, `5 ${d.adult}`, `6 ${d.adult}`];
 const childrenOptions = [d.child0, d.child1, `2 ${d.child}`, `3 ${d.child}`];
@@ -160,21 +176,20 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             netlify-honeypot="bot-field"
             action={d.successUrl}
             x-data=`{
-              property: '${d.propertyAny}',
+              property: new URLSearchParams(window.location.search).get('property') || '${d.propertyAny}',
+              checkin: new URLSearchParams(window.location.search).get('checkin') || '',
+              checkout: new URLSearchParams(window.location.search).get('checkout') || '',
+              adults: new URLSearchParams(window.location.search).get('adults') || '2',
+              children: new URLSearchParams(window.location.search).get('children') || '0',
               isBerganti() { return this.property === '${d.propertyBerganti}'; },
               handleSubmit(e) {
                 if (this.isBerganti()) {
                   e.preventDefault();
-                  const form = e.target;
-                  const checkin = form.checkin.value;
-                  const checkout = form.checkout.value;
-                  const adults = form.adults.value;
-                  const children = form.children.value;
                   const url = new URL('${d.cloudbedsUrl}');
-                  if (checkin) url.searchParams.set('checkin', checkin);
-                  if (checkout) url.searchParams.set('checkout', checkout);
-                  url.searchParams.set('adults', adults);
-                  url.searchParams.set('children', children);
+                  if (this.checkin) url.searchParams.set('checkin', this.checkin);
+                  if (this.checkout) url.searchParams.set('checkout', this.checkout);
+                  url.searchParams.set('adults', this.adults);
+                  url.searchParams.set('children', this.children);
                   window.open(url.toString(), '_blank');
                 }
                 // Otherwise let Netlify handle the form submission normally
@@ -210,6 +225,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
                 type="date"
                 name="checkin"
                 required
+                x-model="checkin"
                 class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
@@ -221,6 +237,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
                 type="date"
                 name="checkout"
                 required
+                x-model="checkout"
                 class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
@@ -230,6 +247,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
               <label class="text-sm text-white mb-1 block">{d.adultsLabel}</label>
               <select
                 name="adults"
+                x-model="adults"
                 class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {adultsOptions.map((opt, i) => (
@@ -243,6 +261,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
               <label class="text-sm text-white mb-1 block">{d.childrenLabel}</label>
               <select
                 name="children"
+                x-model="children"
                 class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {childrenOptions.map((opt, i) => (
@@ -300,7 +319,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
                 class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
               >
                 <Icon name="bi:journal-check" class="text-lg" />
-                <span x-text="isBerganti() ? 'Reservar en Cloudbeds' : d.submitBtn">{d.checkBtn}</span>
+                <span x-text="isBerganti() ? 'Reservar en Cloudbeds' : d.submitBtn">{d.submitBtn}</span>
               </button>
             </div>
           </form>
@@ -329,41 +348,43 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
     <div class="max-w-7xl mx-auto px-4">
       <form
         name="booking-compact"
-        method="POST"
-        netlify
-        netlify-honeypot="bot-field"
-        action={d.successUrl}
         x-data=`{
           property: '${d.propertyAny}',
+          checkin: '',
+          checkout: '',
+          adults: '2',
+          children: '0',
           isBerganti() { return this.property === '${d.propertyBerganti}'; },
+          isHostalet() { return this.property === '${d.propertyHostalet}'; },
           handleSubmit(e) {
+            e.preventDefault();
             if (this.isBerganti()) {
-              e.preventDefault();
-              const form = e.target;
-              const checkin = form.checkin.value;
-              const checkout = form.checkout.value;
-              const adults = form.adults.value;
-              const children = form.children.value;
               const url = new URL('${d.cloudbedsUrl}');
-              if (checkin) url.searchParams.set('checkin', checkin);
-              if (checkout) url.searchParams.set('checkout', checkout);
-              url.searchParams.set('adults', adults);
-              url.searchParams.set('children', children);
+              if (this.checkin) url.searchParams.set('checkin', this.checkin);
+              if (this.checkout) url.searchParams.set('checkout', this.checkout);
+              url.searchParams.set('adults', this.adults);
+              url.searchParams.set('children', this.children);
               window.open(url.toString(), '_blank');
+            } else if (this.isHostalet()) {
+              const params = new URLSearchParams();
+              if (this.checkin) params.set('checkin', this.checkin);
+              if (this.checkout) params.set('checkout', this.checkout);
+              params.set('adults', this.adults);
+              params.set('children', this.children);
+              window.location.href = '${hostaletRoomUrl}' + '?' + params.toString();
+            } else {
+              const params = new URLSearchParams();
+              if (this.checkin) params.set('checkin', this.checkin);
+              if (this.checkout) params.set('checkout', this.checkout);
+              params.set('adults', this.adults);
+              params.set('children', this.children);
+              window.location.href = '${bookingPageUrl}' + '?' + params.toString();
             }
           }
         }`
         x-on:submit="handleSubmit($event)"
         class="bg-primary p-6 rounded-lg shadow-xl"
       >
-        <!-- Honeypot field for spam prevention -->
-        <p class="hidden">
-          <label>No llenes este campo: <input name="bot-field" /></label>
-        </p>
-
-        <!-- Hidden form name for Netlify -->
-        <input type="hidden" name="form-name" value="booking-compact" />
-
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
           <!-- Property -->
@@ -389,6 +410,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
               type="date"
               name="checkin"
               required
+              x-model="checkin"
               class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
             />
           </div>
@@ -402,6 +424,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
               type="date"
               name="checkout"
               required
+              x-model="checkout"
               class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
             />
           </div>
@@ -413,6 +436,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             </label>
             <select
               name="adults"
+              x-model="adults"
               class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
             >
               {adultsOptions.map((opt, i) => (
@@ -428,6 +452,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             </label>
             <select
               name="children"
+              x-model="children"
               class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
             >
               {childrenOptions.map((opt, i) => (
@@ -436,52 +461,14 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             </select>
           </div>
 
-          <!-- Name -->
-          <div class="lg:col-span-3">
-            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
-              <Icon name="bi:person" class="w-4 h-4" /> {d.nameField}
-            </label>
-            <input
-              type="text"
-              name="name"
-              required
-              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
-            />
-          </div>
-
-          <!-- Email -->
-          <div class="lg:col-span-3">
-            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
-              <Icon name="bi:envelope" class="w-4 h-4" /> {d.emailField}
-            </label>
-            <input
-              type="email"
-              name="email"
-              required
-              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
-            />
-          </div>
-
-          <!-- Phone -->
-          <div class="lg:col-span-3">
-            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
-              <Icon name="bi:telephone" class="w-4 h-4" /> {d.phoneField}
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
-            />
-          </div>
-
           <!-- Submit -->
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-2">
             <button
               type="submit"
               class="w-full h-12 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-2 transition"
             >
               <Icon name="bi:journal-check" class="text-lg" />
-              <span class="text-sm sm:text-base whitespace-nowrap" x-text="isBerganti() ? 'Cloudbeds' : d.checkBtn">{d.checkBtn}</span>
+              <span class="text-sm sm:text-base whitespace-nowrap">{d.checkBtn}</span>
             </button>
           </div>
         </div>

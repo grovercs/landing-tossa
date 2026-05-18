@@ -167,3 +167,19 @@ const d = dicts[lang] || dicts.es;
     </p>
   </form>
 </div>
+
+<script is:inline>
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const form = document.querySelector('form[name="booking-room"]');
+    if (!form) return;
+    const checkin = params.get('checkin');
+    const checkout = params.get('checkout');
+    const adults = params.get('adults');
+    const children = params.get('children');
+    if (checkin && form.checkin) form.checkin.value = checkin;
+    if (checkout && form.checkout) form.checkout.value = checkout;
+    if (adults && form.adults) form.adults.value = adults;
+    if (children && form.children) form.children.value = children;
+  })();
+</script>
