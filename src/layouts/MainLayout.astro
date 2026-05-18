@@ -26,9 +26,9 @@ const {
 } = Astro.props;
 
 const lang = Astro.currentLocale || 'es';
-const siteUrl = Astro.url?.href || "https://alojamientotossademar.com";
+const siteUrl = Astro.url?.href || "https://alojamientostossademar.com";
 // Ensure absolute URL for OpenGraph images
-const ogImage = image.startsWith('http') ? image : `https://alojamientotossademar.com${image}`;
+const ogImage = image.startsWith('http') ? image : `https://alojamientostossademar.com${image}`;
 
 ---
 <!DOCTYPE html>
@@ -61,8 +61,8 @@ const ogImage = image.startsWith('http') ? image : `https://alojamientotossadema
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "El Hostalet de Tossa & El Bergantí",
-      "url": "https://alojamientotossademar.com",
-      "logo": "https://alojamientotossademar.com/img/favicon.png",
+      "url": "https://alojamientostossademar.com",
+      "logo": "https://alojamientostossademar.com/img/favicon.png",
       "sameAs": [
         "https://elberganti-tossa.com/",
         "https://www.hostalhostalet.com/"

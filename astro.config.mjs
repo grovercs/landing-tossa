@@ -8,7 +8,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://alojamientotossademar.com',
+  site: 'https://alojamientostossademar.com',
   base: '/',
   output: 'static',
 
