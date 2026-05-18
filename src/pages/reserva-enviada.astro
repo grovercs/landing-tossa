@@ -1,0 +1,68 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<MainLayout
+  title="Reserva Enviada - Hostalet de Tossa & El Bergantí"
+  description="Tu solicitud de reserva ha sido enviada correctamente. Te contactaremos en breve."
+>
+  <section class="py-20 bg-white overflow-x-hidden">
+    <div class="max-w-2xl mx-auto px-4 text-center">
+      <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <Icon name="bi:check-lg" class="text-4xl text-green-600" />
+      </div>
+
+      <h1 class="font-heading text-4xl text-primary-dark mb-4">
+        ¡Solicitud Enviada!
+      </h1>
+
+      <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+        Hemos recibido tu solicitud de reserva correctamente.
+        Nuestro equipo de recepción revisará la disponibilidad y te contactará
+        en menos de 24 horas para confirmar tu estancia.
+      </p>
+
+      <div class="bg-skin-light p-6 rounded-tl-3xl rounded-br-3xl mb-8 text-left">
+        <h2 class="font-heading text-xl text-primary-dark mb-4">¿Qué sigue?</h2>
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+            <Icon name="bi:check-circle" class="text-primary mt-1" />
+            <span>Revisaremos disponibilidad para tus fechas</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:check-circle" class="text-primary mt-1" />
+            <span>Te contactaremos por email o teléfono en menos de 24h</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:check-circle" class="text-primary mt-1" />
+            <span>Confirmaremos tu reserva con instrucciones de pago</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 hover:bg-primary-dark transition"
+        >
+          <Icon name="bi:house" />
+          Volver al Inicio
+        </a>
+        <a
+          href="/blogs/"
+          class="inline-flex items-center justify-center gap-2 border-2 border-primary text-primary px-8 py-4 hover:bg-primary hover:text-white transition"
+        >
+          <Icon name="bi:journal" />
+          Explorar el Blog
+        </a>
+      </div>
+
+      <p class="text-sm text-gray-400 mt-8">
+        Si no recibes respuesta en 24 horas, contáctanos directamente al
+        <strong>+34 972 34 04 22</strong> (El Bergantí) o al
+        <strong>+34 972 34 00 00</strong> (El Hostalet).
+      </p>
+    </div>
+  </section>
+</MainLayout>

@@ -37,10 +37,17 @@ const hasHalfStar = data.rating % 1 !== 0;
 // Images
 const featured = data.featuredImage;
 const gallery = data.gallery ?? [];
+
+// Official website link per property
+const officialUrls: Record<string, string> = {
+  hostalet: 'https://www.hostalhostalet.com/',
+  'el-berganti': 'https://elberganti-tossa.com/',
+};
+const officialUrl = officialUrls[slug || ''];
 ---
 <MainLayout
   title={data.title}
-  description={`${data.title} - Alojamiento en Tossa de Mar. ${data.label}. Reserva directa.`}
+  description={`${data.title} - Alojamiento en Tossa de Mar. ${data.label}. Visita la web oficial para reservar.`}
   image={data.featuredImage}
   schema={{
     "@context": "https://schema.org",
@@ -101,6 +108,23 @@ const gallery = data.gallery ?? [];
         </div>
         )}
       </div>
+
+      {officialUrl && (
+        <div class="mb-6">
+          <a
+            href={officialUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-tl-2xl rounded-br-2xl hover:bg-primary-dark transition shadow-lg"
+          >
+            <Icon name="bi:box-arrow-up-right" class="text-lg" />
+            Visitar web oficial
+          </a>
+          <p class="text-sm text-gray-500 mt-2">
+            Accede a la web de {data.title} para ver disponibilidad, fotos y reservar directamente.
+          </p>
+        </div>
+      )}
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 

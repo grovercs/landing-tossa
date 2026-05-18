@@ -23,10 +23,33 @@ const {
   ],
   submitText = "Enviar Mensaje",
 } = Astro.props;
+
+const lang = (Astro.currentLocale || 'es') as string;
+const successUrls = {
+  es: '/reserva-enviada/',
+  ca: '/ca/reserva-enviada/',
+  en: '/en/booking-sent/',
+  fr: '/fr/reservation-envoyee/',
+};
+const successUrl = successUrls[lang] || successUrls.es;
 ---
 
 <div class="bg-wood p-8 rounded-tl-3xl shadow-lg">
-  <form class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <form
+    name="contact"
+    method="POST"
+    data-netlify="true"
+    data-netlify-honeypot="bot-field"
+    action={successUrl}
+    class="grid grid-cols-1 md:grid-cols-2 gap-5"
+  >
+    <!-- Honeypot field for spam prevention -->
+    <p class="hidden">
+      <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+    </p>
+
+    <!-- Hidden form name for Netlify -->
+    <input type="hidden" name="form-name" value="contact" />
 
     {fields.map((field) => (
       <div class={field.span === 2 ? "md:col-span-2" : ""}>

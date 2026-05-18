@@ -50,6 +50,15 @@ const dicts = {
     childrenLabel: "Niños",
     checkBtn: "Comprobar Disponibilidad",
     cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    successUrl: "/reserva-enviada/",
+    propertyField: "Propiedad",
+    datesField: "Fechas",
+    guestsField: "Huéspedes",
+    nameField: "Nombre",
+    emailField: "Email",
+    phoneField: "Teléfono",
+    notesField: "Notas",
+    submitBtn: "Enviar Solicitud",
   },
   ca: {
     adult1: "1 Adult", adult: "Adults", child0: "0 Nens", child1: "1 Nen", child: "Nens",
@@ -64,6 +73,15 @@ const dicts = {
     childrenLabel: "Nens",
     checkBtn: "Comprovar Disponibilitat",
     cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    successUrl: "/ca/reserva-enviada/",
+    propertyField: "Propietat",
+    datesField: "Dates",
+    guestsField: "Hostes",
+    nameField: "Nom",
+    emailField: "Email",
+    phoneField: "Telèfon",
+    notesField: "Notes",
+    submitBtn: "Enviar Sol·licitud",
   },
   en: {
     adult1: "1 Adult", adult: "Adults", child0: "0 Children", child1: "1 Child", child: "Children",
@@ -78,6 +96,15 @@ const dicts = {
     childrenLabel: "Children",
     checkBtn: "Check Availability",
     cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    successUrl: "/en/booking-sent/",
+    propertyField: "Property",
+    datesField: "Dates",
+    guestsField: "Guests",
+    nameField: "Name",
+    emailField: "Email",
+    phoneField: "Phone",
+    notesField: "Notes",
+    submitBtn: "Send Request",
   },
   fr: {
     adult1: "1 Adulte", adult: "Adultes", child0: "0 Enfants", child1: "1 Enfant", child: "Enfants",
@@ -92,6 +119,15 @@ const dicts = {
     childrenLabel: "Enfants",
     checkBtn: "Vérifier la Disponibilité",
     cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    successUrl: "/fr/reservation-envoyee/",
+    propertyField: "Propriété",
+    datesField: "Dates",
+    guestsField: "Voyageurs",
+    nameField: "Nom",
+    emailField: "Email",
+    phoneField: "Téléphone",
+    notesField: "Notes",
+    submitBtn: "Envoyer la Demande",
   },
 };
 
@@ -115,19 +151,52 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
           <HelpCard title={helpTitle} description={helpDescription} items={helpItems} />
         </div>
 
-        <!-- RIGHT SIDE: Cloudbeds Search Form -->
+        <!-- RIGHT SIDE: Booking Form with Netlify + Cloudbeds fallback -->
         <div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg">
           <form
+            name="booking"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            action={d.successUrl}
+            x-data=`{
+              property: '${d.propertyAny}',
+              isBerganti() { return this.property === '${d.propertyBerganti}'; },
+              handleSubmit(e) {
+                if (this.isBerganti()) {
+                  e.preventDefault();
+                  const form = e.target;
+                  const checkin = form.checkin.value;
+                  const checkout = form.checkout.value;
+                  const adults = form.adults.value;
+                  const children = form.children.value;
+                  const url = new URL('${d.cloudbedsUrl}');
+                  if (checkin) url.searchParams.set('checkin', checkin);
+                  if (checkout) url.searchParams.set('checkout', checkout);
+                  url.searchParams.set('adults', adults);
+                  url.searchParams.set('children', children);
+                  window.open(url.toString(), '_blank');
+                }
+                // Otherwise let Netlify handle the form submission normally
+              }
+            }`
+            x-on:submit="handleSubmit($event)"
             class="grid grid-cols-2 gap-5"
-            action={d.cloudbedsUrl}
-            method="GET"
-            target="_blank"
           >
+            <!-- Honeypot field for spam prevention -->
+            <p class="hidden">
+              <label>No llenes este campo: <input name="bot-field" /></label>
+            </p>
+
+            <!-- Hidden form name for Netlify -->
+            <input type="hidden" name="form-name" value="booking" />
+
             <!-- Property Selector -->
             <div class="col-span-2">
               <label class="text-sm text-white mb-1 block">{d.propertyLabel}</label>
               <select
                 name="property"
+                x-model="property"
                 class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {properties.map(p => <option value={p}>{p}</option>)}
@@ -182,6 +251,48 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
               </select>
             </div>
 
+            <!-- Name -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.nameField}</label>
+              <input
+                type="text"
+                name="name"
+                required
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.emailField}</label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Phone -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.phoneField}</label>
+              <input
+                type="tel"
+                name="phone"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Notes -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.notesField}</label>
+              <textarea
+                name="notes"
+                rows="3"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              ></textarea>
+            </div>
+
             <!-- Submit -->
             <div class="col-span-2">
               <button
@@ -189,12 +300,19 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
                 class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
               >
                 <Icon name="bi:journal-check" class="text-lg" />
-                {d.checkBtn}
+                <span x-text="isBerganti() ? 'Reservar en Cloudbeds' : d.submitBtn">{d.checkBtn}</span>
               </button>
             </div>
           </form>
 
-          <p class="text-white/60 text-sm mt-4 text-center">
+          <p class="text-white/60 text-sm mt-4 text-center" x-show="!isBerganti()">
+            {lang === 'es' && "Recibirás una respuesta en menos de 24 horas. Si eliges El Bergantí, puedes reservar directamente en Cloudbeds."}
+            {lang === 'ca' && "Rebràs una resposta en menys de 24 hores. Si tries El Bergantí, pots reservar directament a Cloudbeds."}
+            {lang === 'en' && "You will receive a response within 24 hours. If you choose El Bergantí, you can book directly on Cloudbeds."}
+            {lang === 'fr' && "Vous recevrez une réponse dans moins de 24 heures. Si vous choisissez El Bergantí, vous pouvez réserver directement sur Cloudbeds."}
+          </p>
+
+          <p class="text-white/60 text-sm mt-4 text-center" x-show="isBerganti()">
             {lang === 'es' && "Serás redirigido a nuestro motor de reservas seguro gestionado por Cloudbeds."}
             {lang === 'ca' && "Seràs redirigit al nostre motor de reserves segur gestionat per Cloudbeds."}
             {lang === 'en' && "You will be redirected to our secure booking engine powered by Cloudbeds."}
@@ -210,11 +328,42 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
   <section class="bg-primary-dark py-8 overflow-x-hidden" id="booking">
     <div class="max-w-7xl mx-auto px-4">
       <form
+        name="booking-compact"
+        method="POST"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+        action={d.successUrl}
+        x-data=`{
+          property: '${d.propertyAny}',
+          isBerganti() { return this.property === '${d.propertyBerganti}'; },
+          handleSubmit(e) {
+            if (this.isBerganti()) {
+              e.preventDefault();
+              const form = e.target;
+              const checkin = form.checkin.value;
+              const checkout = form.checkout.value;
+              const adults = form.adults.value;
+              const children = form.children.value;
+              const url = new URL('${d.cloudbedsUrl}');
+              if (checkin) url.searchParams.set('checkin', checkin);
+              if (checkout) url.searchParams.set('checkout', checkout);
+              url.searchParams.set('adults', adults);
+              url.searchParams.set('children', children);
+              window.open(url.toString(), '_blank');
+            }
+          }
+        }`
+        x-on:submit="handleSubmit($event)"
         class="bg-primary p-6 rounded-lg shadow-xl"
-        action={d.cloudbedsUrl}
-        method="GET"
-        target="_blank"
       >
+        <!-- Honeypot field for spam prevention -->
+        <p class="hidden">
+          <label>No llenes este campo: <input name="bot-field" /></label>
+        </p>
+
+        <!-- Hidden form name for Netlify -->
+        <input type="hidden" name="form-name" value="booking-compact" />
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
           <!-- Property -->
@@ -224,6 +373,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             </label>
             <select
               name="property"
+              x-model="property"
               class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
             >
               {properties.map(p => <option value={p}>{p}</option>)}
@@ -293,7 +443,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
               class="w-full h-12 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-2 transition"
             >
               <Icon name="bi:journal-check" class="text-lg" />
-              <span class="text-sm sm:text-base whitespace-nowrap">{d.checkBtn}</span>
+              <span class="text-sm sm:text-base whitespace-nowrap" x-text="isBerganti() ? 'Cloudbeds' : d.checkBtn">{d.checkBtn}</span>
             </button>
           </div>
         </div>

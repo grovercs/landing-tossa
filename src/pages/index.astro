@@ -2,17 +2,41 @@
 import AboutSection from "@src/components/AboutSection.astro";
 import AwardsSection from "@src/components/AwardsSection.astro";
 import CloudbedsBooking from "@src/components/CloudbedsBooking.astro";
+import DirectBookingBanner from "@src/components/DirectBookingBanner.astro";
 import FacilitiesSection from "@src/components/FacilitiesSection.astro";
 import GallerySection from "@src/components/GallerySection.astro";
+import GuestReviews from "@src/components/GuestReviews.astro";
 import HeroSection from "@src/components/HeroSection.astro";
+import BlogCard from "@src/components/BlogCard.astro";
 import RestaurantSection from "@src/components/RestaurantSection.astro";
 import RoomsSection from "@src/components/RoomsSection.astro";
 import MainLayout from "@src/layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import { useTranslations } from "@src/i18n/utils";
+
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+const t = useTranslations(lang);
+
+// Fetch latest 3 blog posts for the current language
+const allPosts = await getCollection("blog", ({ id }) => id.startsWith(`${lang}/`));
+const latestPosts = allPosts
+  .sort((a, b) => {
+    const dateA = new Date(a.data.date);
+    const dateB = new Date(b.data.date);
+    return dateB.valueOf() - dateA.valueOf();
+  })
+  .slice(0, 3);
+
+const blogBase = lang === 'es' ? '/blogs' : `/${lang}/blogs`;
 ---
 
-<MainLayout title="Hostalet de Tossa & El Bergantí - Costa Brava" description="Dos alojamientos con encanto en el centro de Tossa de Mar. Elige entre Hostalet de Tossa y El Bergantí con reserva directa.">
+<MainLayout
+  title={`${t('hero.title')} - Costa Brava`}
+  description={t('hero.subtitle')}
+>
   <HeroSection />
   <CloudbedsBooking />
+  <DirectBookingBanner />
   <AboutSection
     title="Alojamiento en el centro de Tossa de Mar"
     image="/images/tossa-de-mar-costa-brava-1.webp"
@@ -76,6 +100,9 @@ import MainLayout from "@src/layouts/MainLayout.astro";
     description="Descubre nuestras opciones para una estancia perfecta en Tossa de Mar."
     maxPosts={6}
   />
+
+  <GuestReviews lang={lang} />
+
   <RestaurantSection />
   <GallerySection
     title="Nuestros Alojamientos"
@@ -89,4 +116,35 @@ import MainLayout from "@src/layouts/MainLayout.astro";
       { src: "/images/elberganti-restaurante-tapas-tossa-mar.webp", alt: "Restaurante Bergantí" },
     ]}
   />
+
+  <!-- Blog Preview Section -->
+  {latestPosts.length > 0 && (
+    <section class="py-20 bg-skin-light overflow-x-hidden">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-2xl mx-auto mb-12 text-center">
+          <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-4">
+            {t('home.blogTitle')}
+          </h2>
+          <p class="text-gray-700 text-lg leading-relaxed">
+            {t('home.blogDescription')}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {latestPosts.map((post) => (
+            <BlogCard post={post} lang={lang} />
+          ))}
+        </div>
+
+        <div class="mt-12 text-center">
+          <a
+            href={blogBase}
+            class="inline-flex items-center gap-2 justify-center bg-primary text-white px-6 py-3 hover:bg-primary-dark transition"
+          >
+            {t('home.blogCta')}
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
 </MainLayout>

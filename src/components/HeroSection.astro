@@ -167,11 +167,13 @@ const partners: PartnerLogo[] = [];
       </div>
 
       <!-- PARTNER LOGOS -->
-      <div class="flex flex-wrap items-center gap-2">
-        {partners.map((p) => (
-          <img src={p.src} class="h-6" alt={p.alt} loading="lazy" />
-        ))}
-      </div>
+      {partners.length > 0 && (
+        <div class="flex flex-wrap items-center gap-2">
+          {partners.map((p) => (
+            <img src={p.src} class="h-6" alt={p.alt} loading="lazy" />
+          ))}
+        </div>
+      )}
 
     </div>
   </div>

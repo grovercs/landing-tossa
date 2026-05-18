@@ -5,7 +5,22 @@
       "WebFetch(domain:elberganti-tossa.com)",
       "Bash(npm run *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(npx netlify *)",
+      "WebFetch(domain:alojamientostossademar.com)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(curl -s https://alojamientostossademar.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(mv habitacion-doble-lhostalet-tossa.png donde-dormir-tossa-centro-habitacion.png)",
+      "Bash(cp donde-dormir-tossa-centro-habitacion.png on-dormir-tossa-centre-habitacio.png)",
+      "Bash(cp donde-dormir-tossa-centro-habitacion.png where-stay-tossa-old-town-room.png)",
+      "Bash(cp donde-dormir-tossa-centro-habitacion.png ou-dormir-tossa-centre-chambre.png)",
+      "Bash(mv hotel-desayuno-incluido-costa-brava-tossa.png hotel-desayuno-incluido-costa-brava.png)",
+      "Bash(cp hotel-desayuno-incluido-costa-brava.png hotel-esmorzar-inclos-costa-brava.png)",
+      "Bash(cp hotel-desayuno-incluido-costa-brava.png hotel-breakfast-included-costa-brava.png)",
+      "Bash(cp hotel-desayuno-incluido-costa-brava.png hotel-petit-dejeuner-inclus-costa-brava.png)",
+      "PowerShell(Get-ChildItem | Where-Object { $_.Name -match \"habitacion|desayuno|romantica|where-stay|on-dormir|ou-dormir|esmorzar|breakfast|petit|escapade|romantic\" } | Select-Object Name, Length)"
     ]
   }
 }
