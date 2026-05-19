@@ -1,0 +1,67 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<MainLayout
+  title="Error a la Reserva - Hostalet de Tossa & El Bergantí"
+  description="Ha ocorregut un problema en processar la teva reserva. Si us plau, torna-ho a intentar o contacta amb nosaltres."
+>
+  <section class="py-20 bg-white overflow-x-hidden">
+    <div class="max-w-2xl mx-auto px-4 text-center">
+      <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <Icon name="bi:x-lg" class="text-4xl text-red-600" />
+      </div>
+
+      <h1 class="font-heading text-4xl text-primary-dark mb-4">
+        Error a la Reserva
+      </h1>
+
+      <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+        Ho sentim, ha ocorregut un problema en processar la teva reserva.
+        Pot ser un error temporal o un problema amb les dades introduïdes.
+      </p>
+
+      <div class="bg-skin-light p-6 rounded-tl-3xl rounded-br-3xl mb-8 text-left">
+        <h2 class="font-heading text-xl text-primary-dark mb-4">Què pots fer?</h2>
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+            <Icon name="bi:arrow-repeat" class="text-primary mt-1" />
+            <span>Tornar a intentar la reserva des del formulari</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:telephone" class="text-primary mt-1" />
+            <span>Trucar-nos directament al +34 972 34 04 22</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:envelope" class="text-primary mt-1" />
+            <span>Enviar-nos un email amb les teves dates i preferències</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/ca/reserves/"
+          class="inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 hover:bg-primary-dark transition"
+        >
+          <Icon name="bi:arrow-left" />
+          Tornar a Reserves
+        </a>
+        <a
+          href="/ca/contacte/"
+          class="inline-flex items-center justify-center gap-2 border-2 border-primary text-primary px-8 py-4 hover:bg-primary hover:text-white transition"
+        >
+          <Icon name="bi:telephone" />
+          Contactar
+        </a>
+      </div>
+
+      <p class="text-sm text-gray-400 mt-8">
+        Si el problema persisteix, si us plau contacta amb nosaltres directament al
+        <strong>+34 972 34 04 22</strong> (El Bergantí) o al
+        <strong>+34 972 34 00 00</strong> (L'Hostalet).
+      </p>
+    </div>
+  </section>
+</MainLayout>

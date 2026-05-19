@@ -1,0 +1,67 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<MainLayout
+  title="Booking Error - Hostalet de Tossa & El Bergantí"
+  description="There was a problem processing your booking. Please try again or contact us."
+>
+  <section class="py-20 bg-white overflow-x-hidden">
+    <div class="max-w-2xl mx-auto px-4 text-center">
+      <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <Icon name="bi:x-lg" class="text-4xl text-red-600" />
+      </div>
+
+      <h1 class="font-heading text-4xl text-primary-dark mb-4">
+        Booking Error
+      </h1>
+
+      <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+        Sorry, there was a problem processing your booking.
+        It may be a temporary error or an issue with the information provided.
+      </p>
+
+      <div class="bg-skin-light p-6 rounded-tl-3xl rounded-br-3xl mb-8 text-left">
+        <h2 class="font-heading text-xl text-primary-dark mb-4">What can you do?</h2>
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+            <Icon name="bi:arrow-repeat" class="text-primary mt-1" />
+            <span>Try booking again using the form</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:telephone" class="text-primary mt-1" />
+            <span>Call us directly at +34 972 34 04 22</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:envelope" class="text-primary mt-1" />
+            <span>Send us an email with your dates and preferences</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/en/booking/"
+          class="inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 hover:bg-primary-dark transition"
+        >
+          <Icon name="bi:arrow-left" />
+          Back to Booking
+        </a>
+        <a
+          href="/en/contact/"
+          class="inline-flex items-center justify-center gap-2 border-2 border-primary text-primary px-8 py-4 hover:bg-primary hover:text-white transition"
+        >
+          <Icon name="bi:telephone" />
+          Contact Us
+        </a>
+      </div>
+
+      <p class="text-sm text-gray-400 mt-8">
+        If the problem persists, please contact us directly at
+        <strong>+34 972 34 04 22</strong> (El Bergantí) or
+        <strong>+34 972 34 00 00</strong> (El Hostalet).
+      </p>
+    </div>
+  </section>
+</MainLayout>

@@ -1,0 +1,67 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<MainLayout
+  title="Booking Confirmed - Hostalet de Tossa & El Bergantí"
+  description="Your booking has been confirmed successfully. We look forward to welcoming you in Tossa de Mar!"
+>
+  <section class="py-20 bg-white overflow-x-hidden">
+    <div class="max-w-2xl mx-auto px-4 text-center">
+      <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <Icon name="bi:check-lg" class="text-4xl text-green-600" />
+      </div>
+
+      <h1 class="font-heading text-4xl text-primary-dark mb-4">
+        Booking Confirmed!
+      </h1>
+
+      <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+        Your booking has been completed successfully.
+        We have sent a confirmation email with all the details of your stay.
+      </p>
+
+      <div class="bg-skin-light p-6 rounded-tl-3xl rounded-br-3xl mb-8 text-left">
+        <h2 class="font-heading text-xl text-primary-dark mb-4">What happens next?</h2>
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+            <Icon name="bi:check-circle" class="text-primary mt-1" />
+            <span>Check your email for the booking confirmation</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:check-circle" class="text-primary mt-1" />
+            <span>Keep your booking reference number for any inquiries</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="bi:check-circle" class="text-primary mt-1" />
+            <span>We look forward to welcoming you in Tossa de Mar</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/en/"
+          class="inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 hover:bg-primary-dark transition"
+        >
+          <Icon name="bi:house" />
+          Back to Home
+        </a>
+        <a
+          href="/en/blogs/"
+          class="inline-flex items-center justify-center gap-2 border-2 border-primary text-primary px-8 py-4 hover:bg-primary hover:text-white transition"
+        >
+          <Icon name="bi:journal" />
+          Explore the Blog
+        </a>
+      </div>
+
+      <p class="text-sm text-gray-400 mt-8">
+        If you have any questions about your booking, contact us at
+        <strong>+34 972 34 04 22</strong> (El Bergantí) or
+        <strong>+34 972 34 00 00</strong> (El Hostalet).
+      </p>
+    </div>
+  </section>
+</MainLayout>
