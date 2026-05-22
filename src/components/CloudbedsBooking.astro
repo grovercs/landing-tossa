@@ -136,6 +136,7 @@ const dicts = {
 };
 
 const d = dicts[lang] || dicts.es;
+const esc = (s: string) => s.replace(/'/g, "\\'");
 
 const bookingPageUrls = {
   es: '/reservas/',
@@ -182,13 +183,13 @@ const properties = fullLayout ? fullProperties : compactProperties;
             netlify-honeypot="bot-field"
             action={d.successUrl}
             x-data=`{
-              property: (() => { const p = new URLSearchParams(window.location.search).get('property'); return p === '${d.propertyHostalet}' || p === '${d.propertyBerganti}' ? p : '${d.propertyHostalet}'; })(),
+              property: (() => { const p = new URLSearchParams(window.location.search).get('property'); return p === '${esc(d.propertyHostalet)}' || p === '${esc(d.propertyBerganti)}' ? p : '${esc(d.propertyHostalet)}'; })(),
               checkin: new URLSearchParams(window.location.search).get('checkin') || '',
               checkout: new URLSearchParams(window.location.search).get('checkout') || '',
               adults: new URLSearchParams(window.location.search).get('adults') || '2',
               children: new URLSearchParams(window.location.search).get('children') || '0',
-              isBerganti() { return this.property === '${d.propertyBerganti}'; },
-              isHostalet() { return this.property === '${d.propertyHostalet}'; },
+              isBerganti() { return this.property === '${esc(d.propertyBerganti)}'; },
+              isHostalet() { return this.property === '${esc(d.propertyHostalet)}'; },
               handleSubmit(e) {
                 if (this.isBerganti()) {
                   e.preventDefault();
@@ -378,8 +379,8 @@ const properties = fullLayout ? fullProperties : compactProperties;
           checkout: '',
           adults: '2',
           children: '0',
-          isBerganti() { return this.property === '${d.propertyBerganti}'; },
-          isHostalet() { return this.property === '${d.propertyHostalet}'; },
+          isBerganti() { return this.property === '${esc(d.propertyBerganti)}'; },
+          isHostalet() { return this.property === '${esc(d.propertyHostalet)}'; },
           handleSubmit(e) {
             e.preventDefault();
             if (this.isBerganti()) {
