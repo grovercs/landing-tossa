@@ -38,18 +38,17 @@ const successUrl = successUrls[lang] || successUrls.es;
   <form
     name="contact"
     method="POST"
-    netlify
-    netlify-honeypot="bot-field"
-    action={successUrl}
+    action="/.netlify/functions/send-form-email"
     class="grid grid-cols-1 md:grid-cols-2 gap-5"
   >
-    <!-- Honeypot field for spam prevention -->
+    <!-- Honeypot anti-spam -->
     <p class="hidden">
-      <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+      <label>No omplis aquest camp: <input name="bot-field" /></label>
     </p>
 
-    <!-- Hidden form name for Netlify -->
     <input type="hidden" name="form-name" value="contact" />
+    <input type="hidden" name="lang" value={lang} />
+    <input type="hidden" name="successUrl" value={successUrl} />
 
     {fields.map((field) => (
       <div class={field.span === 2 ? "md:col-span-2" : ""}>
