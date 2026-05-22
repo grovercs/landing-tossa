@@ -381,7 +381,7 @@ const properties = fullLayout ? fullProperties : compactProperties;
   <!-- COMPACT HOME SEARCH BAR -->
   <section class="bg-primary-dark py-8 overflow-x-hidden" id="booking">
     <div class="max-w-7xl mx-auto px-4">
-      <script is:inline define:vars={{ propertyAny: d.propertyAny, propertyHostalet: d.propertyHostalet, propertyBerganti: d.propertyBerganti, cloudbedsUrl: d.cloudbedsUrl, bookingPageUrl: bookingPageUrl }}>
+      <script is:inline define:vars={{ propertyAny: d.propertyAny, propertyHostalet: d.propertyHostalet, propertyBerganti: d.propertyBerganti, cloudbedsUrl: d.cloudbedsUrl, beds24Url: d.beds24Url, bookingPageUrl: bookingPageUrl }}>
         window.getCompactBookingData = function() {
           return {
             property: propertyAny,
@@ -401,14 +401,25 @@ const properties = fullLayout ? fullProperties : compactProperties;
                 url.searchParams.set('children', this.children);
                 window.open(url.toString(), '_blank');
               } else if (this.isHostalet()) {
-                const params = new URLSearchParams();
-                if (this.checkin) params.set('checkin', this.checkin);
-                if (this.checkout) params.set('checkout', this.checkout);
-                params.set('adults', this.adults);
-                params.set('children', this.children);
-                params.set('property', this.property);
-                window.location.href = bookingPageUrl + '?' + params.toString();
+                const url = new URL(beds24Url);
+                if (this.checkin) {
+                  const [y, m, day] = this.checkin.split('-');
+                  url.searchParams.set('fdate_date', day);
+                  url.searchParams.set('fdate_monthyear', y + '-' + m);
+                }
+                if (this.checkout) {
+                  if (this.checkin) {
+                    const ci = new Date(this.checkin);
+                    const co = new Date(this.checkout);
+                    const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+                    if (numnight > 0) url.searchParams.set('numnight', numnight);
+                  }
+                }
+                url.searchParams.set('numadult', this.adults);
+                url.searchParams.set('numchild', this.children);
+                window.open(url.toString(), '_blank');
               } else {
+                // Fallback: internal booking page (kept as backup if external engines fail)
                 const params = new URLSearchParams();
                 if (this.checkin) params.set('checkin', this.checkin);
                 if (this.checkout) params.set('checkout', this.checkout);
