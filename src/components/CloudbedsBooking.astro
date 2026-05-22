@@ -178,7 +178,9 @@ const properties = fullLayout ? fullProperties : compactProperties;
           <form
             name="booking"
             method="POST"
-            action="/.netlify/functions/send-form-email"
+            netlify
+            netlify-honeypot="bot-field"
+            action={d.successUrl}
             x-data=`{
               property: (() => { const p = new URLSearchParams(window.location.search).get('property'); return p === '${d.propertyHostalet}' || p === '${d.propertyBerganti}' ? p : '${d.propertyHostalet}'; })(),
               checkin: new URLSearchParams(window.location.search).get('checkin') || '',
@@ -220,14 +222,13 @@ const properties = fullLayout ? fullProperties : compactProperties;
             x-on:submit="handleSubmit($event)"
             class="grid grid-cols-2 gap-5"
           >
-            <!-- Honeypot anti-spam -->
+            <!-- Honeypot field for spam prevention -->
             <p class="hidden">
-              <label>No omplis aquest camp: <input name="bot-field" /></label>
+              <label>No llenes este campo: <input name="bot-field" /></label>
             </p>
 
+            <!-- Hidden form name for Netlify -->
             <input type="hidden" name="form-name" value="booking" />
-            <input type="hidden" name="lang" value={lang} />
-            <input type="hidden" name="successUrl" value={d.successUrl} />
 
             <!-- Property Selector -->
             <div class="col-span-2">
