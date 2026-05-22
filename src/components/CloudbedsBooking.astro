@@ -176,52 +176,60 @@ const properties = fullLayout ? fullProperties : compactProperties;
 
         <!-- RIGHT SIDE: Booking Form with Netlify + Cloudbeds fallback -->
         <div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg">
+          <script is:inline define:vars={{ cloudbedsUrl: d.cloudbedsUrl, beds24Url: d.beds24Url, propertyHostalet: d.propertyHostalet, propertyBerganti: d.propertyBerganti }}>
+            window.getBookingData = function() {
+              const params = new URLSearchParams(window.location.search);
+              return {
+                property: (() => {
+                  const p = params.get('property');
+                  return p === propertyHostalet || p === propertyBerganti ? p : propertyHostalet;
+                })(),
+                checkin: params.get('checkin') || '',
+                checkout: params.get('checkout') || '',
+                adults: params.get('adults') || '2',
+                children: params.get('children') || '0',
+                isBerganti() { return this.property === propertyBerganti; },
+                isHostalet() { return this.property === propertyHostalet; },
+                handleSubmit(e) {
+                  if (this.isBerganti()) {
+                    e.preventDefault();
+                    const url = new URL(cloudbedsUrl);
+                    if (this.checkin) url.searchParams.set('checkin', this.checkin);
+                    if (this.checkout) url.searchParams.set('checkout', this.checkout);
+                    url.searchParams.set('adults', this.adults);
+                    url.searchParams.set('children', this.children);
+                    window.open(url.toString(), '_blank');
+                  } else if (this.isHostalet() && beds24Url) {
+                    e.preventDefault();
+                    const url = new URL(beds24Url);
+                    if (this.checkin) {
+                      const [y, m, day] = this.checkin.split('-');
+                      url.searchParams.set('fdate_date', day);
+                      url.searchParams.set('fdate_monthyear', y + '-' + m);
+                    }
+                    if (this.checkout) {
+                      if (this.checkin) {
+                        const ci = new Date(this.checkin);
+                        const co = new Date(this.checkout);
+                        const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+                        if (numnight > 0) url.searchParams.set('numnight', numnight);
+                      }
+                    }
+                    url.searchParams.set('numadult', this.adults);
+                    url.searchParams.set('numchild', this.children);
+                    window.open(url.toString(), '_blank');
+                  }
+                }
+              };
+            };
+          </script>
           <form
             name="booking"
             method="POST"
             netlify
             netlify-honeypot="bot-field"
             action={d.successUrl}
-            x-data=`{
-              property: (() => { const p = new URLSearchParams(window.location.search).get('property'); return p === '${esc(d.propertyHostalet)}' || p === '${esc(d.propertyBerganti)}' ? p : '${esc(d.propertyHostalet)}'; })(),
-              checkin: new URLSearchParams(window.location.search).get('checkin') || '',
-              checkout: new URLSearchParams(window.location.search).get('checkout') || '',
-              adults: new URLSearchParams(window.location.search).get('adults') || '2',
-              children: new URLSearchParams(window.location.search).get('children') || '0',
-              isBerganti() { return this.property === '${esc(d.propertyBerganti)}'; },
-              isHostalet() { return this.property === '${esc(d.propertyHostalet)}'; },
-              handleSubmit(e) {
-                if (this.isBerganti()) {
-                  e.preventDefault();
-                  const url = new URL('${d.cloudbedsUrl}');
-                  if (this.checkin) url.searchParams.set('checkin', this.checkin);
-                  if (this.checkout) url.searchParams.set('checkout', this.checkout);
-                  url.searchParams.set('adults', this.adults);
-                  url.searchParams.set('children', this.children);
-                  window.open(url.toString(), '_blank');
-                } else if (this.isHostalet() && '${d.beds24Url}') {
-                  e.preventDefault();
-                  const url = new URL('${d.beds24Url}');
-                  if (this.checkin) {
-                    const [y, m, day] = this.checkin.split('-');
-                    url.searchParams.set('fdate_date', day);
-                    url.searchParams.set('fdate_monthyear', y + '-' + m);
-                  }
-                  if (this.checkout) {
-                    if (this.checkin) {
-                      const ci = new Date(this.checkin);
-                      const co = new Date(this.checkout);
-                      const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
-                      if (numnight > 0) url.searchParams.set('numnight', numnight);
-                    }
-                  }
-                  url.searchParams.set('numadult', this.adults);
-                  url.searchParams.set('numchild', this.children);
-                  window.open(url.toString(), '_blank');
-                }
-                // Otherwise let Netlify handle the form submission normally
-              }
-            }`
+            x-data="getBookingData()"
             x-on:submit="handleSubmit($event)"
             class="grid grid-cols-2 gap-5"
           >
@@ -373,43 +381,48 @@ const properties = fullLayout ? fullProperties : compactProperties;
   <!-- COMPACT HOME SEARCH BAR -->
   <section class="bg-primary-dark py-8 overflow-x-hidden" id="booking">
     <div class="max-w-7xl mx-auto px-4">
+      <script is:inline define:vars={{ propertyAny: d.propertyAny, propertyHostalet: d.propertyHostalet, propertyBerganti: d.propertyBerganti, cloudbedsUrl: d.cloudbedsUrl, bookingPageUrl: bookingPageUrl }}>
+        window.getCompactBookingData = function() {
+          return {
+            property: propertyAny,
+            checkin: '',
+            checkout: '',
+            adults: '2',
+            children: '0',
+            isBerganti() { return this.property === propertyBerganti; },
+            isHostalet() { return this.property === propertyHostalet; },
+            handleSubmit(e) {
+              e.preventDefault();
+              if (this.isBerganti()) {
+                const url = new URL(cloudbedsUrl);
+                if (this.checkin) url.searchParams.set('checkin', this.checkin);
+                if (this.checkout) url.searchParams.set('checkout', this.checkout);
+                url.searchParams.set('adults', this.adults);
+                url.searchParams.set('children', this.children);
+                window.open(url.toString(), '_blank');
+              } else if (this.isHostalet()) {
+                const params = new URLSearchParams();
+                if (this.checkin) params.set('checkin', this.checkin);
+                if (this.checkout) params.set('checkout', this.checkout);
+                params.set('adults', this.adults);
+                params.set('children', this.children);
+                params.set('property', this.property);
+                window.location.href = bookingPageUrl + '?' + params.toString();
+              } else {
+                const params = new URLSearchParams();
+                if (this.checkin) params.set('checkin', this.checkin);
+                if (this.checkout) params.set('checkout', this.checkout);
+                params.set('adults', this.adults);
+                params.set('children', this.children);
+                window.location.href = bookingPageUrl + '?' + params.toString();
+              }
+            }
+          };
+        };
+      </script>
       <form
         name="booking-compact"
-        x-data=`{
-          property: '${d.propertyAny}',
-          checkin: '',
-          checkout: '',
-          adults: '2',
-          children: '0',
-          isBerganti() { return this.property === '${esc(d.propertyBerganti)}'; },
-          isHostalet() { return this.property === '${esc(d.propertyHostalet)}'; },
-          handleSubmit(e) {
-            e.preventDefault();
-            if (this.isBerganti()) {
-              const url = new URL('${d.cloudbedsUrl}');
-              if (this.checkin) url.searchParams.set('checkin', this.checkin);
-              if (this.checkout) url.searchParams.set('checkout', this.checkout);
-              url.searchParams.set('adults', this.adults);
-              url.searchParams.set('children', this.children);
-              window.open(url.toString(), '_blank');
-            } else if (this.isHostalet()) {
-              const params = new URLSearchParams();
-              if (this.checkin) params.set('checkin', this.checkin);
-              if (this.checkout) params.set('checkout', this.checkout);
-              params.set('adults', this.adults);
-              params.set('children', this.children);
-              params.set('property', this.property);
-              window.location.href = '${bookingPageUrl}' + '?' + params.toString();
-            } else {
-              const params = new URLSearchParams();
-              if (this.checkin) params.set('checkin', this.checkin);
-              if (this.checkout) params.set('checkout', this.checkout);
-              params.set('adults', this.adults);
-              params.set('children', this.children);
-              window.location.href = '${bookingPageUrl}' + '?' + params.toString();
-            }
-          }
-        }`
+        x-data="getCompactBookingData()"
         x-on:submit="handleSubmit($event)"
         class="bg-primary p-6 rounded-lg shadow-xl"
       >
