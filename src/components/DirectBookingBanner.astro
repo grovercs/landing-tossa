@@ -1,3 +1,15 @@
+---
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+
+const bookingLinks = {
+  es: '/reservas/',
+  ca: '/ca/reserves/',
+  en: '/en/booking/',
+  fr: '/fr/reservations/'
+};
+const bookingUrl = bookingLinks[lang] || bookingLinks.es;
+---
+
 <!-- Direct Booking Banner: Anti-OTA incentive -->
 <div class="relative bg-primary-dark text-white rounded-tl-3xl rounded-br-3xl p-6 md:p-8 my-8 overflow-hidden">
   <!-- Decorative background pattern -->
@@ -50,7 +62,7 @@
 
     <div class="flex-shrink-0">
       <a
-        href="/reservas"
+        href={bookingUrl}
         class="inline-flex items-center justify-center gap-2 bg-white text-primary-dark font-semibold px-6 py-3 rounded-tl-2xl rounded-br-2xl hover:bg-gray-100 transition shadow-lg"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

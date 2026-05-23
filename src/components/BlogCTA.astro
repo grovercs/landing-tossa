@@ -8,11 +8,21 @@ export interface Props {
   link?: string;
 }
 
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+
+const bookingLinks = {
+  es: '/reservas/',
+  ca: '/ca/reserves/',
+  en: '/en/booking/',
+  fr: '/fr/reservations/'
+};
+const defaultLink = bookingLinks[lang] || bookingLinks.es;
+
 const {
   title = "¿Planeas visitar Tossa de Mar?",
   text = "Alójate en el corazón de Vila Vella con Hostalet de Tossa o El Bergantí. Descubre la auténtica Costa Brava con nosotros.",
   buttonText = "Ver Alojamientos y Reservar",
-  link = "/reservas"
+  link = defaultLink
 } = Astro.props;
 ---
 <div class="my-10 p-8 bg-skin-light rounded-tl-3xl rounded-br-3xl shadow-sm border border-primary/20 text-center flex flex-col items-center">

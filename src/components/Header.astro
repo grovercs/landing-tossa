@@ -27,7 +27,7 @@ const menu: MenuItem[] = [
   { label: t('nav.contact'), href: getLocalizedPath('contacto') },
   { label: t('nav.book'), href: getLocalizedPath('reservas'), isButton: true },
 ];
-const basePath = lang === 'es' ? '/' : `/${lang}/`;
+const basePath = '/';
 ---
 
 <header>
@@ -38,7 +38,7 @@ const basePath = lang === 'es' ? '/' : `/${lang}/`;
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex justify-between items-center h-20">
 
-        <!-- Logo -->
+        <!-- Logo always links to Spanish homepage -->
         <Logo href={basePath} />
 
         <!-- Desktop Menu -->

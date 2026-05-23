@@ -1,3 +1,15 @@
+---
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+
+const bookingLinks = {
+  es: '/reservas/',
+  ca: '/ca/reserves/',
+  en: '/en/booking/',
+  fr: '/fr/reservations/'
+};
+const bookingUrl = bookingLinks[lang] || bookingLinks.es;
+---
+
 <!-- Exit Intent Popup: Reserva Directa -->
 <div
   x-data="{
@@ -104,7 +116,7 @@
 
       <!-- CTA -->
       <a
-        href="/reservas"
+        href={bookingUrl}
         @click="close()"
         class="inline-flex items-center justify-center gap-2 w-full bg-primary text-white font-medium px-8 py-4 rounded-tl-2xl rounded-br-2xl hover:bg-primary-dark transition shadow-lg hover:shadow-xl"
       >
