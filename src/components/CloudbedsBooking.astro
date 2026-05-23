@@ -133,6 +133,9 @@ const dicts = {
 
 const d = dicts[lang] || dicts.es;
 
+// Helper to escape single quotes for safe JS string interpolation inside x-data
+const esc = (s: string) => s.replace(/'/g, "\\'");
+
 const bookingPageUrls = {
   es: '/reservas/',
   ca: '/ca/reserves/',
@@ -176,13 +179,13 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
             netlify-honeypot="bot-field"
             action={d.successUrl}
             x-data={`{
-              property: new URLSearchParams(window.location.search).get('property') || '${d.propertyAny}',
+              property: new URLSearchParams(window.location.search).get('property') || '${esc(d.propertyAny)}',
               checkin: new URLSearchParams(window.location.search).get('checkin') || '',
               checkout: new URLSearchParams(window.location.search).get('checkout') || '',
               adults: new URLSearchParams(window.location.search).get('adults') || '2',
               children: new URLSearchParams(window.location.search).get('children') || '0',
-              isBerganti() { return this.property === '${d.propertyBerganti}'; },
-              isHostalet() { return this.property === '${d.propertyHostalet}'; },
+              isBerganti() { return this.property === '${esc(d.propertyBerganti)}'; },
+              isHostalet() { return this.property === '${esc(d.propertyHostalet)}'; },
               handleSubmit(e) {
                 if (this.isBerganti()) {
                   e.preventDefault();
@@ -330,7 +333,7 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
                 class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
               >
                 <Icon name="bi:journal-check" class="text-lg" />
-                <span x-text="isBerganti() ? 'Reservar en Cloudbeds' : (isHostalet() ? 'Reservar en Beds24' : d.submitBtn)">{d.submitBtn}</span>
+                <span x-text="isBerganti() ? 'Reservar en Cloudbeds' : (isHostalet() ? 'Reservar en Beds24' : '${esc(d.submitBtn)}')">{d.submitBtn}</span>
               </button>
             </div>
           </form>
@@ -367,13 +370,13 @@ const properties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
       <form
         name="booking-compact"
         x-data={`{
-          property: '${d.propertyAny}',
+          property: '${esc(d.propertyAny)}',
           checkin: '',
           checkout: '',
           adults: '2',
           children: '0',
-          isBerganti() { return this.property === '${d.propertyBerganti}'; },
-          isHostalet() { return this.property === '${d.propertyHostalet}'; },
+          isBerganti() { return this.property === '${esc(d.propertyBerganti)}'; },
+          isHostalet() { return this.property === '${esc(d.propertyHostalet)}'; },
           handleSubmit(e) {
             e.preventDefault();
             if (this.isBerganti()) {
