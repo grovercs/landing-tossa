@@ -8,6 +8,7 @@ import 'glightbox/dist/css/glightbox.min.css';
 import '@src/styles/style.css';
 import BackToTop from '@src/components/BackToTop.astro';
 import ExitPopup from '@src/components/ExitPopup.astro';
+import Scripts from '../components/Scripts.astro';
 
 export interface Props {
   title: string;
@@ -80,7 +81,7 @@ const ogImage = image.startsWith('http') ? image : `https://alojamientostossadem
     <Font cssVariable="--font-gilda-display" preload />
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8EH27HSSVP"></script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-8EH27HSSVP"></script>
     <script is:inline src="/gtag.js"></script>
   </head>
 
@@ -92,33 +93,7 @@ const ogImage = image.startsWith('http') ? image : `https://alojamientostossadem
     <Footer />
     <BackToTop />
 
-    <!-- Alpine.js -->
-    <script>
-      import Alpine from 'alpinejs';
-      declare global {
-        interface Window {
-          Alpine: typeof Alpine;
-        }
-      }
-      window.Alpine = Alpine;
-      Alpine.start();
-    </script>
-
-    <!-- GLightbox -->
-    <script>
-      import GLightbox from 'glightbox';
-
-      const hasLightbox = document.querySelector('.glightbox');
-      if (hasLightbox) {
-        GLightbox({
-          selector: '.glightbox',
-          touchNavigation: true,
-          loop: true,
-        });
-      }
-    </script>
-
-    <script src="@src/scripts/animation.ts"></script>
+    <Scripts />
 
     <ExitPopup />
   </body>

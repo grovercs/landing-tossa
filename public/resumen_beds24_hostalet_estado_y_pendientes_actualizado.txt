@@ -1,0 +1,823 @@
+RESUMEN DE TRABAJO — BEDS24 / L’HOSTALET DE TOSSA
+Fecha de resumen: 21/05/2026
+
+Este documento resume el punto actual de configuración de Beds24 para L’Hostalet de Tossa, lo que ya se ha realizado y lo que queda pendiente por hacer.
+
+
+1. OBJETIVO GENERAL
+
+Se está configurando Beds24 para gestionar L’Hostalet de Tossa como propiedad independiente, con motor de reservas directo, tarifas por temporada, tarifa flexible, tarifa no reembolsable, control de ocupación y preparación para pagos online.
+
+La idea principal es que el motor de reservas permita vender de forma clara y profesional, evitando errores de ocupación, mostrando solo habitaciones compatibles y ofreciendo dos tipos de tarifa:
+
+- Tarifa Flexible.
+- Tarifa No Reembolsable con 10% de descuento.
+
+
+2. CONFIGURACIÓN YA REALIZADA
+
+2.1. Tarifas base por temporada
+
+Ya estaban creadas las tarifas base por temporadas en Daily Prices.
+
+Precios base revisados:
+
+- Habitación Doble Sencilla:
+  - Mayo / baja: 70 €/noche.
+  - Junio / media: 85 €/noche.
+
+- Habitación Doble Estándar:
+  - Mayo / baja: 80 €/noche.
+  - Junio / media: 95 €/noche.
+
+- Habitación Doble con Balcón:
+  - Mayo / baja: 80 €/noche.
+  - Junio / media: 95 €/noche.
+
+- Habitación Doble con Dos Camas:
+  - Mayo / baja: 80 €/noche.
+  - Junio / media: 95 €/noche.
+
+- Habitación Doble Superior con Balcón:
+  - Mayo / baja: 85 €/noche.
+  - Junio / media: 105 €/noche.
+
+- Habitación Triple:
+  - Mayo / baja: 110 €/noche.
+  - Junio / media: 130 €/noche.
+
+- Habitación Familiar:
+  - Mayo / baja: 130 €/noche.
+  - Junio / media: 150 €/noche.
+
+
+2.2. Oferta 1 — Tarifa Flexible
+
+Se configuró la Oferta 1 como tarifa principal.
+
+Configuración general:
+
+- Nombre interno: Flexible / Base-Flexible, según habitación.
+- Display Name en español: Tarifa Flexible.
+- Enabled / Habilitar: Siempre.
+- Posición: Fila 1.
+- Estadía mínima: Por Defecto.
+- Tipo de Reserva: Por Defecto.
+- Permitir Cancelaciones: Utilizar Condiciones de Reserva de la Propiedad.
+
+La Tarifa Flexible usa los precios base cargados en Daily Prices.
+
+
+2.3. Oferta 2 — Tarifa No Reembolsable
+
+Se creó la Oferta 2 para todas las habitaciones.
+
+Configuración general:
+
+- Nombre interno: No Reembolsable.
+- Display Name en español: Tarifa No Reembolsable.
+- Enabled / Habilitar: Siempre.
+- Posición: Fila 2.
+- Estadía mínima: Por Defecto.
+- Tipo de Reserva: Por Defecto, por ahora.
+- Permitir Cancelaciones: Utilizar Condiciones de Reserva de la Propiedad.
+
+Texto utilizado en español para la descripción de la Tarifa No Reembolsable:
+
+Ahorre un 10% reservando esta tarifa especial no reembolsable.
+
+El pago completo se realiza en el momento de confirmar la reserva.
+
+Esta tarifa no permite cancelación gratuita ni devolución del importe abonado en caso de cancelación, modificación o no presentación.
+
+No reembolsable, pago completo, sin devolución.
+
+La última línea se ha puesto en negrita.
+
+
+2.4. Descuento del 10% para No Reembolsable
+
+Se configuró en:
+
+Precios > Daily Price Rules
+
+Para cada habitación se añadió una segunda regla:
+
+- Nombre: No Reembolsable.
+- Price For: Capacidad Máxima de la Habitación.
+- Persona adicional: 0.
+- Niño adicional: 0.
+- Estadía mínima: 1.
+- Estadía máxima: 365.
+- Oferta: 2.
+- Mínimo de días hasta el check-in: 0.
+- Máximo de días de antelación: 365.
+- Use price from: Base/Flexible o Tarifa Diaria 1 de la misma habitación.
+- Offset percent: -10.
+- Offset amount: vacío.
+- Canales: Direct, Agent.
+
+Habitaciones configuradas:
+
+- Habitación Doble Sencilla.
+- Habitación Doble Estándar.
+- Habitación Doble con Balcón.
+- Habitación Doble con Dos Camas.
+- Habitación Doble Superior con Balcón.
+- Habitación Triple.
+- Habitación Familiar.
+
+Resultado probado:
+
+- Doble Sencilla, 2 noches, mayo:
+  - Flexible: 140 €.
+  - No Reembolsable: 126 €.
+
+- Familiar, 2 noches, mayo:
+  - Flexible: 260 €.
+  - No Reembolsable: 234 €.
+
+El cálculo del 10% funciona correctamente.
+
+
+2.5. Motor de reservas
+
+Se probó que en el motor aparecen:
+
+- Tarifa Flexible.
+- Tarifa No Reembolsable.
+- Descuento correcto del 10%.
+- Texto comercial de No Reembolsable.
+
+Se detectó que algunas tarifas mostraban “desde” y otras mostraban precio directo. Se comprobó que esto dependía del comportamiento del selector de cantidad/habitaciones y del tipo de búsqueda.
+
+
+2.6. Reservas múltiples y ocupación
+
+Se modificó la configuración de la Property Booking Page:
+
+Ruta:
+Booking Engine > Property Booking Page > Configuration
+
+Cambios realizados:
+
+- Reservas Múltiples de Habitaciones: Desactivado.
+- Orden de la Lista de Habitaciones: Hide Unavailable / Ocultar no disponibles.
+- Número de noches por defecto: 2.
+- Default Number of Guests: 2.
+- Número mínimo de noches: 1.
+- Número máximo de huéspedes: Max Occupancy.
+
+Resultado:
+
+- Si el cliente busca 4 personas, el motor muestra solo habitaciones compatibles, como la Habitación Familiar.
+- Las habitaciones no compatibles ya no deberían mostrarse con el aviso de ocupación máxima excedida.
+- Si un cliente quiere 2 habitaciones dobles para 4 personas, deberá hacer dos reservas separadas o contactar con recepción.
+
+Criterio aprobado:
+
+Se acepta trabajar así porque es más limpio para el cliente final y evita errores de ocupación.
+
+
+2.7. Widget de reservas
+
+Se revisó:
+
+Booking Engine > Widgets de Reservas > Booking Box
+
+Configuración aplicada o preparada:
+
+- Selección de Personas: Adultos y niños.
+- Número de Noches por Defecto: 2.
+- Default Number of Adults: 2.
+- Default Number of Children: 0.
+- Máximo de Adultos: 8.
+- Máximo de Niños: 4.
+- Texto del Botón: Buscar disponibilidad.
+
+El ejemplo del widget muestra:
+
+- Fecha de entrada.
+- Fecha de salida.
+- Adultos.
+- Niños.
+- Botón Buscar disponibilidad.
+
+Este widget queda bien preparado para incrustarlo en la web propia.
+
+
+2.8. Textos en español añadidos o actualizados
+
+Se han trabajado los textos principales en español.
+
+2.8.1. Descripción de la Propiedad 2
+
+Texto añadido:
+
+¿Necesita reservar varias habitaciones o viaja en grupo?
+
+Contacte directamente con recepción y le ayudaremos a encontrar la mejor combinación disponible según fechas y ocupación.
+
+
+2.8.2. No Rooms Available Message
+
+Texto añadido:
+
+No hay habitaciones disponibles para las fechas u ocupación seleccionadas.
+
+Si necesita reservar varias habitaciones, viaja en grupo o desea consultar otras opciones, contacte directamente con recepción. Le ayudaremos a encontrar la mejor alternativa disponible.
+
+
+2.8.3. Política General
+
+Texto actualizado:
+
+Las reservas están sujetas a disponibilidad y a las condiciones indicadas en el momento de realizar la reserva.
+
+Para confirmar correctamente la reserva, el huésped deberá facilitar datos de contacto válidos. El alojamiento se reserva el derecho de cancelar reservas con datos incorrectos, incompletos o cuando no sea posible contactar con el huésped.
+
+Según la tarifa seleccionada, la temporada, el canal de venta o las condiciones particulares de la reserva, el alojamiento podrá solicitar una tarjeta como garantía, un depósito, el pago parcial o el pago completo de la estancia.
+
+La Tarifa Flexible y la Tarifa No Reembolsable pueden tener condiciones diferentes de pago, modificación y cancelación. El huésped deberá revisar las condiciones específicas antes de confirmar la reserva.
+
+El horario de entrada y salida será informado en la confirmación de reserva. Si tiene previsto llegar fuera del horario habitual, le recomendamos indicarlo en el campo de comentarios o contactar previamente con el alojamiento.
+
+Las peticiones especiales están sujetas a disponibilidad y no pueden garantizarse hasta ser confirmadas por el alojamiento.
+
+Para reservas de varias habitaciones, familias numerosas o grupos, recomendamos contactar directamente con recepción antes de confirmar la reserva. Le ayudaremos a encontrar la mejor combinación disponible según fechas y ocupación.
+
+En caso de duda, prevalecerán siempre las condiciones indicadas en la confirmación de reserva.
+
+
+2.8.4. Política de Cancelación
+
+Texto actualizado:
+
+Las condiciones de cancelación dependen de la tarifa seleccionada en el momento de realizar la reserva.
+
+Tarifa Flexible:
+La Tarifa Flexible permite cancelación gratuita dentro del plazo indicado en la confirmación de reserva. Como norma general, la cancelación gratuita podrá realizarse hasta 7 días antes de la fecha de llegada, salvo que se indiquen condiciones diferentes según temporada, promoción, canal de venta o tipo de reserva.
+
+Si la reserva se cancela fuera del plazo gratuito, el alojamiento podrá cobrar el importe correspondiente a la primera noche.
+
+En caso de no presentación, el alojamiento podrá cobrar el importe correspondiente a la primera noche.
+
+Tarifa No Reembolsable:
+La Tarifa No Reembolsable requiere el pago completo en el momento de confirmar la reserva. En caso de cancelación, modificación o no presentación, el importe abonado no será reembolsado.
+
+En caso de duda, prevalecerán siempre las condiciones indicadas en la confirmación de reserva.
+
+
+3. DECISIONES APROBADAS
+
+3.1. Temporadas y flexibilidad
+
+Se decidió mantener una estrategia flexible porque L’Hostalet es un alojamiento de playa.
+
+Criterio:
+
+- Temporada baja: 1 noche.
+- Temporada media: 1 noche entre semana y 2 noches en fines de semana.
+- Julio y agosto: mínimo 2 noches.
+- Puentes/festivos: 1, 2 o 3 noches según demanda, evitando endurecer demasiado fuera del verano.
+
+3.2. Tarifa No Reembolsable
+
+Se aprobó:
+
+- Descuento del 10%.
+- Pago completo al reservar, pendiente de configurar técnicamente.
+- Sin devolución en caso de cancelación, modificación o no presentación.
+
+3.3. Reservas múltiples
+
+Se decidió desactivar reservas múltiples en la página principal para que el motor filtre por ocupación y oculte habitaciones no compatibles.
+
+Si un cliente quiere varias habitaciones, se le indicará que contacte con recepción o que haga reservas separadas.
+
+3.4. Idiomas
+
+Se decidió continuar primero en español para cerrar la configuración funcional.
+
+Queda pendiente una revisión multidioma completa en:
+
+- Español.
+- Inglés.
+- Francés.
+- Catalán.
+
+
+4. PUNTO EXACTO ACTUAL
+
+Estamos en el Paso 14: Pagos.
+
+Objetivo actual:
+
+Conseguir que la Tarifa No Reembolsable cobre el 100% al reservar.
+
+Queremos configurar:
+
+- Deposit Payment 2 Percentage = 100.
+- Non Payment Booking Status = Cancel.
+
+Después, en cada Oferta 2 / No Reembolsable, cambiar el Tipo de Reserva a:
+
+Solicitud de Depósito 2 - Confirmación Automática con Pago de Depósito.
+
+Pero esto todavía NO se debe hacer hasta confirmar dónde se configura correctamente el Depósito 2 al 100% y revisar Stripe.
+
+
+5. INVESTIGACIÓN DE PAGOS REALIZADA HASTA AHORA
+
+5.1. Pagos > Payment Collection
+
+Se revisó:
+
+Pagos > Payment Collection
+
+Pantalla encontrada:
+
+- Encabezado de Pagos de Depósito.
+- Payment Request Header.
+- Payment Request Confirmation.
+
+Conclusión:
+
+Esta pantalla sirve para textos de la pantalla de pago, no para configurar el porcentaje del depósito.
+
+
+5.2. Pagos > Payment Rules
+
+Se revisó:
+
+Pagos > Payment Rules
+
+Pantalla encontrada:
+
+- Botón Create New Payment Rule.
+- No había reglas creadas.
+
+Conclusión:
+
+No crear Payment Rules todavía. Esta zona parece orientada a reglas automáticas o cobros posteriores, no al cobro completo inicial de la tarifa no reembolsable.
+
+
+5.3. Booking Engine > Property Booking Page > Configuration
+
+Se revisó y no aparecen los campos de depósito.
+
+Pantalla útil para:
+
+- Motor de reservas.
+- Ocupación.
+- Reservas múltiples.
+- Ocultar no disponibles.
+
+Pero no contiene:
+
+- Deposit Payment 2 Percentage.
+- Non Payment Booking Status.
+
+
+5.4. Configuración > Propiedades > Reglas de Reserva
+
+Se revisó:
+
+Configuración > Propiedades > Reglas de Reserva
+
+Campos visibles:
+
+- Fecha límite de reserva el mismo día.
+- Estrategia de Tarifa Diaria.
+- Tipo de Reserva.
+- Estado de Reserva.
+
+Conclusión:
+
+No tocar el Tipo de Reserva global porque afectaría a todas las tarifas, incluida la Flexible.
+
+Falta comprobar si hay más secciones hacia abajo en esa pantalla que puedan contener depósitos o pagos.
+
+
+6. LO QUE FALTA POR HACER
+
+6.1. Pagos
+
+Pendiente principal:
+
+- Encontrar el lugar exacto donde configurar:
+  - Deposit Payment 2 Percentage = 100.
+  - Non Payment Booking Status = Cancel.
+
+Siguiente acción recomendada:
+
+1. Seguir revisando hasta el final Configuración > Propiedades > Reglas de Reserva.
+2. Si no aparecen campos de depósito, revisar Pagos > Payment Gateways > Stripe.
+3. Comprobar si Stripe está conectado o si hay que conectarlo primero para que aparezcan opciones de depósito.
+
+
+6.2. Stripe
+
+Pendiente:
+
+- Ir a Pagos > Payment Gateways > Stripe.
+- Ver si Stripe está conectado.
+- Comprobar modo test/real.
+- Comprobar captura automática.
+- Comprobar si permite cobro completo de la reserva.
+
+No se debe activar el cobro en producción sin hacer prueba controlada.
+
+
+6.3. Cambiar Oferta 2 a Depósito 2
+
+Cuando el Depósito 2 esté configurado al 100%, habrá que ir a:
+
+Configuración > Propiedades > Ofertas > Oferta 2
+
+Para cada habitación, cambiar:
+
+Tipo de Reserva:
+Solicitud de Depósito 2 - Confirmación Automática con Pago de Depósito.
+
+Habitaciones a revisar:
+
+- Doble Sencilla.
+- Doble Estándar.
+- Doble con Balcón.
+- Doble con Dos Camas.
+- Doble Superior con Balcón.
+- Triple.
+- Familiar.
+
+
+6.4. Prueba de reserva No Reembolsable
+
+Pendiente:
+
+- Buscar fechas de prueba.
+- Seleccionar Tarifa No Reembolsable.
+- Comprobar que pide pago completo.
+- Verificar que no permite confirmar sin pagar.
+- Revisar si genera reserva.
+- Revisar estado de reserva si no se completa el pago.
+- Revisar email recibido.
+
+
+6.5. Prueba de reserva Flexible
+
+Pendiente:
+
+- Comprobar que la Tarifa Flexible no queda afectada por el Depósito 2.
+- Comprobar que no cobra 100%.
+- Revisar condiciones y email.
+
+
+6.6. Restricciones de estancia mínima por fechas
+
+Pendiente para más adelante:
+
+- Julio y agosto: mínimo 2 noches.
+- Junio/septiembre fines de semana: mínimo 2 noches.
+- Semana Santa: mínimo 2 noches.
+- Puente 1 de mayo: mínimo 2 noches.
+- Sant Pere: mínimo 2 noches.
+- Diada: mínimo 2 noches.
+- Otros puentes: flexible según demanda.
+
+Todavía no se ha aplicado este calendario completo de restricciones.
+
+
+6.7. Revisión multidioma
+
+Pendiente:
+
+Revisar y completar en inglés, francés y catalán:
+
+- Tarifa Flexible.
+- Tarifa No Reembolsable.
+- Descripciones de tarifa.
+- Texto para grupos.
+- No Rooms Available Message.
+- Política General.
+- Política de Cancelación.
+- Botones y etiquetas.
+- Mensajes de pago.
+
+
+6.8. Revisión visual final
+
+Pendiente:
+
+- Comprobar cómo se ve el motor en escritorio.
+- Comprobar móvil.
+- Revisar textos largos.
+- Revisar alineación de precios.
+- Revisar imágenes.
+- Revisar si se mantiene limpio con todas las tarifas visibles.
+
+
+6.9. Prueba completa antes de abrir venta
+
+Pendiente:
+
+- Reserva Flexible.
+- Reserva No Reembolsable.
+- Reserva con 2 adultos.
+- Reserva con 3 adultos.
+- Reserva con 4 adultos.
+- Prueba sin disponibilidad.
+- Prueba de cancelación.
+- Prueba de email.
+- Prueba de pago.
+
+
+7. RECORDATORIO IMPORTANTE
+
+No tocar todavía el Tipo de Reserva global en Reglas de Reserva.
+
+No cambiar la Oferta 2 a Depósito 2 hasta confirmar que el Depósito 2 está configurado al 100%.
+
+No activar pagos reales sin prueba controlada.
+
+No mezclar ahora revisión de idiomas con configuración de pagos.
+
+
+8. SIGUIENTE PASO RECOMENDADO
+
+Continuar desde:
+
+Configuración > Propiedades > Reglas de Reserva
+
+Revisar si hay más bloques hacia abajo.
+
+Si no aparecen campos de depósito, pasar a:
+
+Pagos > Payment Gateways > Stripe
+
+y comprobar si la pasarela está conectada o pendiente de configurar.
+
+9. PENDIENTES ADICIONALES ADEMÁS DE PAGOS
+
+Además del bloque de pagos, quedan pendientes varias tareas importantes para dejar Beds24 listo antes de abrir venta directa de forma definitiva.
+
+9.1. Revisión final de tarifas en el motor
+
+Aunque ya se ha comprobado que la Tarifa Flexible y la Tarifa No Reembolsable aparecen correctamente, falta hacer una revisión final ordenada en varias temporadas.
+
+Pruebas pendientes:
+
+- Mayo / temporada baja.
+- Junio / temporada media.
+- Julio y agosto / temporada alta.
+- Septiembre / temporada media.
+- Fechas especiales o puentes.
+- Búsqueda con 2 adultos.
+- Búsqueda con 3 adultos.
+- Búsqueda con 4 adultos.
+- Búsqueda sin disponibilidad.
+- Comprobación de que la No Reembolsable mantiene siempre el 10% de descuento.
+- Comprobación de que cada habitación usa su propia tarifa base y no una tarifa de otra habitación.
+
+Objetivo:
+
+Confirmar que precios, ocupación, disponibilidad y tarifas se comportan correctamente en todos los escenarios normales.
+
+
+9.2. Mínimos de estancia por temporada
+
+Todavía no se han cargado definitivamente las restricciones de estancia mínima en Beds24.
+
+Criterio aprobado:
+
+- Temporada baja: mínimo 1 noche.
+- Mayo, junio y septiembre entre semana: mínimo 1 noche.
+- Fines de semana de junio y septiembre: mínimo 2 noches.
+- Julio y agosto: mínimo 2 noches.
+- Semana Santa: mínimo 2 noches.
+- Puente del 1 de mayo: mínimo 2 noches.
+- Sant Pere / fiesta local de verano: mínimo 2 noches.
+- Diada de Cataluña: mínimo 2 noches.
+- Otros puentes y festivos: aplicar mínimo 1 o 2 noches según demanda.
+- Mínimo 3 noches: solo en casos puntuales de alta demanda o por decisión de dirección.
+
+Objetivo:
+
+Evitar reservas de una sola noche en fechas fuertes, pero manteniendo flexibilidad porque L’Hostalet es un alojamiento de playa.
+
+
+9.3. Festivos, puentes y fechas especiales 2026
+
+Queda pendiente aplicar o revisar las restricciones en fechas concretas.
+
+Fechas a revisar:
+
+- Año Nuevo.
+- Reyes.
+- Festa Major d’Hivern / Sant Vicenç.
+- Semana Santa.
+- Puente del 1 de mayo.
+- Sant Joan.
+- Sant Pere / fiesta local de Tossa.
+- Julio.
+- Agosto.
+- Diada de Cataluña.
+- Puente del 12 de octubre.
+- Puente de diciembre.
+- Navidad / Sant Esteve.
+- Fin de Año.
+
+Objetivo:
+
+Definir para cada bloque si se mantiene 1 noche, se sube a 2 noches o, excepcionalmente, se aplica 3 noches.
+
+
+9.4. Revisión multidioma completa
+
+Se decidió continuar primero en español para avanzar con la configuración funcional, pero queda pendiente una revisión completa de idiomas.
+
+Idiomas pendientes:
+
+- Inglés.
+- Francés.
+- Catalán.
+
+Zonas que habrá que revisar/traducir:
+
+- Tarifa Flexible.
+- Tarifa No Reembolsable.
+- Descripción de Tarifa Flexible.
+- Descripción de Tarifa No Reembolsable.
+- Descripción de Propiedad 2 / texto para grupos.
+- No Rooms Available Message.
+- Política General.
+- Política de Cancelación.
+- Botones del motor.
+- Etiquetas del widget.
+- Mensajes de pago.
+- Emails automáticos.
+
+Objetivo:
+
+Evitar que el motor quede mezclando español con otros idiomas cuando el huésped cambie el idioma de navegación.
+
+
+9.5. Emails automáticos
+
+Queda pendiente revisar todos los emails que enviará Beds24.
+
+Emails a revisar:
+
+- Confirmación de reserva.
+- Confirmación interna para recepción.
+- Solicitud de pago, si se activa Stripe.
+- Confirmación de pago.
+- Cancelación.
+- No show o modificación, si aplica.
+- Email para reservas pendientes o sin pago completado.
+
+Puntos a comprobar:
+
+- Datos del alojamiento.
+- Nombre correcto: L’Hostalet de Tossa.
+- Fechas de entrada y salida.
+- Tipo de habitación.
+- Tarifa seleccionada.
+- Importe total.
+- Condiciones de cancelación.
+- Información de pago.
+- Teléfono y correo de contacto.
+- Firma.
+- Idiomas.
+
+Objetivo:
+
+Que el cliente reciba una comunicación clara y que recepción tenga copia o aviso interno fiable.
+
+
+9.6. Fotos y diseño de habitaciones
+
+Queda pendiente una revisión visual completa del motor.
+
+Puntos a revisar:
+
+- Foto principal de cada habitación.
+- Calidad y recorte de imágenes.
+- Que no haya fotos equivocadas o repetidas.
+- Orden de habitaciones.
+- Claridad de nombres comerciales.
+- Descripciones de habitaciones.
+- Presentación de Tarifa Flexible y No Reembolsable.
+- Visualización en escritorio.
+- Visualización en móvil.
+- Visualización de textos largos.
+- Alineación de precios.
+
+Objetivo:
+
+Que el motor se vea profesional y coherente con la imagen de Alojamientos Tossa.
+
+
+9.7. Comparación con Booking.com
+
+Antes de abrir la venta fuerte, conviene comparar la web directa con Booking.com.
+
+Elementos a comparar:
+
+- Nombres de habitaciones.
+- Ocupación máxima.
+- Fotos.
+- Precios.
+- Tarifas reembolsables/no reembolsables.
+- Condiciones de cancelación.
+- Restricciones de estancia mínima.
+- Disponibilidad.
+- Textos comerciales.
+
+Objetivo:
+
+Que la web directa sea competitiva y no quede peor presentada que Booking.com. Idealmente, la reserva directa debe tener una ventaja clara o una comunicación más cercana.
+
+
+9.8. Conexión con canales
+
+Todavía no se ha conectado ni mapeado de forma definitiva Booking.com, Expedia u otros canales.
+
+Pendientes:
+
+- Conectar Booking.com.
+- Conectar Expedia, si procede.
+- Mapear tipos de habitación.
+- Mapear tarifas.
+- Decidir si la No Reembolsable se enviará también a Booking.com.
+- Comprobar disponibilidad.
+- Comprobar precios.
+- Verificar restricciones.
+- Evitar overbooking.
+- Hacer pruebas de sincronización.
+
+Objetivo:
+
+No abrir canales externos hasta que la venta directa y la configuración base estén probadas.
+
+
+9.9. Revisión legal y comercial final
+
+Antes de abrir reservas reales, revisar:
+
+- Política de cancelación.
+- Política de no show.
+- Condiciones de pago.
+- Condiciones de No Reembolsable.
+- Protección de datos.
+- Datos de empresa/fiscales, si aplica.
+- Teléfono y correo visibles.
+- Condiciones en varios idiomas.
+- Información de llegada y salida.
+- Aviso para grupos o varias habitaciones.
+
+Objetivo:
+
+Evitar malentendidos con clientes y proteger al alojamiento.
+
+
+9.10. Prueba completa antes de abrir venta
+
+Cuando pagos esté configurado, hacer una prueba completa de principio a fin.
+
+Pruebas necesarias:
+
+- Reserva Flexible.
+- Reserva No Reembolsable.
+- Reserva con 2 adultos.
+- Reserva con 3 adultos.
+- Reserva con 4 adultos.
+- Reserva sin disponibilidad.
+- Reserva sin completar pago.
+- Cancelación.
+- Email cliente.
+- Email recepción.
+- Revisión del calendario interno.
+- Revisión de disponibilidad después de reservar.
+- Cancelar o eliminar reservas de prueba al finalizar.
+
+Objetivo:
+
+Confirmar que el sistema puede funcionar con clientes reales sin errores graves.
+
+
+10. PRIORIDAD RECOMENDADA A PARTIR DE AHORA
+
+Orden recomendado para continuar:
+
+1. Terminar configuración de pagos.
+2. Probar No Reembolsable con pago completo.
+3. Probar Flexible para comprobar que no queda afectada.
+4. Aplicar mínimos de estancia.
+5. Hacer pruebas por temporada y ocupación.
+6. Revisar emails automáticos.
+7. Revisar diseño/fotos.
+8. Hacer revisión multidioma.
+9. Comparar con Booking.com.
+10. Preparar conexión con canales externos.
+

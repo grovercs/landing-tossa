@@ -28,66 +28,41 @@ const dicts = {
 const d = dicts[lang] || dicts.es;
 ---
 <div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg mb-8">
+  <!-- ROOM INFO -->
+  <div class="mb-6 pb-4 border-b border-white/10">
+    <span class="text-sm text-white/70 mb-1 block">{t('bookingForm.roomType')}</span>
+    <span class="text-heading font-semibold text-white text-lg">
+      {roomTitle}
+    </span>
+    {(price && price > 0) && (
+    <span class="block text-sm text-white/80 mt-1">
+      {t('rooms.from')} {price}€ {t('rooms.night')}
+    </span>
+    )}
+  </div>
+
   <form
     name="booking-room"
-    method="POST"
-    netlify
-    netlify-honeypot="bot-field"
-    action={successUrl}
+    x-data={`{
+      checkin: '',
+      checkout: '',
+      adults: '2',
+      children: '0',
+      handleSubmit(e) {
+        e.preventDefault();
+        const url = new URL('https://beds24.com/booking2.php');
+        url.searchParams.set('propid', '328935');
+        url.searchParams.set('lang', '${lang}');
+        if (this.checkin) url.searchParams.set('checkin', this.checkin);
+        if (this.checkout) url.searchParams.set('checkout', this.checkout);
+        url.searchParams.set('numadult', this.adults);
+        url.searchParams.set('numchild', this.children);
+        window.open(url.toString(), '_blank');
+      }
+    }`}
+    x-on:submit="handleSubmit($event)"
     class="grid grid-cols-2 gap-5"
   >
-    <!-- Honeypot field for spam prevention -->
-    <p class="hidden">
-      <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-    </p>
-
-    <!-- Hidden form name for Netlify -->
-    <input type="hidden" name="form-name" value="booking-room" />
-    <!-- Room Info -->
-    <div class="col-span-2">
-      <span class="text-sm text-white mb-1 block">{t('bookingForm.roomType')}</span>
-      <span class="text-heading font-semibold text-white">
-        {roomTitle}
-      </span>
-      {(price && price > 0) && (
-      <span class="block text-sm text-white/80 mt-1">
-        {t('rooms.from')} {price}€ {t('rooms.night')}
-      </span>
-      )}
-    </div>
-
-    <!-- Full Name -->
-    <div class="col-span-2">
-      <label class="text-sm text-white mb-1 block">{t('bookingForm.name')}</label>
-      <input
-        type="text"
-        name="name"
-        required
-        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
-      />
-    </div>
-
-    <!-- Email -->
-    <div class="col-span-2">
-      <label class="text-sm text-white mb-1 block">{t('bookingForm.email')}</label>
-      <input
-        type="email"
-        name="email"
-        required
-        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
-      />
-    </div>
-
-    <!-- Phone -->
-    <div class="col-span-2">
-      <label class="text-sm text-white mb-1 block">{t('bookingForm.phone')}</label>
-      <input
-        type="tel"
-        name="phone"
-        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
-      />
-    </div>
-
     <!-- Check-in -->
     <div>
       <label class="text-sm text-white mb-1 block">{t('booking.checkin')}</label>
@@ -95,6 +70,7 @@ const d = dicts[lang] || dicts.es;
         type="date"
         name="checkin"
         required
+        x-model="checkin"
         class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
       />
     </div>
@@ -106,6 +82,7 @@ const d = dicts[lang] || dicts.es;
         type="date"
         name="checkout"
         required
+        x-model="checkout"
         class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
       />
     </div>
@@ -115,6 +92,7 @@ const d = dicts[lang] || dicts.es;
       <label class="text-sm text-white mb-1 block">{t('booking.adults')}</label>
       <select
         name="adults"
+        x-model="adults"
         class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
       >
         <option value="1">{d.adult1}</option>
@@ -129,6 +107,7 @@ const d = dicts[lang] || dicts.es;
       <label class="text-sm text-white mb-1 block">{t('booking.children')}</label>
       <select
         name="children"
+        x-model="children"
         class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
       >
         <option value="0">{d.child0}</option>
@@ -138,32 +117,25 @@ const d = dicts[lang] || dicts.es;
       </select>
     </div>
 
-    <!-- Notes -->
-    <div class="col-span-2">
-      <label class="text-sm text-white mb-1 block">{t('bookingForm.notes')}</label>
-      <textarea
-        rows="4"
-        name="notes"
-        class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
-      ></textarea>
-    </div>
-
     <!-- Submit -->
-    <div class="col-span-2">
+    <div class="col-span-2 mt-2">
       <button
         type="submit"
         class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
       >
         <Icon name="bi:journal-check" class="text-lg" />
-        {t('bookingForm.submit')}
+        {lang === 'es' && "Reservar en Beds24"}
+        {lang === 'ca' && "Reservar a Beds24"}
+        {lang === 'en' && "Book on Beds24"}
+        {lang === 'fr' && "Réserver sur Beds24"}
       </button>
     </div>
 
-    <p class="text-white/60 text-sm mt-4 text-center col-span-2">
-      {lang === 'es' && "Recibirás una respuesta en menos de 24 horas."}
-      {lang === 'ca' && "Rebràs una resposta en menys de 24 hores."}
-      {lang === 'en' && "You will receive a response within 24 hours."}
-      {lang === 'fr' && "Vous recevrez une réponse dans moins de 24 heures."}
+    <p class="text-white/60 text-sm mt-2 text-center col-span-2">
+      {lang === 'es' && "Confirmación en tiempo real. Serás redirigido a nuestro motor seguro."}
+      {lang === 'ca' && "Confirmació en temps real. Seràs redirigit al nostre motor segur."}
+      {lang === 'en' && "Real-time confirmation. You will be redirected to our secure booking engine."}
+      {lang === 'fr' && "Confirmation en temps réel. Vous serez redirigé vers notre moteur sécurisé."}
     </p>
   </form>
 </div>
