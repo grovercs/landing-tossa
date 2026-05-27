@@ -468,7 +468,7 @@ const properties = fullLayout ? fullProperties : compactProperties;
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
           <!-- Property -->
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-2">
             <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
               <Icon name="bi:building" class="w-4 h-4" /> {d.propertyLabel}
             </label>
@@ -526,7 +526,7 @@ const properties = fullLayout ? fullProperties : compactProperties;
           </div>
 
           <!-- Children -->
-          <div class="lg:col-span-1">
+          <div class="lg:col-span-2">
             <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
               <Icon name="bi:person-add" class="w-4 h-4" /> {d.childrenLabel}
             </label>
@@ -556,10 +556,10 @@ const properties = fullLayout ? fullProperties : compactProperties;
           <div class="lg:col-span-2">
             <button
               type="submit"
-              class="w-full h-12 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-2 transition"
+              class="w-full min-h-12 py-2 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-3 transition"
             >
-              <Icon name="bi:journal-check" class="text-lg" />
-              <span class="text-sm sm:text-base whitespace-nowrap">{d.checkBtn}</span>
+              <Icon name="bi:journal-check" class="text-base flex-shrink-0" />
+              <span class="text-xs sm:text-sm text-center leading-snug">{d.checkBtn}</span>
             </button>
           </div>
         </div>
