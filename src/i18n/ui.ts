@@ -62,6 +62,10 @@ export const ui = {
     'home.blogTitle': 'Guías de Tossa de Mar',
     'home.blogDescription': 'Descubre consejos locales, rutas secretas y los mejores planes para tu estancia en la Costa Brava.',
     'home.blogCta': 'Ver todas las guías',
+    'tourism.badge': 'Presencia Oficial',
+    'tourism.title': 'Nos encontrarás en...',
+    'tourism.subtitle': 'Colaboramos con las principales plataformas y organismos turísticos de la Costa Brava y Catalunya para ofrecerte la mejor visibilidad y experiencia.',
+    'tourism.note': 'Reserva directamente en nuestra web y obtén el mejor precio garantizado.',
   },
   ca: {
     'nav.home': 'Inici',
@@ -117,6 +121,10 @@ export const ui = {
     'home.blogTitle': 'Guies de Tossa de Mar',
     'home.blogDescription': 'Descobreix consells locals, rutes secretes i els millors plans per a la teva estada a la Costa Brava.',
     'home.blogCta': 'Veure totes les guies',
+    'tourism.badge': 'Presència Oficial',
+    'tourism.title': 'Ens trobaràs a...',
+    'tourism.subtitle': 'Col·laborem amb les principals plataformes i organismes turístics de la Costa Brava i Catalunya per donar-te la millor visibilitat i experiència.',
+    'tourism.note': 'Reserva directament a la nostra web i obtén el millor preu garantit.',
   },
   en: {
     'nav.home': 'Home',
@@ -172,6 +180,10 @@ export const ui = {
     'home.blogTitle': 'Tossa de Mar Guides',
     'home.blogDescription': 'Discover local tips, secret routes and the best plans for your stay on the Costa Brava.',
     'home.blogCta': 'See all guides',
+    'tourism.badge': 'Official Presence',
+    'tourism.title': 'Find us on...',
+    'tourism.subtitle': 'We collaborate with the leading tourism platforms and organisations of the Costa Brava and Catalunya to give you the best visibility and experience.',
+    'tourism.note': 'Book directly on our website and get the best price guaranteed.',
   },
   fr: {
     'nav.home': 'Accueil',
@@ -227,5 +239,9 @@ export const ui = {
     'home.blogTitle': 'Guides de Tossa de Mar',
     'home.blogDescription': 'Découvrez des conseils locaux, des routes secrètes et les meilleurs plans pour votre séjour sur la Costa Brava.',
     'home.blogCta': 'Voir tous les guides',
+    'tourism.badge': 'Présence Officielle',
+    'tourism.title': 'Retrouvez-nous sur...',
+    'tourism.subtitle': 'Nous collaborons avec les principales plateformes et organismes touristiques de la Costa Brava et de la Catalogne pour vous offrir la meilleure visibilité et expérience.',
+    'tourism.note': 'Réservez directement sur notre site et obtenez le meilleur prix garanti.',
   },
 } as const;

@@ -8,13 +8,17 @@ export interface PortalItem {
 }
 
 export interface Props {
+  badge?: string;
   title?: string;
   subtitle?: string;
+  note?: string;
 }
 
 const {
+  badge = "Presència Oficial",
   title = "Ens trobaràs a...",
-  subtitle = "Col·laborem amb les principals plataformes i organismes turístics de la Costa Brava i Catalunya per oferir-te la millor experiència.",
+  subtitle = "Col·laborem amb les principals plataformes i organismes turístics de la Costa Brava i Catalunya per donar-te la millor visibilitat i experiència.",
+  note = "Reserva directament a la nostra web i obtén el millor preu garantit.",
 } = Astro.props;
 
 const portals: PortalItem[] = [
@@ -90,7 +94,7 @@ const portals: PortalItem[] = [
     <!-- Header -->
     <div class="text-center max-w-2xl mx-auto mb-14">
       <span class="inline-block text-xs uppercase tracking-widest text-accent font-semibold mb-3 border border-accent/40 px-4 py-1 rounded-full">
-        Presència Oficial
+        {badge}
       </span>
       <h2 class="font-heading text-4xl lg:text-5xl text-primary-dark mb-4">
         {title}
@@ -159,7 +163,7 @@ const portals: PortalItem[] = [
 
     <!-- Bottom note -->
     <p class="text-center text-gray-400 text-sm mt-10">
-      Reserva directament a la nostra web i obté el millor preu garantit.
+      {note}
     </p>
   </div>
 </section>
