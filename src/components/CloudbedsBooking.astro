@@ -188,9 +188,17 @@ const properties = fullLayout ? fullProperties : compactProperties;
                 checkout: params.get('checkout') || '',
                 adults: params.get('adults') || '2',
                 children: params.get('children') || '0',
+                showWarning: false,
                 isBerganti() { return this.property === propertyBerganti; },
                 isHostalet() { return this.property === propertyHostalet; },
                 handleSubmit(e) {
+                  const totalGuests = parseInt(this.adults) + parseInt(this.children);
+                  if (this.isHostalet() && totalGuests > 4) {
+                    e.preventDefault();
+                    this.showWarning = true;
+                    return;
+                  }
+                  this.showWarning = false;
                   if (this.isBerganti()) {
                     e.preventDefault();
                     const url = new URL(cloudbedsUrl);
@@ -347,6 +355,17 @@ const properties = fullLayout ? fullProperties : compactProperties;
               ></textarea>
             </div>
 
+            <!-- Warning block for > 4 guests in Hostalet -->
+            <div x-show="showWarning && (parseInt(adults) + parseInt(children) > 4)" x-transition class="col-span-2 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm rounded-lg flex items-start gap-3">
+              <Icon name="bi:exclamation-triangle" class="w-5 h-5 flex-shrink-0 text-amber-500 mt-0.5" />
+              <div>
+                {lang === 'es' && "La capacidad máxima por habitación es de 4 personas. Para grupos de 5 o más personas, por favor realiza una segunda reserva o contáctanos directamente para coordinar tu estancia."}
+                {lang === 'ca' && "La capacitat màxima per habitació és de 4 persones. Per a grups de 5 o més persones, si us plau realitza una segona reserva o contacta'ns directament per coordinar la teva estada."}
+                {lang === 'en' && "The maximum capacity per room is 4 people. For groups of 5 or more guests, please make a second booking or contact us directly to arrange your stay."}
+                {lang === 'fr' && "La capacité maximale par chambre est de 4 personnes. Pour les groupes de 5 personnes ou plus, veuillez effectuer une deuxième réservation ou nous contacter directement pour organiser votre séjour."}
+              </div>
+            </div>
+
             <!-- Submit -->
             <div class="col-span-2">
               <button
@@ -389,11 +408,19 @@ const properties = fullLayout ? fullProperties : compactProperties;
             checkout: '',
             adults: '2',
             children: '0',
+            showWarning: false,
             isBerganti() { return this.property === propertyBerganti; },
             isHostalet() { return this.property === propertyHostalet; },
             handleSubmit(e) {
-              e.preventDefault();
+              const totalGuests = parseInt(this.adults) + parseInt(this.children);
+              if (this.isHostalet() && totalGuests > 4) {
+                e.preventDefault();
+                this.showWarning = true;
+                return;
+              }
+              this.showWarning = false;
               if (this.isBerganti()) {
+                e.preventDefault();
                 const url = new URL(cloudbedsUrl);
                 if (this.checkin) url.searchParams.set('checkin', this.checkin);
                 if (this.checkout) url.searchParams.set('checkout', this.checkout);
@@ -401,6 +428,7 @@ const properties = fullLayout ? fullProperties : compactProperties;
                 url.searchParams.set('children', this.children);
                 window.open(url.toString(), '_blank');
               } else if (this.isHostalet()) {
+                e.preventDefault();
                 const url = new URL(beds24Url);
                 if (this.checkin) {
                   const [y, m, day] = this.checkin.split('-');
@@ -419,7 +447,7 @@ const properties = fullLayout ? fullProperties : compactProperties;
                 url.searchParams.set('numchild', this.children);
                 window.open(url.toString(), '_blank');
               } else {
-                // Fallback: internal booking page (kept as backup if external engines fail)
+                // Fallback: internal booking page
                 const params = new URLSearchParams();
                 if (this.checkin) params.set('checkin', this.checkin);
                 if (this.checkout) params.set('checkout', this.checkout);
@@ -511,6 +539,17 @@ const properties = fullLayout ? fullProperties : compactProperties;
                 <option value={i}>{opt}</option>
               ))}
             </select>
+          </div>
+
+          <!-- Warning block for > 4 guests in Hostalet (compact layout) -->
+          <div x-show="showWarning && (parseInt(adults) + parseInt(children) > 4)" x-transition class="col-span-1 md:col-span-2 lg:col-span-12 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm rounded-lg flex items-start gap-3">
+            <Icon name="bi:exclamation-triangle" class="w-5 h-5 flex-shrink-0 text-amber-500 mt-0.5" />
+            <div>
+              {lang === 'es' && "La capacidad máxima por habitación en El Hostalet de Tossa es de 4 personas. Para grupos de 5 o más personas, por favor realiza una segunda reserva o contáctanos directamente para coordinar tu estancia."}
+              {lang === 'ca' && "La capacitat màxima per habitació a L'Hostalet de Tossa és de 4 persones. Per a grups de 5 o més persones, si us plau realitza una segona reserva o contacta'ns directament per coordinar la teva estada."}
+              {lang === 'en' && "The maximum capacity per room at Hostalet de Tossa is 4 people. For groups of 5 or more guests, please make a second booking or contact us directly to arrange your stay."}
+              {lang === 'fr' && "La capacité maximale par chambre à L'Hostalet de Tossa est de 4 personnes. Pour les groupes de 5 personnes ou plus, veuillez effectuer une deuxième réservation ou nous contacter directement pour organiser votre séjour."}
+            </div>
           </div>
 
           <!-- Submit -->

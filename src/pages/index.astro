@@ -10,6 +10,7 @@ import HeroSection from "@src/components/HeroSection.astro";
 import BlogCard from "@src/components/BlogCard.astro";
 import RestaurantSection from "@src/components/RestaurantSection.astro";
 import RoomsSection from "@src/components/RoomsSection.astro";
+import TourismPresenceSection from "@src/components/TourismPresenceSection.astro";
 import MainLayout from "@src/layouts/MainLayout.astro";
 import { getCollection } from "astro:content";
 import { useTranslations } from "@src/i18n/utils";
@@ -115,6 +116,11 @@ const blogBase = lang === 'es' ? '/blogs' : `/${lang}/blogs`;
       { src: "/images/habitacion-doble-berganti-tossa.webp", alt: "Habitación Bergantí" },
       { src: "/images/elberganti-restaurante-tapas-tossa-mar.webp", alt: "Restaurante Bergantí" },
     ]}
+  />
+
+  <TourismPresenceSection
+    title="Ens trobaràs a..."
+    subtitle="Col·laborem amb les principals plataformes i organismes turístics de la Costa Brava i Catalunya per donar-te la millor visibilitat i experiència."
   />
 
   <!-- Blog Preview Section -->

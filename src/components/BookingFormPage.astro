@@ -48,7 +48,15 @@ const d = dicts[lang] || dicts.es;
       checkout: '',
       adults: '2',
       children: '0',
+      showWarning: false,
       handleSubmit(e) {
+        const totalGuests = parseInt(this.adults) + parseInt(this.children);
+        if (totalGuests > 4) {
+          e.preventDefault();
+          this.showWarning = true;
+          return;
+        }
+        this.showWarning = false;
         e.preventDefault();
         const url = new URL('https://beds24.com/booking2.php');
         url.searchParams.set('propid', '328935');
@@ -99,6 +107,8 @@ const d = dicts[lang] || dicts.es;
         <option value="2">2 {d.adult}</option>
         <option value="3">3 {d.adult}</option>
         <option value="4">4 {d.adult}</option>
+        <option value="5">5 {d.adult}</option>
+        <option value="6">6 {d.adult}</option>
       </select>
     </div>
 
@@ -115,6 +125,17 @@ const d = dicts[lang] || dicts.es;
         <option value="2">2 {d.child}</option>
         <option value="3">3 {d.child}</option>
       </select>
+    </div>
+
+    <!-- Warning block for > 4 guests in Hostalet -->
+    <div x-show="showWarning && (parseInt(adults) + parseInt(children) > 4)" x-transition class="col-span-2 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm rounded-lg flex items-start gap-3">
+      <Icon name="bi:exclamation-triangle" class="w-5 h-5 flex-shrink-0 text-amber-500 mt-0.5" />
+      <div>
+        {lang === 'es' && "La capacidad máxima por habitación es de 4 personas. Para grupos de 5 o más personas, por favor realiza una segunda reserva o contáctanos directamente para coordinar tu estancia."}
+        {lang === 'ca' && "La capacitat màxima per habitació és de 4 persones. Per a grups de 5 o més persones, si us plau realitza una segona reserva o contacta'ns directament per coordinar la teva estada."}
+        {lang === 'en' && "The maximum capacity per room is 4 people. For groups of 5 or more guests, please make a second booking or contact us directly to arrange your stay."}
+        {lang === 'fr' && "La capacité maximale par chambre est de 4 personnes. Pour les groupes de 5 personnes ou plus, veuillez effectuer une deuxième réservation ou nous contacter directement pour organiser votre séjour."}
+      </div>
     </div>
 
     <!-- Submit -->
