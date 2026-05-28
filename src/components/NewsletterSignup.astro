@@ -12,36 +12,52 @@ const copy = {
     sub: "Recibe gratis los 5 rincones que solo los locales conocen + ofertas exclusivas de última hora.",
     placeholder: "Tu correo electrónico",
     cta: "Descargar guía gratis",
+    ctaLoading: "Enviando...",
     privacy: "Sin spam. Puedes darte de baja en cualquier momento.",
-    success: "¡Gracias! Revisa tu bandeja de entrada.",
+    errorInvalid: "Introduce un email válido.",
+    errorGeneric: "Algo salió mal. Inténtalo de nuevo.",
   },
   ca: {
     headline: "Guia secreta de Tossa de Mar",
     sub: "Rep de franc els 5 racons que només coneixen els locals + ofertes exclusives de darrera hora.",
     placeholder: "El teu correu electrònic",
     cta: "Descarregar guia gratuïta",
+    ctaLoading: "Enviant...",
     privacy: "Sense spam. Et pots donar de baixa en qualsevol moment.",
-    success: "Gràcies! Revisa la teva bústia d'entrada.",
+    errorInvalid: "Introdueix un email vàlid.",
+    errorGeneric: "Alguna cosa ha anat malament. Torna-ho a provar.",
   },
   en: {
     headline: "Secret Tossa de Mar Guide",
     sub: "Get free the 5 hidden spots only locals know + exclusive last-minute offers.",
     placeholder: "Your email address",
     cta: "Get free guide",
+    ctaLoading: "Sending...",
     privacy: "No spam. Unsubscribe anytime.",
-    success: "Thanks! Check your inbox.",
+    errorInvalid: "Please enter a valid email.",
+    errorGeneric: "Something went wrong. Please try again.",
   },
   fr: {
     headline: "Guide secret de Tossa de Mar",
     sub: "Recevez gratuitement les 5 recoins connus seulement des locaux + offres exclusives de dernière minute.",
     placeholder: "Votre adresse e-mail",
     cta: "Télécharger le guide gratuit",
+    ctaLoading: "Envoi en cours...",
     privacy: "Pas de spam. Vous pouvez vous désinscrire à tout moment.",
-    success: "Merci ! Vérifiez votre boîte de réception.",
+    errorInvalid: "Veuillez entrer un email valide.",
+    errorGeneric: "Une erreur s'est produite. Veuillez réessayer.",
   },
 };
 
 const t = copy[lang];
+
+const successUrls = {
+  es: "/guia-enviada/",
+  ca: "/ca/guia-enviada/",
+  en: "/en/guide-sent/",
+  fr: "/fr/guide-envoyee/",
+};
+const successUrl = successUrls[lang];
 
 const wrapperClasses =
   variant === "box"
@@ -49,7 +65,7 @@ const wrapperClasses =
     : "border-t border-primary/10 pt-8";
 ---
 
-<div class={wrapperClasses}>
+<div class={wrapperClasses} data-newsletter-form data-lang={lang} data-success={successUrl}>
   <h3 class="font-heading text-xl sm:text-2xl text-primary-dark mb-2">
     {t.headline}
   </h3>
@@ -57,23 +73,15 @@ const wrapperClasses =
     {t.sub}
   </p>
 
-  <form
-    name={`newsletter-${lang}`}
-    method="POST"
-    data-netlify="true"
-    netlify-honeypot="bot-field"
-    class="flex flex-col sm:flex-row gap-3"
-  >
-    <p class="hidden">
-      <label>
-        Don't fill this out if you're human:
-        <input name="bot-field" />
-      </label>
-    </p>
-
-    <input type="hidden" name="form-name" value={`newsletter-${lang}`} />
-    <input type="hidden" name="language" value={lang} />
-
+  <form class="flex flex-col sm:flex-row gap-3" novalidate>
+    <input
+      type="text"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="absolute opacity-0 pointer-events-none w-0 h-0"
+    />
     <input
       type="email"
       name="email"
@@ -84,13 +92,95 @@ const wrapperClasses =
 
     <button
       type="submit"
-      class="bg-primary hover:bg-primary-dark text-white font-medium px-6 py-3 rounded-lg text-sm transition-colors whitespace-nowrap"
+      class="bg-primary hover:bg-primary-dark text-white font-medium px-6 py-3 rounded-lg text-sm transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
     >
-      {t.cta}
+      <span class="btn-text">{t.cta}</span>
+      <span class="btn-loading hidden">{t.ctaLoading}</span>
     </button>
   </form>
 
   <p class="text-xs text-gray-400 mt-3">
     {t.privacy}
   </p>
+
+  <p class="text-sm text-red-600 mt-2 hidden" data-error-msg></p>
 </div>
+
+<script>
+  (function () {
+    const containers = document.querySelectorAll('[data-newsletter-form]');
+
+    containers.forEach((container) => {
+      const form = container.querySelector('form');
+      const input = form.querySelector('input[name="email"]');
+      const btn = form.querySelector('button[type="submit"]');
+      const btnText = btn.querySelector('.btn-text');
+      const btnLoading = btn.querySelector('.btn-loading');
+      const errorMsg = container.querySelector('[data-error-msg]');
+      const lang = container.dataset.lang || 'es';
+      const successUrl = container.dataset.success || '/guia-enviada/';
+
+      const messages = {
+        es: { invalid: 'Introduce un email válido.', generic: 'Algo salió mal. Inténtalo de nuevo.' },
+        ca: { invalid: 'Introdueix un email vàlid.', generic: 'Alguna cosa ha anat malament. Torna-ho a provar.' },
+        en: { invalid: 'Please enter a valid email.', generic: 'Something went wrong. Please try again.' },
+        fr: { invalid: 'Veuillez entrer un email valide.', generic: 'Une erreur s\'est produite. Veuillez réessayer.' },
+      };
+      const t = messages[lang] || messages.es;
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function setLoading(loading) {
+        btn.disabled = loading;
+        btnText.classList.toggle('hidden', loading);
+        btnLoading.classList.toggle('hidden', !loading);
+      }
+
+      function showError(msg) {
+        errorMsg.textContent = msg;
+        errorMsg.classList.remove('hidden');
+      }
+
+      function hideError() {
+        errorMsg.classList.add('hidden');
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideError();
+
+        const email = input.value.trim();
+        const honeypot = form.querySelector('input[name="website"]')?.value || '';
+
+        if (!isValidEmail(email)) {
+          showError(t.invalid);
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          const res = await fetch('/.netlify/functions/send-newsletter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, lang, honeypot }),
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (res.ok && data.success) {
+            window.location.href = successUrl;
+          } else {
+            showError(data.error || t.generic);
+            setLoading(false);
+          }
+        } catch (err) {
+          showError(t.generic);
+          setLoading(false);
+        }
+      });
+    });
+  })();
+</script>
