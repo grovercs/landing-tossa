@@ -14,16 +14,16 @@ export interface MenuItem {
 }
 
 // Map slugs depending on language
-const getLocalizedPath = (base: 'contacto' | 'reservas' | 'blogs') => {
+const getLocalizedPath = (base: 'contacto' | 'reservas' | 'blog') => {
   if (lang === 'es') return `/${base}`;
-  if (lang === 'ca') return `/ca/${base === 'contacto' ? 'contacte' : base === 'reservas' ? 'reserves' : 'blogs'}`;
-  if (lang === 'en') return `/en/${base === 'contacto' ? 'contact' : base === 'reservas' ? 'booking' : 'blogs'}`;
-  if (lang === 'fr') return `/fr/${base === 'contacto' ? 'contact' : base === 'reservas' ? 'reservations' : 'blogs'}`;
+  if (lang === 'ca') return `/ca/${base === 'contacto' ? 'contacte' : base === 'reservas' ? 'reserves' : 'blog'}`;
+  if (lang === 'en') return `/en/${base === 'contacto' ? 'contact' : base === 'reservas' ? 'booking' : 'blog'}`;
+  if (lang === 'fr') return `/fr/${base === 'contacto' ? 'contact' : base === 'reservas' ? 'reservations' : 'blog'}`;
   return `/${base}`;
 };
 
 const menu: MenuItem[] = [
-  { label: t('nav.blog'), href: getLocalizedPath('blogs') },
+  { label: t('nav.blog'), href: getLocalizedPath('blog') },
   { label: t('nav.contact'), href: getLocalizedPath('contacto') },
   { label: t('nav.book'), href: getLocalizedPath('reservas'), isButton: true },
 ];

@@ -16,7 +16,7 @@ function getUrlForLang(targetLang: string) {
   let rest = segments.slice(1).join('/');
 
   // Translate blog post slugs between languages
-  if (basePage === 'blogs' && rest) {
+  if ((basePage === 'blog' || basePage === 'blogs') && rest) {
     rest = getLocalizedBlogSlug(rest, targetLang);
   }
 
