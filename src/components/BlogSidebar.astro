@@ -90,7 +90,7 @@ const waShare = `https://wa.me/?text=${encodeURIComponent(currentUrl)}`;
       <div class="space-y-4">
         {related.map(post => {
           const slug = post.id.split('/').pop()?.replace(/\.mdx$/, '');
-          const url = lang === 'es' ? `/blogs/${slug}` : `/${lang}/blogs/${slug}`;
+          const url = lang === 'es' ? `/blog/${slug}` : `/${lang}/blog/${slug}`;
           return (
             <a href={url} class="flex gap-4 group">
               <img src={post.data.image} alt={post.data.title} class="w-20 h-20 object-cover rounded shadow-sm group-hover:opacity-80 transition" loading="lazy" />

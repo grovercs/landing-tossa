@@ -1,0 +1,4 @@
+/blogs/* /blog/:splat 301
+/ca/blogs/* /ca/blog/:splat 301
+/en/blogs/* /en/blog/:splat 301
+/fr/blogs/* /fr/blog/:splat 301

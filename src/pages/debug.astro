@@ -3,6 +3,9 @@ import { getCollection } from "astro:content";
 const allPosts = await getCollection("blog");
 ---
 <html>
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
 <body>
   <h1>Debug Blog Posts</h1>
   <ul>

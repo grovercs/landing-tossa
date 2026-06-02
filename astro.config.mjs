@@ -40,7 +40,40 @@ export default defineConfig({
     lastmod: new Date(),
     changefreq: 'weekly',
     priority: 0.7,
-    filter: (page) => !page.includes('/debug/'),
+    filter: (page) => {
+      // Exclude internal/dev pages
+      if (page.includes('/debug/')) return false;
+      if (page.includes('/documentation/')) return false;
+
+      // Exclude about page (deleted)
+      if (page.includes('/about/')) return false;
+
+      // Exclude pagination duplicates
+      if (page.includes('/rooms/page/1/')) return false;
+
+      // Exclude transactional/confirmation pages
+      const noindexPages = [
+        '/error-reserva/',
+        '/gracias-reserva/',
+        '/guia-enviada/',
+        '/reserva-enviada/',
+        '/ca/error-reserva/',
+        '/ca/gracies-reserva/',
+        '/ca/guia-enviada/',
+        '/ca/reserva-enviada/',
+        '/en/booking-error/',
+        '/en/booking-sent/',
+        '/en/guide-sent/',
+        '/en/thank-you-booking/',
+        '/fr/erreur-reservation/',
+        '/fr/guide-envoyee/',
+        '/fr/merci-reservation/',
+        '/fr/reservation-envoyee/',
+      ];
+      if (noindexPages.some(p => page.includes(p))) return false;
+
+      return true;
+    },
   })],
 
   vite: {

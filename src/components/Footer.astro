@@ -41,11 +41,11 @@ const getLocalizedContact = () => {
 };
 
 const getLocalizedBlog = () => {
-  if (lang === 'es') return `/blogs`;
-  if (lang === 'ca') return `/ca/blogs`;
-  if (lang === 'en') return `/en/blogs`;
-  if (lang === 'fr') return `/fr/blogs`;
-  return `/blogs`;
+  if (lang === 'es') return `/blog`;
+  if (lang === 'ca') return `/ca/blog`;
+  if (lang === 'en') return `/en/blog`;
+  if (lang === 'fr') return `/fr/blog`;
+  return `/blog`;
 };
 
 const hostaletLabel = lang === 'ca' || lang === 'fr' ? "L'Hostalet de Tossa" : lang === 'es' ? "El Hostalet de Tossa" : "Hostalet de Tossa";

@@ -1,0 +1,154 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+import DirectBookingBanner from "@src/components/DirectBookingBanner.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection, render } from "astro:content";
+import { useTranslations } from "@src/i18n/utils";
+import BlogSidebar from "@src/components/BlogSidebar.astro";
+import GuestReviews from "@src/components/GuestReviews.astro";
+import GiscusComments from "@src/components/GiscusComments.astro";
+import NewsletterSignup from "@src/components/NewsletterSignup.astro";
+
+// ======================================
+//  STATIC PATHS dynamic route
+// ======================================
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ id }) => id.startsWith("en/"));
+  return posts.map((post) => ({
+    params: { slug: post.id.replace("en/", "").replace(/\.mdx$/, "") },
+  }));
+}
+
+// ======================================
+//  GET POST DATA
+// ======================================
+const { slug } = Astro.params;
+const lang = "en";
+const t = useTranslations(lang);
+
+const allPostsForEntry = await getCollection("blog", ({ id }) => id.startsWith("en/"));
+const post = allPostsForEntry.find(p => p.id.replace("en/", "").replace(/\.mdx$/, "") === slug);
+if (!post) throw new Error(`Blog post not found: ${slug}`);
+
+const { Content } = await render(post);
+
+// All posts
+const allPosts = await getCollection("blog", ({ id }) => id.startsWith("en/"));
+
+// Related posts
+const related = allPosts
+  .filter((p) => p.id.replace("en/", "").replace(/\.mdx$/, "") !== slug)
+  .sort((a, b) => {
+    const dateA = new Date(a.data.date);
+    const dateB = new Date(b.data.date);
+    return dateB.valueOf() - dateA.valueOf();
+  })
+  .slice(0, 3);
+
+// Safety fallback
+const tags = Array.isArray(post.data.tags) ? post.data.tags : [];
+const cover = post.data.image ?? "/images/tossa-de-mar-costa-brava-1.webp";
+
+// Date formatting
+const postDate =
+  typeof post.data.date === "string"
+    ? new Date(post.data.date)
+    : post.data.date;
+
+const formattedDate = new Intl.DateTimeFormat(lang, {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+}).format(postDate);
+
+const currentUrl = Astro.url.href;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.data.title,
+  "image": [
+    `https://alojamientostossademar.com${cover}`
+  ],
+  "datePublished": post.data.date,
+  "author": [{
+    "@type": "Organization",
+    "name": post.data.author,
+    "url": "https://alojamientostossademar.com"
+  }],
+  "description": post.data.description,
+  "keywords": post.data.keywords ? post.data.keywords.join(", ") : undefined
+};
+---
+
+<MainLayout 
+  title={`${post.data.title} | Hostalet de Tossa & El Bergantí`}
+  description={post.data.description}
+  image={cover}
+  type="article"
+  schema={schema}
+>
+  <!-- HERO SECTION -->
+  <div class="relative py-12 md:py-20 flex items-center overflow-x-hidden mt-10 md:mt-0">
+    <div class="max-w-7xl mx-auto px-4 relative z-10 text-center">
+      <h1 class="font-heading text-4xl md:text-5xl text-primary-dark mb-4">
+        {post.data.title}
+      </h1>
+      
+      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-lg text-gray-600 mb-8">
+        <span class="flex items-center gap-2">
+          <Icon name="bi:calendar-event" /> {formattedDate}
+        </span>
+        <span class="flex items-center gap-2">
+          <Icon name="bi:person" /> {post.data.author}
+        </span>
+        <span class="flex items-center gap-2">
+          <Icon name="bi:clock" /> {post.data.readingTime} min
+        </span>
+        {tags.length > 0 && (
+          <span class="flex items-center gap-2">
+            <Icon name="bi:tag" /> {tags[0]}
+          </span>
+        )}
+      </div>
+
+      <img
+        src={cover}
+        alt={post.data.title}
+        class="w-full max-w-5xl mx-auto h-auto md:h-[500px] object-cover rounded-tl-3xl rounded-br-3xl shadow-lg"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT & SIDEBAR -->
+  <div class="py-12 bg-white overflow-x-hidden">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      
+      <!-- Left Column: Content & Comments -->
+      <div class="lg:col-span-2">
+        <div class="post-content prose prose-lg prose-green max-w-none mb-16">
+          <Content />
+        </div>
+
+        <DirectBookingBanner />
+
+        <GuestReviews lang={lang} />
+
+        <NewsletterSignup lang="en" />
+
+        <!-- GiscusComments disabled: upstream 403 error (giscus/giscus#1269) -->
+        <!-- <GiscusComments lang={lang} /> -->
+      </div>
+
+      <!-- Right Column: Sidebar -->
+      <div class="lg:col-span-1">
+        <BlogSidebar related={related} lang={lang} currentUrl={currentUrl} />
+      </div>
+
+    </div>
+  </div>
+
+</MainLayout>

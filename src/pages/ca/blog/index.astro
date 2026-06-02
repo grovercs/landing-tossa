@@ -1,0 +1,60 @@
+---
+import MainLayout from "@src/layouts/MainLayout.astro";
+import BlogCard from "@src/components/BlogCard.astro";
+import Pagination from "@src/components/Pagination.astro";
+import HeadingPageSm from "@src/components/HeadingPageSm.astro";
+import { useTranslations } from "@src/i18n/utils";
+import { getCollection } from "astro:content";
+
+const lang = "ca";
+const t = useTranslations(lang);
+
+// get mdx files
+const allPosts = await getCollection("blog", ({ id }) => id.startsWith("ca/"));
+
+// Sort posts by date (newest first)
+const posts = allPosts.sort((a, b) => {
+  const dateA = typeof a.data.date === "string" ? new Date(a.data.date) : a.data.date;
+  const dateB = typeof b.data.date === "string" ? new Date(b.data.date) : b.data.date;
+  return dateB.valueOf() - dateA.valueOf();
+});
+
+// Pagination settings
+const maxPerPage = 9;
+const currentPage = 1;
+const totalPages = Math.ceil(posts.length / maxPerPage);
+const visiblePosts = posts.slice(0, maxPerPage);
+---
+
+<MainLayout 
+  title="Blog i Guia Local | Hostalet de Tossa & El Bergantí"
+  description="Descobreix què fer a Tossa de Mar, on menjar i la nostra guia local amb consells i rutes per gaudir de la teva estada."
+>
+  <HeadingPageSm
+    title="Blog i Guia Local"
+    subtitle="Descobreix què fer, on menjar i els secrets millor guardats de Tossa de Mar."
+    bgImage="/images/tossa-de-mar-costa-brava-1.webp"
+  />
+
+  <section id="blogs" class="py-16 bg-skin-light overflow-x-hidden min-h-[50vh]">
+    <div class="max-w-7xl mx-auto px-4">
+      {posts.length === 0 ? (
+        <div class="text-center text-gray-500 py-20">
+          <p class="text-xl">Estem preparant nous articles per a tu. Torna aviat!</p>
+        </div>
+      ) : (
+        <>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {visiblePosts.map((post) => <BlogCard post={post} lang={lang} />)}
+          </div>
+
+          {totalPages > 1 && (
+            <div class="flex justify-center mt-16">
+              <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl={`/ca/blog`} />
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  </section>
+</MainLayout>

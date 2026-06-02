@@ -24,7 +24,7 @@ const formattedDate = new Intl.DateTimeFormat(lang, {
   day: "numeric",
 }).format(postDate);
 
-const url = lang === 'es' ? `/blogs/${baseSlug}/` : `/${lang}/blogs/${baseSlug}/`;
+const url = lang === 'es' ? `/blog/${baseSlug}/` : `/${lang}/blog/${baseSlug}/`;
 
 const translations = {
   es: { minRead: "Min de lectura", readMore: "Leer Más" },

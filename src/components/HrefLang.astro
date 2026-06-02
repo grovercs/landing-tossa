@@ -1,0 +1,56 @@
+---
+import { languages } from '../i18n/ui';
+import { getLocalizedBlogSlug } from '../i18n/slugMap';
+
+const currentPath = Astro.url.pathname;
+
+function getUrlForLang(targetLang: string) {
+  let segments = currentPath.split('/').filter(Boolean);
+
+  // If the first segment is an existing language code, remove it.
+  if (segments.length > 0 && Object.keys(languages).includes(segments[0])) {
+    segments.shift();
+  }
+
+  let basePage = segments[0] || '';
+  let rest = segments.slice(1).join('/');
+
+  // Translate blog post slugs between languages
+  if (basePage === 'blogs' && rest) {
+    rest = getLocalizedBlogSlug(rest, targetLang);
+  }
+
+  let trailing = rest ? '/' + rest + '/' : (basePage ? '/' : '');
+
+  if (targetLang === 'es') {
+    if (basePage === 'contacte' || basePage === 'contact') basePage = 'contacto';
+    if (basePage === 'reserves' || basePage === 'booking' || basePage === 'reservations') basePage = 'reservas';
+    return 'https://alojamientostossademar.com/' + (basePage ? basePage + trailing : '');
+  }
+
+  if (targetLang === 'ca') {
+    if (basePage === 'contacto' || basePage === 'contact') basePage = 'contacte';
+    if (basePage === 'reservas' || basePage === 'booking' || basePage === 'reservations') basePage = 'reserves';
+    return 'https://alojamientostossademar.com/ca/' + (basePage ? basePage + trailing : '');
+  }
+
+  if (targetLang === 'en') {
+    if (basePage === 'contacto' || basePage === 'contacte') basePage = 'contact';
+    if (basePage === 'reservas' || basePage === 'reserves' || basePage === 'reservations') basePage = 'booking';
+    return 'https://alojamientostossademar.com/en/' + (basePage ? basePage + trailing : '');
+  }
+
+  if (targetLang === 'fr') {
+    if (basePage === 'contacto' || basePage === 'contacte' || basePage === 'contact') basePage = 'contact';
+    if (basePage === 'reservas' || basePage === 'reserves' || basePage === 'booking') basePage = 'reservations';
+    return 'https://alojamientostossademar.com/fr/' + (basePage ? basePage + trailing : '');
+  }
+
+  return 'https://alojamientostossademar.com/';
+}
+---
+
+<link rel="alternate" hreflang="x-default" href={getUrlForLang('es')} />
+{Object.keys(languages).map((locale) => (
+  <link rel="alternate" hreflang={locale} href={getUrlForLang(locale)} />
+))}

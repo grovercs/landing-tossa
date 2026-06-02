@@ -16,7 +16,7 @@ const updatedText = entry?.data?.updated
 ---
 
 {entry ? (
-  <MainLayout title={entry.data.title}>
+  <MainLayout title={entry.data.title} robots="noindex, follow">
     <HeadingPageSm
         title="Documentation"
         subtitle={updatedText}
