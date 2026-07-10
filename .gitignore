@@ -12,6 +12,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+chrome_error.log
+
+# debug y capturas de Beds24 (material de trabajo local, no del sitio)
+scratch/
+__pycache__/
+*.pyc
 
 # environment variables
 .env
