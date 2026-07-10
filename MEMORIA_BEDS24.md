@@ -96,4 +96,56 @@ Se implementó una validación reactiva en el frontend utilizando **Alpine.js** 
     *   Se amplió el selector del formulario específico de la habitación (que estaba limitado a 4) hasta **6 adultos** únicamente para alinearlo con el formulario principal y asegurar que salte la advertencia instructiva en caso de excederse.
 
 ---
+
+## 6. Actualizaciones y Ajustes de Tarifas y Restricciones (28 de Mayo de 2026)
+
+Se realizaron los siguientes ajustes en Beds24 y Cloudbeds para Hostalet de Tossa y El Bergantí respectivamente:
+
+### A. Alineación de Tarifas y Precios (Beds24 - Hostalet de Tossa)
+*   **Habitaciones Afectadas:** Habitación Triple (`682354`) y Habitación Familiar (`682355`).
+*   **Lógica Aplicada:** Precios basados en el precio diario de la Habitación Doble con Balcón (`682341`):
+    *   **Triple:** Precio de la Doble Balcón + 25% (redondeado a enteros).
+    *   **Familiar:** Precio de la Doble Balcón + 50% (redondeado a enteros).
+*   **Periodo de Aplicación:** Del 28 de Mayo al 30 de Septiembre de 2026 (toda la temporada alta).
+*   **Estado:** Completado y verificado con éxito vía inyección AJAX.
+
+### B. Eliminación de Estancia Mínima de 2 Noches en Sábados (Beds24 y Cloudbeds)
+*   **Objetivo:** Permitir reservas de **1 sola noche** los sábados del periodo de mayo y junio.
+*   **Periodo Afectado:** Sábados desde el 28 de Mayo hasta el 30 de Junio de 2026 (afectando a los sábados: 30 de mayo, 6 de junio, 13 de junio, 20 de junio y 27 de junio).
+*   **Beds24 (Hostalet de Tossa):**
+    *   Se aplicó de forma masiva a todas las categorías de habitación mediante inyección de red directa (`api/ajax/calendar.php`), estableciendo el valor de la celda de estancia mínima a **1** para dichos sábados.
+    *   **Estado:** Completado y verificado en la cuadrícula del calendario.
+*   **Cloudbeds (El Bergantí):**
+    *   Se aplicó a todas las habitaciones y tarifas en la Matriz de disponibilidad (`#/availability`), estableciendo el ajuste de Estancia Mínima a **1** para los sábados del periodo.
+    *   **Estado:** Completado y verificado en la matriz.
+
+---
+
+## 7. Conexión de Canal Booking y Configuración de Tarifa No Reembolsable (29 de Mayo de 2026)
+
+Se completó la conexión del Channel Manager de Beds24 con la extranet de Booking.com y se alinearon las restricciones de la tarifa No Reembolsable (Offer 2) con el canal.
+
+### A. Mapeo y Habilitación de Habitaciones en Beds24 (Booking.com XML)
+*   **Hotel ID de Booking.com:** `543089` (L'Hostalet de Tossa)
+*   **Mapeo de Habitaciones:** Se introdujeron las IDs exactas en `Channel Manager > Booking.com > Mapping` para las categorías del hotel:
+    *   **Habitación Individual con Balcón (682346):** `54308901`
+    *   **Habitación Doble Estándar (682348):** `54308908`
+    *   **Habitación Doble con Balcón (682341):** `54308902`
+    *   **Habitación Doble Superior con Balcón (682340):** `54308909` (Preexistente)
+    *   **Habitación Triple (682354):** `54308910` (Preexistente)
+    *   **Habitación Familiar (682355):** `54308911` (Preexistente)
+    *   *Nota: La **Habitación Doble con Dos Camas (682350)** se configuró en **Desactivado** y sin ID de Booking, al tratarse de un mapeo interno.*
+*   **Activación de la Sincronización:** Se cambió el estado de `Habilitar` de `Desactivado` a `Enabled` (Sincronización completa en ambas direcciones, código `7` en la API de Beds24) para las 6 categorías mapeadas.
+*   **Estado:** Guardado y verificado con éxito. Se forzó una sincronización inicial ("Actualizar") en la Habitación Doble con Balcón (`682341`) para verificar la comunicación con Booking.com sin errores.
+
+### B. Restricciones de Tarifa No Reembolsable (Offer 2)
+*   **Objetivo:** Replicar en el motor de reservas directo de Beds24 las restricciones de la tarifa `ANTICIPADA NO DESAYUNO` (No Reembolsable) de Booking.com para alinear las ventas directas.
+*   **Configuración Aplicada:**
+    *   Se editaron las reglas de precios diarios (**Precios > Daily Price Rules**) de la tarifa `No Reembolsable` (regla número `2`, `pricenum=2`) para las 7 categorías de habitación de Beds24.
+    *   **Estancia Mínima (Min Stay):** Establecido a **4 noches** (`ratedatems2 = '4'`).
+    *   **Release (Antelación de reserva):** Establecido a **15 días** de antelación mínima antes del check-in (`ratedateinadvanceend2 = '15'`).
+*   **Estado:** Completado y verificado en la cuadrícula de reglas de Beds24 para todas las habitaciones.
+
+---
 *Este documento es de uso interno y se puede actualizar a medida que se realicen nuevos cambios en el motor.*
+
