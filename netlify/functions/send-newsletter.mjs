@@ -22,7 +22,7 @@ const ALLOWED_ORIGINS = [
   "http://localhost:8888",
 ];
 
-const PDF_URL = "https://alojamientostossademar.com/downloads/5%20Rincones%20Secretos%20de%20Tossa%20de%20Mar.pdf";
+const PDF_URL = "https://alojamientostossademar.com/downloads/guia-rincones-secretos-tossa.pdf";
 
 // Rate limiting en memoria (se resetea en cold start, pero bloquea spam masivo)
 const RATE_LIMIT_MS = 60_000; // 1 minuto entre intentos por email
