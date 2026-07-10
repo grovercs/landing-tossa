@@ -1,0 +1,31 @@
+---
+import CloudbedsBooking from "@src/components/CloudbedsBooking.astro";
+import HeadingPage from "@src/components/HeadingPage.astro";
+import NotFoundSection from "@src/components/NotFoundSection.astro";
+import MainLayout from "@src/layouts/MainLayout.astro";
+---
+
+<MainLayout title="Réservez votre hébergement à Tossa de Mar - Costa Brava" description="Assurez votre séjour parfait à El Bergantí ou Hostalet de Tossa en remplissant le formulaire de réservation.">
+    <HeadingPage
+        title="Réserver un hébergement"
+        subtitle="Assurez votre séjour idéal au cœur de la Costa Brava en remplissant le formulaire ci-dessous."
+        background="/images/tossa-de-mar-costa-brava-1.webp"
+        />
+    <CloudbedsBooking
+        fullLayout={true}
+        infoTitle="Informations de Réservation"
+        infoItems={[
+            { icon: "bi:clock", text: "Enregistrement à partir de 14h00" },
+            { icon: "bi:clock-history", text: "Départ avant 12h00" },
+            { icon: "bi:shield-check", text: "Annulation gratuite jusqu'à 24 heures avant l'arrivée" },
+            { icon: "bi:cup-hot", text: "Restaurants propres dans les hébergements" },
+            { icon: "bi:wifi", text: "Wi-Fi haut débit gratuit" },
+        ]}
+        helpTitle="Besoin d'aide ?"
+        helpDescription="Notre équipe de réception est prête à vous aider avec toute demande spéciale."
+        helpItems={[
+            { icon: "bi:telephone", text: "El Bergantí : +34 682 04 79 50" },
+            { icon: "bi:telephone", text: "L'Hostalet : +34 634 39 83 57" },
+        ]}
+    />
+</MainLayout>

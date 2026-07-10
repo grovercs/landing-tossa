@@ -1,0 +1,569 @@
+---
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "../i18n/utils";
+import BookingInfo from "./BookingInfo.astro";
+import HelpCard from "./HelpCard.astro";
+
+export interface Props {
+  /** When true, renders the full two-column page layout. When false, renders a compact search bar. */
+  fullLayout?: boolean;
+  infoTitle?: string;
+  infoItems?: { icon: string; text: string }[];
+  helpTitle?: string;
+  helpDescription?: string;
+  helpItems?: { icon: string; text: string }[];
+}
+
+const {
+  fullLayout = false,
+  infoTitle = "Información de Reserva",
+  infoItems = [
+    { icon: "bi:clock", text: "Check-in a partir de las 14:00 h" },
+    { icon: "bi:clock-history", text: "Check-out antes de las 12:00 h" },
+    { icon: "bi:shield-check", text: "Cancelación gratuita hasta 24 horas antes de la llegada" },
+    { icon: "bi:cup-hot", text: "Restaurantes propios en los alojamientos" },
+    { icon: "bi:wifi", text: "Wi-Fi gratuito de alta velocidad" },
+  ],
+  helpTitle = "¿Necesitas Ayuda?",
+  helpDescription = "Nuestro equipo de recepción está listo para ayudarte con cualquier petición especial.",
+  helpItems = [
+    { icon: "bi:telephone", text: "El Bergantí: +34 682 04 79 50" },
+    { icon: "bi:telephone", text: "El Hostalet: +34 634 39 83 57" },
+  ],
+} = Astro.props;
+
+const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
+const t = useTranslations(lang);
+
+// Translated dictionaries for adults/children labels
+const dicts = {
+  es: {
+    adult1: "1 Adulto", adult: "Adultos", child0: "0 Niños", child1: "1 Niño", child: "Niños",
+    propertyLabel: "Alojamiento",
+    propertyAny: "Cualquiera",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "El Hostalet de Tossa",
+    checkinLabel: "Fecha Entrada",
+    checkoutLabel: "Fecha Salida",
+    guestsLabel: "Huéspedes",
+    adultsLabel: "Adultos",
+    childrenLabel: "Niños",
+    checkBtn: "Comprobar Disponibilidad",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    beds24Url: "https://beds24.com/booking2.php?propid=328935&lang=es",
+    successUrl: "/reserva-enviada/",
+    propertyField: "Propiedad",
+    datesField: "Fechas",
+    guestsField: "Huéspedes",
+    nameField: "Nombre",
+    emailField: "Email",
+    phoneField: "Teléfono",
+    notesField: "Notas",
+    submitBtn: "Enviar Solicitud",
+  },
+  ca: {
+    adult1: "1 Adult", adult: "Adults", child0: "0 Nens", child1: "1 Nen", child: "Nens",
+    propertyLabel: "Allotjament",
+    propertyAny: "Qualsevol",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "L'Hostalet de Tossa",
+    checkinLabel: "Data Entrada",
+    checkoutLabel: "Data Sortida",
+    guestsLabel: "Hostes",
+    adultsLabel: "Adults",
+    childrenLabel: "Nens",
+    checkBtn: "Comprovar Disponibilitat",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    beds24Url: "https://beds24.com/booking2.php?propid=328935&lang=ca",
+    successUrl: "/ca/reserva-enviada/",
+    propertyField: "Propietat",
+    datesField: "Dates",
+    guestsField: "Hostes",
+    nameField: "Nom",
+    emailField: "Email",
+    phoneField: "Telèfon",
+    notesField: "Notes",
+    submitBtn: "Enviar Sol·licitud",
+  },
+  en: {
+    adult1: "1 Adult", adult: "Adults", child0: "0 Children", child1: "1 Child", child: "Children",
+    propertyLabel: "Accommodation",
+    propertyAny: "Any",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "Hostalet de Tossa",
+    checkinLabel: "Check-in",
+    checkoutLabel: "Check-out",
+    guestsLabel: "Guests",
+    adultsLabel: "Adults",
+    childrenLabel: "Children",
+    checkBtn: "Check Availability",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    beds24Url: "https://beds24.com/booking2.php?propid=328935&lang=en",
+    successUrl: "/en/booking-sent/",
+    propertyField: "Property",
+    datesField: "Dates",
+    guestsField: "Guests",
+    nameField: "Name",
+    emailField: "Email",
+    phoneField: "Phone",
+    notesField: "Notes",
+    submitBtn: "Send Request",
+  },
+  fr: {
+    adult1: "1 Adulte", adult: "Adultes", child0: "0 Enfants", child1: "1 Enfant", child: "Enfants",
+    propertyLabel: "Hébergement",
+    propertyAny: "Tous",
+    propertyBerganti: "El Bergantí",
+    propertyHostalet: "L'Hostalet de Tossa",
+    checkinLabel: "Date d'arrivée",
+    checkoutLabel: "Date de départ",
+    guestsLabel: "Voyageurs",
+    adultsLabel: "Adultes",
+    childrenLabel: "Enfants",
+    checkBtn: "Vérifier la Disponibilité",
+    cloudbedsUrl: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+    beds24Url: "https://beds24.com/booking2.php?propid=328935&lang=fr",
+    successUrl: "/fr/reservation-envoyee/",
+    propertyField: "Propriété",
+    datesField: "Dates",
+    guestsField: "Voyageurs",
+    nameField: "Nom",
+    emailField: "Email",
+    phoneField: "Téléphone",
+    notesField: "Notes",
+    submitBtn: "Envoyer la Demande",
+  },
+};
+
+const d = dicts[lang] || dicts.es;
+const esc = (s: string) => s.replace(/'/g, "\\'");
+
+const bookingPageUrls = {
+  es: '/reservas/',
+  ca: '/ca/reserves/',
+  en: '/en/booking/',
+  fr: '/fr/reservations/',
+};
+const bookingPageUrl = bookingPageUrls[lang] || bookingPageUrls.es;
+
+const roomPageUrls = {
+  es: '/rooms/hostalet/',
+  ca: '/ca/rooms/hostalet/',
+  en: '/en/rooms/hostalet/',
+  fr: '/fr/rooms/hostalet/',
+};
+const hostaletRoomUrl = roomPageUrls[lang] || roomPageUrls.es;
+
+// Options
+const adultsOptions = [d.adult1, `2 ${d.adult}`, `3 ${d.adult}`, `4 ${d.adult}`, `5 ${d.adult}`, `6 ${d.adult}`];
+const childrenOptions = [d.child0, d.child1, `2 ${d.child}`, `3 ${d.child}`];
+const compactProperties = [d.propertyAny, d.propertyHostalet, d.propertyBerganti];
+const fullProperties = [d.propertyHostalet, d.propertyBerganti];
+const properties = fullLayout ? fullProperties : compactProperties;
+---
+
+{fullLayout ? (
+  <!-- FULL PAGE LAYOUT -->
+  <section id="booking" class="py-16 relative bg-white overflow-x-hidden">
+    <div class="max-w-7xl relative mx-auto px-4">
+      <div class="grid lg:grid-cols-2 gap-8 items-start">
+
+        <!-- LEFT SIDE -->
+        <div class="max-lg:order-2 space-y-8">
+          <BookingInfo title={infoTitle} items={infoItems} />
+          <HelpCard title={helpTitle} description={helpDescription} items={helpItems} />
+        </div>
+
+        <!-- RIGHT SIDE: Booking Form with Netlify + Cloudbeds fallback -->
+        <div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg">
+          <script is:inline define:vars={{ cloudbedsUrl: d.cloudbedsUrl, beds24Url: d.beds24Url, propertyHostalet: d.propertyHostalet, propertyBerganti: d.propertyBerganti }}>
+            window.getBookingData = function() {
+              const params = new URLSearchParams(window.location.search);
+              return {
+                property: (() => {
+                  const p = params.get('property');
+                  return p === propertyHostalet || p === propertyBerganti ? p : propertyHostalet;
+                })(),
+                checkin: params.get('checkin') || '',
+                checkout: params.get('checkout') || '',
+                adults: params.get('adults') || '2',
+                children: params.get('children') || '0',
+                showWarning: false,
+                isBerganti() { return this.property === propertyBerganti; },
+                isHostalet() { return this.property === propertyHostalet; },
+                handleSubmit(e) {
+                  const totalGuests = parseInt(this.adults) + parseInt(this.children);
+                  if (this.isHostalet() && totalGuests > 4) {
+                    e.preventDefault();
+                    this.showWarning = true;
+                    return;
+                  }
+                  this.showWarning = false;
+                  if (this.isBerganti()) {
+                    e.preventDefault();
+                    const url = new URL(cloudbedsUrl);
+                    if (this.checkin) url.searchParams.set('checkin', this.checkin);
+                    if (this.checkout) url.searchParams.set('checkout', this.checkout);
+                    url.searchParams.set('adults', this.adults);
+                    url.searchParams.set('children', this.children);
+                    window.open(url.toString(), '_blank');
+                  } else if (this.isHostalet() && beds24Url) {
+                    e.preventDefault();
+                    const url = new URL(beds24Url);
+                    if (this.checkin) {
+                      const [y, m, day] = this.checkin.split('-');
+                      url.searchParams.set('fdate_date', day);
+                      url.searchParams.set('fdate_monthyear', y + '-' + m);
+                    }
+                    if (this.checkout) {
+                      if (this.checkin) {
+                        const ci = new Date(this.checkin);
+                        const co = new Date(this.checkout);
+                        const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+                        if (numnight > 0) url.searchParams.set('numnight', numnight);
+                      }
+                    }
+                    url.searchParams.set('numadult', this.adults);
+                    url.searchParams.set('numchild', this.children);
+                    window.open(url.toString(), '_blank');
+                  }
+                }
+              };
+            };
+          </script>
+          <form
+            name="booking"
+            method="POST"
+            netlify
+            netlify-honeypot="bot-field"
+            action={d.successUrl}
+            x-data="getBookingData()"
+            x-on:submit="handleSubmit($event)"
+            class="grid grid-cols-2 gap-5"
+          >
+            <!-- Honeypot field for spam prevention -->
+            <p class="hidden">
+              <label>No llenes este campo: <input name="bot-field" /></label>
+            </p>
+
+            <!-- Hidden form name for Netlify -->
+            <input type="hidden" name="form-name" value="booking" />
+
+            <!-- Property Selector -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.propertyLabel}</label>
+              <select
+                name="property"
+                x-model="property"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {properties.map(p => <option value={p}>{p}</option>)}
+              </select>
+            </div>
+
+            <!-- Check-in -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.checkinLabel}</label>
+              <input
+                type="date"
+                name="checkin"
+                required
+                x-model="checkin"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Check-out -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.checkoutLabel}</label>
+              <input
+                type="date"
+                name="checkout"
+                required
+                x-model="checkout"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Adults -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.adultsLabel}</label>
+              <select
+                name="adults"
+                x-model="adults"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {adultsOptions.map((opt, i) => (
+                  <option value={i + 1}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Children -->
+            <div>
+              <label class="text-sm text-white mb-1 block">{d.childrenLabel}</label>
+              <select
+                name="children"
+                x-model="children"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {childrenOptions.map((opt, i) => (
+                  <option value={i}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Name -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.nameField}</label>
+              <input
+                type="text"
+                name="name"
+                required
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.emailField}</label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Phone -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.phoneField}</label>
+              <input
+                type="tel"
+                name="phone"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <!-- Notes -->
+            <div class="col-span-2">
+              <label class="text-sm text-white mb-1 block">{d.notesField}</label>
+              <textarea
+                name="notes"
+                rows="3"
+                class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+              ></textarea>
+            </div>
+
+            <!-- Warning block for > 4 guests in Hostalet -->
+            <div x-show="showWarning && (parseInt(adults) + parseInt(children) > 4)" x-transition class="col-span-2 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm rounded-lg flex items-start gap-3">
+              <Icon name="bi:exclamation-triangle" class="w-5 h-5 flex-shrink-0 text-amber-500 mt-0.5" />
+              <div>
+                {lang === 'es' && "La capacidad máxima por habitación es de 4 personas. Para grupos de 5 o más personas, por favor realiza una segunda reserva o contáctanos directamente para coordinar tu estancia."}
+                {lang === 'ca' && "La capacitat màxima per habitació és de 4 persones. Per a grups de 5 o més persones, si us plau realitza una segona reserva o contacta'ns directament per coordinar la teva estada."}
+                {lang === 'en' && "The maximum capacity per room is 4 people. For groups of 5 or more guests, please make a second booking or contact us directly to arrange your stay."}
+                {lang === 'fr' && "La capacité maximale par chambre est de 4 personnes. Pour les groupes de 5 personnes ou plus, veuillez effectuer une deuxième réservation ou nous contacter directement pour organiser votre séjour."}
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-span-2">
+              <button
+                type="submit"
+                class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
+              >
+                <Icon name="bi:journal-check" class="text-lg" />
+                <span x-text="isBerganti() ? 'Reservar en Cloudbeds' : d.submitBtn">{d.submitBtn}</span>
+              </button>
+            </div>
+          </form>
+
+          <p class="text-white/60 text-sm mt-4 text-center" x-show="!isBerganti()">
+            {lang === 'es' && "Recibirás una respuesta en menos de 24 horas. Si eliges El Bergantí, puedes reservar directamente en Cloudbeds."}
+            {lang === 'ca' && "Rebràs una resposta en menys de 24 hores. Si tries El Bergantí, pots reservar directament a Cloudbeds."}
+            {lang === 'en' && "You will receive a response within 24 hours. If you choose El Bergantí, you can book directly on Cloudbeds."}
+            {lang === 'fr' && "Vous recevrez une réponse dans moins de 24 heures. Si vous choisissez El Bergantí, vous pouvez réserver directement sur Cloudbeds."}
+          </p>
+
+          <p class="text-white/60 text-sm mt-4 text-center" x-show="isBerganti()">
+            {lang === 'es' && "Serás redirigido a nuestro motor de reservas seguro gestionado por Cloudbeds."}
+            {lang === 'ca' && "Seràs redirigit al nostre motor de reserves segur gestionat per Cloudbeds."}
+            {lang === 'en' && "You will be redirected to our secure booking engine powered by Cloudbeds."}
+            {lang === 'fr' && "Vous serez redirigé vers notre moteur de réservation sécurisé géré par Cloudbeds."}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+) : (
+  <!-- COMPACT HOME SEARCH BAR -->
+  <section class="bg-primary-dark py-8 overflow-x-hidden" id="booking">
+    <div class="max-w-7xl mx-auto px-4">
+      <script is:inline define:vars={{ propertyAny: d.propertyAny, propertyHostalet: d.propertyHostalet, propertyBerganti: d.propertyBerganti, cloudbedsUrl: d.cloudbedsUrl, beds24Url: d.beds24Url, bookingPageUrl: bookingPageUrl }}>
+        window.getCompactBookingData = function() {
+          return {
+            property: propertyAny,
+            checkin: '',
+            checkout: '',
+            adults: '2',
+            children: '0',
+            showWarning: false,
+            isBerganti() { return this.property === propertyBerganti; },
+            isHostalet() { return this.property === propertyHostalet; },
+            handleSubmit(e) {
+              const totalGuests = parseInt(this.adults) + parseInt(this.children);
+              if (this.isHostalet() && totalGuests > 4) {
+                e.preventDefault();
+                this.showWarning = true;
+                return;
+              }
+              this.showWarning = false;
+              if (this.isBerganti()) {
+                e.preventDefault();
+                const url = new URL(cloudbedsUrl);
+                if (this.checkin) url.searchParams.set('checkin', this.checkin);
+                if (this.checkout) url.searchParams.set('checkout', this.checkout);
+                url.searchParams.set('adults', this.adults);
+                url.searchParams.set('children', this.children);
+                window.open(url.toString(), '_blank');
+              } else if (this.isHostalet()) {
+                e.preventDefault();
+                const url = new URL(beds24Url);
+                if (this.checkin) {
+                  const [y, m, day] = this.checkin.split('-');
+                  url.searchParams.set('fdate_date', day);
+                  url.searchParams.set('fdate_monthyear', y + '-' + m);
+                }
+                if (this.checkout) {
+                  if (this.checkin) {
+                    const ci = new Date(this.checkin);
+                    const co = new Date(this.checkout);
+                    const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+                    if (numnight > 0) url.searchParams.set('numnight', numnight);
+                  }
+                }
+                url.searchParams.set('numadult', this.adults);
+                url.searchParams.set('numchild', this.children);
+                window.open(url.toString(), '_blank');
+              } else {
+                // Fallback: internal booking page
+                const params = new URLSearchParams();
+                if (this.checkin) params.set('checkin', this.checkin);
+                if (this.checkout) params.set('checkout', this.checkout);
+                params.set('adults', this.adults);
+                params.set('children', this.children);
+                window.location.href = bookingPageUrl + '?' + params.toString();
+              }
+            }
+          };
+        };
+      </script>
+      <form
+        name="booking-compact"
+        x-data="getCompactBookingData()"
+        x-on:submit="handleSubmit($event)"
+        class="bg-primary p-6 rounded-lg shadow-xl"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+
+          <!-- Property -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:building" class="w-4 h-4" /> {d.propertyLabel}
+            </label>
+            <select
+              name="property"
+              x-model="property"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            >
+              {properties.map(p => <option value={p}>{p}</option>)}
+            </select>
+          </div>
+
+          <!-- Check-in -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:calendar-check" class="w-4 h-4" /> {d.checkinLabel}
+            </label>
+            <input
+              type="date"
+              name="checkin"
+              required
+              x-model="checkin"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
+          <!-- Check-out -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:calendar-x" class="w-4 h-4" /> {d.checkoutLabel}
+            </label>
+            <input
+              type="date"
+              name="checkout"
+              required
+              x-model="checkout"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            />
+          </div>
+
+          <!-- Adults -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:people" class="w-4 h-4" /> {d.adultsLabel}
+            </label>
+            <select
+              name="adults"
+              x-model="adults"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            >
+              {adultsOptions.map((opt, i) => (
+                <option value={i + 1}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Children -->
+          <div class="lg:col-span-2">
+            <label class="text-skin-light text-sm mb-2 font-medium flex items-center gap-1">
+              <Icon name="bi:person-add" class="w-4 h-4" /> {d.childrenLabel}
+            </label>
+            <select
+              name="children"
+              x-model="children"
+              class="w-full px-4 py-3 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary h-12"
+            >
+              {childrenOptions.map((opt, i) => (
+                <option value={i}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Warning block for > 4 guests in Hostalet (compact layout) -->
+          <div x-show="showWarning && (parseInt(adults) + parseInt(children) > 4)" x-transition class="col-span-1 md:col-span-2 lg:col-span-12 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm rounded-lg flex items-start gap-3">
+            <Icon name="bi:exclamation-triangle" class="w-5 h-5 flex-shrink-0 text-amber-500 mt-0.5" />
+            <div>
+              {lang === 'es' && "La capacidad máxima por habitación en El Hostalet de Tossa es de 4 personas. Para grupos de 5 o más personas, por favor realiza una segunda reserva o contáctanos directamente para coordinar tu estancia."}
+              {lang === 'ca' && "La capacitat màxima per habitació a L'Hostalet de Tossa és de 4 persones. Per a grups de 5 o més persones, si us plau realitza una segona reserva o contacta'ns directament per coordinar la teva estada."}
+              {lang === 'en' && "The maximum capacity per room at Hostalet de Tossa is 4 people. For groups of 5 or more guests, please make a second booking or contact us directly to arrange your stay."}
+              {lang === 'fr' && "La capacité maximale par chambre à L'Hostalet de Tossa est de 4 personnes. Pour les groupes de 5 personnes ou plus, veuillez effectuer une deuxième réservation ou nous contacter directement pour organiser votre séjour."}
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="lg:col-span-2">
+            <button
+              type="submit"
+              class="w-full min-h-12 py-2 flex items-center gap-2 justify-center bg-green-700/90 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-3 transition"
+            >
+              <Icon name="bi:journal-check" class="text-base flex-shrink-0" />
+              <span class="text-xs sm:text-sm text-center leading-snug">{d.checkBtn}</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+)}
