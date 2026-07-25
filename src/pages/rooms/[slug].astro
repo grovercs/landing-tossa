@@ -41,7 +41,7 @@ const gallery = data.gallery ?? [];
 // Official website link per property
 const officialUrls: Record<string, string> = {
   hostalet: 'https://www.hostalhostalet.com/',
-  'el-berganti': 'https://elberganti-tossa.com/',
+  'el-berganti': 'https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/',
 };
 const officialUrl = officialUrls[slug || ''];
 ---
@@ -196,7 +196,7 @@ const officialUrl = officialUrls[slug || ''];
         <div class="relative">
 
           <!-- Booking Form -->
-          <BookingFormPage roomTitle={data.title} price={data.price} />
+          <BookingFormPage roomTitle={data.title} price={data.price} slug={slug} />
 
           <!-- Info -->
           <BookingInfo

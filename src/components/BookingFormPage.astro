@@ -5,11 +5,21 @@ import { useTranslations } from "../i18n/utils";
 export interface Props {
   roomTitle: string;
   price: number;
+  slug?: string;
 }
 
-const { roomTitle, price } = Astro.props;
+const { roomTitle, price, slug } = Astro.props;
 const lang = (Astro.currentLocale || 'es') as keyof typeof import('../i18n/ui').ui;
 const t = useTranslations(lang);
+
+const isBerganti = slug ? slug === 'el-berganti' : (roomTitle ? roomTitle.toLowerCase().includes('bergantí') || roomTitle.toLowerCase().includes('berganti') : false);
+const cloudbedsUrls: Record<string, string> = {
+  es: "https://hotels.cloudbeds.com/es-es/reservation/Fx9DTf/",
+  ca: "https://hotels.cloudbeds.com/ca/reservation/Fx9DTf/",
+  en: "https://hotels.cloudbeds.com/en/reservation/Fx9DTf/",
+  fr: "https://hotels.cloudbeds.com/fr/reservation/Fx9DTf/",
+};
+const cloudbedsUrl = cloudbedsUrls[lang] || cloudbedsUrls.es;
 
 const successUrls = {
   es: '/reserva-enviada/',
@@ -20,12 +30,25 @@ const successUrls = {
 const successUrl = successUrls[lang] || successUrls.es;
 
 const dicts = {
-  es: { adult1: "1 Adulto", adult: "Adultos", child0: "0 Niños", child1: "1 Niño", child: "Niños" },
-  ca: { adult1: "1 Adult", adult: "Adults", child0: "0 Nens", child1: "1 Nen", child: "Nens" },
-  en: { adult1: "1 Adult", adult: "Adults", child0: "0 Children", child1: "1 Child", child: "Children" },
-  fr: { adult1: "1 Adulte", adult: "Adultes", child0: "0 Enfants", child1: "1 Enfant", child: "Enfants" },
+  es: {
+    adult1: "1 Adulto", adult: "Adultos", child0: "0 Niños", child1: "1 Niño", child: "Niños",
+    submitBerganti: "Reservar en Cloudbeds", submitHostalet: "Reservar en Beds24"
+  },
+  ca: {
+    adult1: "1 Adult", adult: "Adults", child0: "0 Nens", child1: "1 Nen", child: "Nens",
+    submitBerganti: "Reservar a Cloudbeds", submitHostalet: "Reservar a Beds24"
+  },
+  en: {
+    adult1: "1 Adult", adult: "Adults", child0: "0 Children", child1: "1 Child", child: "Children",
+    submitBerganti: "Book on Cloudbeds", submitHostalet: "Book on Beds24"
+  },
+  fr: {
+    adult1: "1 Adulte", adult: "Adultes", child0: "0 Enfants", child1: "1 Enfant", child: "Enfants",
+    submitBerganti: "Réserver sur Cloudbeds", submitHostalet: "Réserver sur Beds24"
+  },
 };
 const d = dicts[lang] || dicts.es;
+const submitText = isBerganti ? d.submitBerganti : d.submitHostalet;
 ---
 <div class="bg-primary-dark p-6 sm:p-8 rounded-tl-3xl shadow-lg mb-8">
   <!-- ROOM INFO -->
@@ -51,21 +74,43 @@ const d = dicts[lang] || dicts.es;
       showWarning: false,
       handleSubmit(e) {
         const totalGuests = parseInt(this.adults) + parseInt(this.children);
-        if (totalGuests > 4) {
+        if (!${isBerganti} && totalGuests > 4) {
           e.preventDefault();
           this.showWarning = true;
           return;
         }
         this.showWarning = false;
         e.preventDefault();
-        const url = new URL('https://beds24.com/booking2.php');
-        url.searchParams.set('propid', '328935');
-        url.searchParams.set('lang', '${lang}');
-        if (this.checkin) url.searchParams.set('checkin', this.checkin);
-        if (this.checkout) url.searchParams.set('checkout', this.checkout);
-        url.searchParams.set('numadult', this.adults);
-        url.searchParams.set('numchild', this.children);
-        window.open(url.toString(), '_blank');
+        if (${isBerganti}) {
+          const url = new URL('${cloudbedsUrl}');
+          if (this.checkin) url.searchParams.set('checkin', this.checkin);
+          if (this.checkout) url.searchParams.set('checkout', this.checkout);
+          url.searchParams.set('adults', this.adults);
+          url.searchParams.set('children', this.children);
+          window.open(url.toString(), '_blank');
+        } else {
+          const url = new URL('https://beds24.com/booking2.php');
+          url.searchParams.set('propid', '328935');
+          url.searchParams.set('lang', '${lang}');
+          if (this.checkin) {
+            const [y, m, day] = this.checkin.split('-');
+            url.searchParams.set('fdate_date', day);
+            url.searchParams.set('fdate_monthyear', y + '-' + m);
+            url.searchParams.set('checkin', this.checkin);
+          }
+          if (this.checkout) {
+            url.searchParams.set('checkout', this.checkout);
+            if (this.checkin) {
+              const ci = new Date(this.checkin);
+              const co = new Date(this.checkout);
+              const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+              if (numnight > 0) url.searchParams.set('numnight', numnight);
+            }
+          }
+          url.searchParams.set('numadult', this.adults);
+          url.searchParams.set('numchild', this.children);
+          window.open(url.toString(), '_blank');
+        }
       }
     }`}
     x-on:submit="handleSubmit($event)"
@@ -145,10 +190,7 @@ const d = dicts[lang] || dicts.es;
         class="w-full flex items-center gap-2 justify-center bg-green-700 text-white px-8 py-4 hover:bg-green-800 transition text-lg"
       >
         <Icon name="bi:journal-check" class="text-lg" />
-        {lang === 'es' && "Reservar en Beds24"}
-        {lang === 'ca' && "Reservar a Beds24"}
-        {lang === 'en' && "Book on Beds24"}
-        {lang === 'fr' && "Réserver sur Beds24"}
+        {submitText}
       </button>
     </div>
 
@@ -161,18 +203,65 @@ const d = dicts[lang] || dicts.es;
   </form>
 </div>
 
-<script is:inline>
+<script is:inline define:vars={{ isBerganti, cloudbedsUrl }}>
   (function() {
-    const params = new URLSearchParams(window.location.search);
     const form = document.querySelector('form[name="booking-room"]');
     if (!form) return;
-    const checkin = params.get('checkin');
-    const checkout = params.get('checkout');
-    const adults = params.get('adults');
-    const children = params.get('children');
-    if (checkin && form.checkin) form.checkin.value = checkin;
-    if (checkout && form.checkout) form.checkout.value = checkout;
-    if (adults && form.adults) form.adults.value = adults;
-    if (children && form.children) form.children.value = children;
+
+    const params = new URLSearchParams(window.location.search);
+    const checkinParam = params.get('checkin');
+    const checkoutParam = params.get('checkout');
+    const adultsParam = params.get('adults');
+    const childrenParam = params.get('children');
+    if (checkinParam && form.checkin) form.checkin.value = checkinParam;
+    if (checkoutParam && form.checkout) form.checkout.value = checkoutParam;
+    if (adultsParam && form.adults) form.adults.value = adultsParam;
+    if (childrenParam && form.children) form.children.value = childrenParam;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const checkin = form.checkin ? form.checkin.value : '';
+      const checkout = form.checkout ? form.checkout.value : '';
+      const adults = form.adults ? form.adults.value : '2';
+      const children = form.children ? form.children.value : '0';
+
+      if (isBerganti) {
+        const url = new URL(cloudbedsUrl);
+        if (checkin) url.searchParams.set('checkin', checkin);
+        if (checkout) url.searchParams.set('checkout', checkout);
+        url.searchParams.set('adults', adults);
+        url.searchParams.set('children', children);
+        window.open(url.toString(), '_blank');
+      } else {
+        const totalGuests = parseInt(adults) + parseInt(children);
+        if (totalGuests > 4) {
+          const warningEl = form.querySelector('[x-show*="showWarning"]');
+          if (warningEl) warningEl.style.display = 'flex';
+          return;
+        }
+        const url = new URL('https://beds24.com/booking2.php');
+        url.searchParams.set('propid', '328935');
+        if (checkin) {
+          const [y, m, day] = checkin.split('-');
+          url.searchParams.set('fdate_date', day);
+          url.searchParams.set('fdate_monthyear', y + '-' + m);
+          url.searchParams.set('checkin', checkin);
+        }
+        if (checkout) {
+          url.searchParams.set('checkout', checkout);
+          if (checkin) {
+            const ci = new Date(checkin);
+            const co = new Date(checkout);
+            const numnight = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+            if (numnight > 0) url.searchParams.set('numnight', numnight);
+          }
+        }
+        url.searchParams.set('numadult', adults);
+        url.searchParams.set('numchild', children);
+        window.open(url.toString(), '_blank');
+      }
+    });
   })();
 </script>
